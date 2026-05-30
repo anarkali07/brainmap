@@ -810,7 +810,8 @@ body[data-theme="light"] {
       <div id="header-title">Dashboard</div>
       <button class="header-btn primary" onclick="openQuickAdd()" title="Quick Add Task">&#43; Quick Add</button>
       <button class="header-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable Notifications">&#128276;</button>
-      <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub">☁️ Sync</button>
+      <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub" id="hdr-sync-btn">☁️ Sync</button>
+      <button class="header-btn" onclick="loadCloudData()" title="Reload data from GitHub" id="hdr-load-btn" style="display:none;">☁️ Load</button>
       <button class="header-btn" onclick="exportData()">&#8595; Export</button>
       <label style="margin:0;cursor:pointer;">
         <button class="header-btn" onclick="this.closest('label').querySelector('input').click()">&#8593; Import</button>
@@ -6016,26 +6017,22 @@ _updateSyncButtons();
 renderDashboard();
 
 // ── Auto-pull from Gist on load if configured ──────────────
-(async function autoSyncOnLoad() {
-  // Only auto-sync when running on GitHub Pages (not local file)
-  const isGitHubPages = window.location.hostname.includes('github.io');
-  if (!isGitHubPages) { return; } // local file — skip auto-sync
-
-  // Same-origin fetch (no CORS) — data file is in same repo
-  const RAW_URL = window.location.origin + '/brainmap/brainmap-data.json';
+async function loadCloudData() {
+  const DATA_URL = 'https://anarkali07.github.io/brainmap/brainmap-data.json';
 
   const indicator = document.createElement('div');
-  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;';
-  indicator.textContent = '☁️ Loading latest data…';
+  indicator.id = 'cloud-sync-bar';
+  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.82rem;font-weight:600;text-align:center;padding:8px;';
+  indicator.textContent = '☁️ Loading your data…';
   document.body.appendChild(indicator);
 
   try {
-    const res = await fetch(RAW_URL + '?t=' + Date.now()); // cache-bust
-    if (res.status === 404) { indicator.remove(); return; } // no data file yet — first run
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const res = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' — data file not reachable');
+    const text = await res.text();
+    const parsed = JSON.parse(text);
+    if (!parsed || typeof parsed !== 'object') throw new Error('Invalid data format');
 
-    const parsed = JSON.parse(await res.text());
-    // preserve local credentials
     const keepPAT    = DB.settings.githubPAT;
     const keepGistId = DB.settings.gistId;
     DB = parsed;
@@ -6048,11 +6045,26 @@ renderDashboard();
     _updateSyncButtons();
 
     indicator.style.background = '#16a34a';
-    indicator.textContent = '✅ Data loaded from cloud';
-    setTimeout(() => indicator.remove(), 2000);
+    indicator.textContent = `✅ ${(parsed.interviews||[]).length} candidates, ${(parsed.tasks||[]).length} tasks loaded`;
+    setTimeout(() => indicator.remove(), 3000);
   } catch(e) {
-    indicator.remove(); // silent fail — load local data
-    console.warn('Auto-sync skipped:', e.message);
+    indicator.style.background = '#dc2626';
+    indicator.textContent = '❌ ' + e.message;
+    setTimeout(() => indicator.remove(), 6000);
+    console.error('Cloud load failed:', e);
+  }
+}
+
+// Auto-run on GitHub Pages + swap header buttons
+(function autoSyncOnLoad() {
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  if (isGitHubPages) {
+    // Show Load, hide Sync (can't push from GitHub Pages)
+    const syncBtn = document.getElementById('hdr-sync-btn');
+    const loadBtn = document.getElementById('hdr-load-btn');
+    if (syncBtn) syncBtn.style.display = 'none';
+    if (loadBtn) loadBtn.style.display = '';
+    loadCloudData();
   }
 })();
 
