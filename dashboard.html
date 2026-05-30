@@ -5362,8 +5362,12 @@ function _updateSyncButtons() {
    GITHUB GIST SYNC
    ============================================================ */
 async function pushToGist() {
-  const pat    = DB.settings.githubPAT || (document.getElementById('cfg-github-pat')?.value.trim());
+  // Always read from field first so new token is used even before clicking Save
+  const fieldPAT = document.getElementById('cfg-github-pat')?.value.trim();
+  const pat = fieldPAT || DB.settings.githubPAT;
   if (!pat) { alert('Enter your GitHub Personal Access Token in Settings → Profile first.'); navigate('config'); return; }
+  // auto-save token to DB so it persists
+  DB.settings.githubPAT = pat; saveData();
 
   const payload = JSON.stringify(DB, null, 2);
   const body = {
@@ -5409,10 +5413,13 @@ async function pushToGist() {
 }
 
 async function pullFromGist() {
-  const pat    = DB.settings.githubPAT || (document.getElementById('cfg-github-pat')?.value.trim());
-  const gistId = DB.settings.gistId    || (document.getElementById('cfg-gist-id')?.value.trim());
+  const fieldPAT    = document.getElementById('cfg-github-pat')?.value.trim();
+  const fieldGistId = document.getElementById('cfg-gist-id')?.value.trim();
+  const pat    = fieldPAT    || DB.settings.githubPAT;
+  const gistId = fieldGistId || DB.settings.gistId;
   if (!pat)    { alert('Enter your GitHub Personal Access Token in Settings.'); navigate('config'); return; }
   if (!gistId) { alert('No Gist ID found. Push first to create the cloud backup.'); return; }
+  DB.settings.githubPAT = pat; DB.settings.gistId = gistId; saveData();
 
   _syncStatus('⏳ Pulling from GitHub…', 'var(--text-muted)');
   const pullBtns = document.querySelectorAll('[onclick="pullFromGist()"]');
