@@ -758,6 +758,8 @@ body[data-theme="light"] {
       <div id="header-title">Dashboard</div>
       <button class="header-btn primary" onclick="openQuickAdd()" title="Quick Add Task">&#43; Quick Add</button>
       <button class="header-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable Notifications">&#128276;</button>
+      <button id="hdr-push-btn" class="header-btn" onclick="pushToGist()" title="Push data to GitHub Gist" style="display:none;">☁️↑</button>
+      <button id="hdr-pull-btn" class="header-btn" onclick="pullFromGist()" title="Pull data from GitHub Gist" style="display:none;">☁️↓</button>
       <button class="header-btn" onclick="exportData()">&#8595; Export</button>
       <label style="margin:0;cursor:pointer;">
         <button class="header-btn" onclick="this.closest('label').querySelector('input').click()">&#8593; Import</button>
@@ -1160,6 +1162,27 @@ body[data-theme="light"] {
             <input id="cfg-apptitle" placeholder="e.g. BrainMap">
             <div class="mt-8" style="display:flex;justify-content:flex-end;">
               <button class="btn-primary" onclick="saveProfile()">&#128190; Save</button>
+            </div>
+
+            <!-- Cloud Sync -->
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid var(--border);">
+              <div style="font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:12px;">☁️ GitHub Gist Sync</div>
+              <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;line-height:1.6;">
+                Sync your data across devices using a private GitHub Gist.<br>
+                <a href="https://github.com/settings/tokens/new?scopes=gist&description=BrainMap+Sync" target="_blank" style="color:var(--accent);">Create a GitHub Token here</a> — only needs <strong>gist</strong> scope.
+              </div>
+              <label>GitHub Personal Access Token</label>
+              <div style="display:flex;gap:6px;">
+                <input type="password" id="cfg-github-pat" placeholder="ghp_xxxxxxxxxxxx" style="flex:1;">
+                <button onclick="togglePatVisibility()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text-muted);cursor:pointer;font-size:0.78rem;flex-shrink:0;">👁</button>
+              </div>
+              <label>Gist ID <span style="font-weight:400;font-size:0.7rem;">(auto-filled after first push)</span></label>
+              <input id="cfg-gist-id" placeholder="Leave blank — auto-created on first push">
+              <div id="sync-status" style="font-size:0.75rem;margin-top:8px;min-height:18px;"></div>
+              <div style="display:flex;gap:8px;margin-top:10px;">
+                <button onclick="pushToGist()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);font-weight:600;cursor:pointer;font-size:0.82rem;">☁️ Push to Cloud</button>
+                <button onclick="pullFromGist()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:600;cursor:pointer;font-size:0.82rem;">☁️ Pull from Cloud</button>
+              </div>
             </div>
           </div>
         </div>
@@ -5298,19 +5321,134 @@ function renderConfig() {
   document.getElementById('cfg-name').value     = s.userName  || '';
   document.getElementById('cfg-role').value     = s.userRole  || '';
   document.getElementById('cfg-apptitle').value = s.appTitle  || 'BrainMap';
+  document.getElementById('cfg-github-pat').value = s.githubPAT || '';
+  document.getElementById('cfg-gist-id').value    = s.gistId   || '';
   cfgTab('profile');
 }
 
 /* --- Profile --- */
 function saveProfile() {
-  DB.settings.userName  = document.getElementById('cfg-name').value.trim();
-  DB.settings.userRole  = document.getElementById('cfg-role').value.trim() || 'AppSec Team Lead';
-  DB.settings.appTitle  = document.getElementById('cfg-apptitle').value.trim() || 'BrainMap';
+  DB.settings.userName   = document.getElementById('cfg-name').value.trim();
+  DB.settings.userRole   = document.getElementById('cfg-role').value.trim() || 'AppSec Team Lead';
+  DB.settings.appTitle   = document.getElementById('cfg-apptitle').value.trim() || 'BrainMap';
+  DB.settings.githubPAT  = document.getElementById('cfg-github-pat').value.trim();
+  DB.settings.gistId     = document.getElementById('cfg-gist-id').value.trim();
   saveData();
-  // update sidebar logo
   document.querySelector('#sidebar-logo span').textContent = DB.settings.userRole;
   document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
+  _updateSyncButtons();
   alert('Profile saved!');
+}
+
+function togglePatVisibility() {
+  const el = document.getElementById('cfg-github-pat');
+  el.type = el.type === 'password' ? 'text' : 'password';
+}
+
+function _syncStatus(msg, clr) {
+  const el = document.getElementById('sync-status');
+  if (el) { el.textContent = msg; el.style.color = clr || 'var(--text-muted)'; }
+}
+
+function _updateSyncButtons() {
+  const hasPAT = !!(DB.settings.githubPAT);
+  ['hdr-push-btn','hdr-pull-btn'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.style.display = hasPAT ? '' : 'none';
+  });
+}
+
+/* ============================================================
+   GITHUB GIST SYNC
+   ============================================================ */
+async function pushToGist() {
+  const pat    = DB.settings.githubPAT || (document.getElementById('cfg-github-pat')?.value.trim());
+  if (!pat) { alert('Enter your GitHub Personal Access Token in Settings → Profile first.'); navigate('config'); return; }
+
+  const payload = JSON.stringify(DB, null, 2);
+  const body = {
+    description: 'BrainMap Data Sync',
+    public: false,
+    files: { 'brainmap-data.json': { content: payload } }
+  };
+
+  _syncStatus('⏳ Pushing to GitHub…', 'var(--text-muted)');
+  const pushBtns = document.querySelectorAll('[onclick="pushToGist()"]');
+  pushBtns.forEach(b => { b.disabled = true; b.textContent = '⏳ Pushing…'; });
+
+  try {
+    const gistId = DB.settings.gistId || (document.getElementById('cfg-gist-id')?.value.trim());
+    const url    = gistId
+      ? `https://api.github.com/gists/${gistId}`
+      : 'https://api.github.com/gists';
+    const method = gistId ? 'PATCH' : 'POST';
+
+    const res  = await fetch(url, {
+      method,
+      headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) throw new Error(`GitHub API error ${res.status}: ${await res.text()}`);
+
+    const data = await res.json();
+    // store gist id for future syncs
+    DB.settings.githubPAT = pat;
+    DB.settings.gistId    = data.id;
+    saveData();
+    const idEl = document.getElementById('cfg-gist-id');
+    if (idEl) idEl.value = data.id;
+    const ts = new Date().toLocaleTimeString();
+    _syncStatus(`✅ Pushed at ${ts}`, 'var(--low)');
+    _updateSyncButtons();
+  } catch(e) {
+    _syncStatus('❌ Push failed: ' + e.message, 'var(--critical)');
+    console.error(e);
+  } finally {
+    pushBtns.forEach(b => { b.disabled = false; b.innerHTML = b.id === 'hdr-push-btn' ? '☁️↑' : '☁️ Push to Cloud'; });
+  }
+}
+
+async function pullFromGist() {
+  const pat    = DB.settings.githubPAT || (document.getElementById('cfg-github-pat')?.value.trim());
+  const gistId = DB.settings.gistId    || (document.getElementById('cfg-gist-id')?.value.trim());
+  if (!pat)    { alert('Enter your GitHub Personal Access Token in Settings.'); navigate('config'); return; }
+  if (!gistId) { alert('No Gist ID found. Push first to create the cloud backup.'); return; }
+
+  _syncStatus('⏳ Pulling from GitHub…', 'var(--text-muted)');
+  const pullBtns = document.querySelectorAll('[onclick="pullFromGist()"]');
+  pullBtns.forEach(b => { b.disabled = true; b.textContent = '⏳ Pulling…'; });
+
+  try {
+    const res  = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { 'Authorization': `token ${pat}` }
+    });
+    if (!res.ok) throw new Error(`GitHub API error ${res.status}`);
+
+    const data    = await res.json();
+    const content = data.files['brainmap-data.json']?.content;
+    if (!content) throw new Error('brainmap-data.json not found in Gist');
+
+    const parsed = JSON.parse(content);
+    // preserve current device's PAT + gistId so they don't get overwritten
+    const localPAT    = DB.settings.githubPAT;
+    const localGistId = DB.settings.gistId;
+    DB = parsed;
+    DB.settings.githubPAT = localPAT;
+    DB.settings.gistId    = localGistId;
+    saveData();
+    applyTheme();
+    applyColorTheme(DB.settings.colorTheme || 'ocean');
+    renderDashboard(); renderTasks(); renderInterviews(); renderInbox();
+    _updateSyncButtons();
+    const ts = new Date().toLocaleTimeString();
+    _syncStatus(`✅ Pulled at ${ts}`, 'var(--low)');
+    alert('✅ Data pulled from cloud successfully!');
+  } catch(e) {
+    _syncStatus('❌ Pull failed: ' + e.message, 'var(--critical)');
+    console.error(e);
+  } finally {
+    pullBtns.forEach(b => { b.disabled = false; b.innerHTML = b.id === 'hdr-pull-btn' ? '☁️↓' : '☁️ Pull from Cloud'; });
+  }
 }
 
 /* --- Navigation toggles --- */
@@ -5734,6 +5872,7 @@ refreshCategoryDropdowns();
 // apply saved profile
 if (DB.settings.userRole) document.querySelector('#sidebar-logo span').textContent = DB.settings.userRole;
 if (DB.settings.appTitle) document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
+_updateSyncButtons();
 renderDashboard();
 
 // Schedule notifications on load if permission already granted
