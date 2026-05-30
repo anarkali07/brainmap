@@ -1180,6 +1180,7 @@ body[data-theme="light"] {
               <input id="cfg-gist-id" placeholder="Leave blank — auto-created on first push">
               <div id="sync-status" style="font-size:0.75rem;margin-top:8px;min-height:18px;"></div>
               <div style="display:flex;gap:8px;margin-top:10px;">
+                <button onclick="testGistToken()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--medium);background:rgba(251,191,36,0.1);color:var(--medium);font-weight:600;cursor:pointer;font-size:0.82rem;">🔍 Test Token</button>
                 <button onclick="pushToGist()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);font-weight:600;cursor:pointer;font-size:0.82rem;">☁️ Push to Cloud</button>
                 <button onclick="pullFromGist()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:600;cursor:pointer;font-size:0.82rem;">☁️ Pull from Cloud</button>
               </div>
@@ -5361,6 +5362,31 @@ function _updateSyncButtons() {
 /* ============================================================
    GITHUB GIST SYNC
    ============================================================ */
+async function testGistToken() {
+  const pat = document.getElementById('cfg-github-pat')?.value.trim() || DB.settings.githubPAT;
+  if (!pat) { _syncStatus('❌ No token entered', 'var(--critical)'); return; }
+  _syncStatus('⏳ Testing token…', 'var(--text-muted)');
+  try {
+    const res = await fetch('https://api.github.com/user', {
+      headers: { 'Authorization': `token ${pat}` }
+    });
+    const scopes = res.headers.get('X-OAuth-Scopes') || 'unknown';
+    const data   = await res.json();
+    if (!res.ok) {
+      _syncStatus('❌ Token invalid: ' + (data.message||res.status), 'var(--critical)');
+      return;
+    }
+    const hasGist = scopes.includes('gist');
+    if (hasGist) {
+      _syncStatus(`✅ Token OK — User: ${data.login} — Scopes: ${scopes}`, 'var(--low)');
+    } else {
+      _syncStatus(`⚠️ Token works but missing GIST scope! Current scopes: "${scopes}" — regenerate with gist scope`, 'var(--medium)');
+    }
+  } catch(e) {
+    _syncStatus('❌ Network error: ' + e.message, 'var(--critical)');
+  }
+}
+
 async function pushToGist() {
   // Always read from field first so new token is used even before clicking Save
   const fieldPAT = document.getElementById('cfg-github-pat')?.value.trim();
