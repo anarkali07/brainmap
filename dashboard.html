@@ -470,10 +470,21 @@ tbody tr:hover td { background: var(--accent-glass); }
    ============================================================ */
 @media (max-width: 768px) {
   #hamburger { display: block; }
-  #sidebar { position: fixed; left: -250px; top: 0; bottom: 0; transition: left 0.22s ease; }
+  #sidebar { position: fixed; left: -220px; top: 0; bottom: 0; transition: left 0.22s ease; width: 200px; min-width: 200px; }
   #sidebar.open { left: 0; box-shadow: 8px 0 32px rgba(0,0,0,0.5); }
   .dash-grid { grid-template-columns: 1fr; }
   .inbox-grid { grid-template-columns: 1fr; }
+  /* Compact sidebar on mobile */
+  #sidebar-logo { padding: 12px 12px 10px; }
+  #sidebar-logo .logo-mark { font-size: 0.9rem; }
+  #sidebar-logo > div > div:last-child { font-size: 0.58rem; }
+  #sidebar-logo > div > div:first-child { width: 28px; height: 28px; border-radius: 7px; font-size: 1rem; }
+  #nav { padding: 6px 6px; }
+  .nav-item { padding: 8px 8px; font-size: 0.82rem; gap: 8px; }
+  .nav-item .nav-icon { font-size: 0.9rem; width: 18px; }
+  .nav-section-label { font-size: 0.6rem; padding: 8px 8px 3px; }
+  #sidebar-footer { padding: 8px 6px; }
+  #sidebar-close-btn { display: block !important; }
 }
 
 /* ============================================================
@@ -746,6 +757,11 @@ body[data-theme="light"] {
     </nav>
     <div id="sidebar-footer">
       <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span> Settings</div>
+      <!-- Mobile close button -->
+      <button onclick="document.getElementById('sidebar').classList.remove('open')"
+        style="display:none;width:100%;margin-top:6px;padding:8px;border-radius:8px;
+          border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);
+          font-size:0.8rem;cursor:pointer;" id="sidebar-close-btn">✕ Close Menu</button>
     </div>
   </aside>
 
@@ -2036,7 +2052,11 @@ function showInnerTab(section, activeTabId, activePanelId) {
 }
 
 document.querySelectorAll('.nav-item').forEach(n => {
-  n.addEventListener('click', () => navigate(n.dataset.section));
+  n.addEventListener('click', () => {
+    navigate(n.dataset.section);
+    // auto-close sidebar on mobile after nav tap
+    if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+  });
 });
 
 function toggleSidebar() {
