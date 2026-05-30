@@ -203,6 +203,32 @@ tbody tr:hover td { background: var(--accent-glass); }
   border-top: 1px solid var(--border);
 }
 
+/* ── Sidebar collapse ── */
+#sidebar {
+  transition: width 0.22s ease, min-width 0.22s ease;
+  overflow: hidden;
+}
+#sidebar.collapsed {
+  width: 52px !important;
+  min-width: 52px !important;
+}
+#sidebar.collapsed #sidebar-logo .logo-text { display: none; }
+#sidebar.collapsed #sidebar-logo {
+  padding: 12px 0;
+  display: flex; justify-content: center;
+}
+#sidebar.collapsed .nav-item .nav-label { display: none; }
+#sidebar.collapsed .nav-section-label { display: none; }
+#sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 9px 0;
+  border-radius: 0;
+}
+#sidebar.collapsed #sidebar-footer .nav-item .nav-label { display: none; }
+#sidebar.collapsed #sidebar-close-btn { display: none !important; }
+#sidebar.collapsed #sidebar-toggle-btn { transform: rotate(180deg); }
+#sidebar-toggle-btn { transition: transform 0.22s ease; }
+
 /* ── Main area ── */
 #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
@@ -738,25 +764,35 @@ body[data-theme="light"] {
         <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px var(--accent-glow);font-size:1rem;line-height:1;">
           🧠
         </div>
-        <div>
+        <div class="logo-text">
           <div class="logo-mark" style="font-size:0.95rem;line-height:1.15;font-weight:800;letter-spacing:-0.02em;">BrainMap</div>
           <div style="font-size:0.58rem;color:var(--text-muted);font-weight:400;margin-top:1px;font-style:italic;">because someone has to think</div>
         </div>
       </div>
     </div>
     <nav id="nav">
-      <div class="nav-item active" data-section="dashboard"><span class="nav-icon">⚡</span> Dashboard</div>
+      <div class="nav-item active" data-section="dashboard"><span class="nav-icon">⚡</span><span class="nav-label"> Dashboard</span></div>
       <div class="nav-section-label">Workspace</div>
-      <div class="nav-item" data-section="inbox"><span class="nav-icon">📋</span> Scratch Pad</div>
-      <div class="nav-item" data-section="tasks"><span class="nav-icon">✅</span> Tasks</div>
-      <div class="nav-item" data-section="work"><span class="nav-icon">📁</span> Projects</div>
+      <div class="nav-item" data-section="inbox"><span class="nav-icon">📋</span><span class="nav-label"> Scratch Pad</span></div>
+      <div class="nav-item" data-section="tasks"><span class="nav-icon">✅</span><span class="nav-label"> Tasks</span></div>
+      <div class="nav-item" data-section="work"><span class="nav-icon">📁</span><span class="nav-label"> Projects</span></div>
       <div class="nav-section-label">Hiring</div>
-      <div class="nav-item" data-section="interviews"><span class="nav-icon">🧑‍💼</span> Interviews</div>
+      <div class="nav-item" data-section="interviews"><span class="nav-icon">🧑‍💼</span><span class="nav-label"> Interviews</span></div>
       <div class="nav-section-label">Life</div>
-      <div class="nav-item" data-section="personal"><span class="nav-icon">🌿</span> Personal</div>
+      <div class="nav-item" data-section="personal"><span class="nav-icon">🌿</span><span class="nav-label"> Personal</span></div>
     </nav>
     <div id="sidebar-footer">
-      <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span> Settings</div>
+      <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span><span class="nav-label"> Settings</span></div>
+      <!-- Collapse / Expand toggle -->
+      <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()"
+        title="Collapse/Expand sidebar"
+        style="width:100%;margin-top:4px;padding:7px 0;border-radius:8px;
+          border:1px solid var(--border);background:transparent;
+          color:var(--text-muted);font-size:0.8rem;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;gap:6px;">
+        <span style="font-size:0.75rem;">◀</span>
+        <span class="nav-label" style="font-size:0.75rem;">Collapse</span>
+      </button>
       <!-- Mobile close button -->
       <button onclick="document.getElementById('sidebar').classList.remove('open')"
         style="display:none;width:100%;margin-top:6px;padding:8px;border-radius:8px;
@@ -2062,6 +2098,19 @@ document.querySelectorAll('.nav-item').forEach(n => {
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
 }
+
+function toggleSidebarCollapse() {
+  const sb = document.getElementById('sidebar');
+  const collapsed = sb.classList.toggle('collapsed');
+  localStorage.setItem('sidebarCollapsed', collapsed ? '1' : '0');
+}
+
+// restore collapse state on load
+(function() {
+  if (localStorage.getItem('sidebarCollapsed') === '1') {
+    document.getElementById('sidebar').classList.add('collapsed');
+  }
+})();
 
 /* ============================================================
    THEME
