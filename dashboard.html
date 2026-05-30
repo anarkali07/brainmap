@@ -5910,6 +5910,50 @@ if (DB.settings.appTitle) document.title = DB.settings.appTitle + ' — ' + DB.s
 _updateSyncButtons();
 renderDashboard();
 
+// ── Auto-pull from Gist on load if configured ──────────────
+(async function autoSyncOnLoad() {
+  const pat    = DB.settings.githubPAT;
+  const gistId = DB.settings.gistId;
+  if (!pat || !gistId) return; // not configured
+
+  const indicator = document.createElement('div');
+  indicator.id = 'autosync-banner';
+  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;';
+  indicator.textContent = '☁️ Syncing data from cloud…';
+  document.body.appendChild(indicator);
+
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { 'Authorization': `token ${pat}` }
+    });
+    if (!res.ok) throw new Error('Sync failed: ' + res.status);
+    const data    = await res.json();
+    const content = data.files['brainmap-data.json']?.content;
+    if (!content) throw new Error('No data file in Gist');
+
+    const parsed = JSON.parse(content);
+    // preserve local token + gistId
+    const localPAT    = DB.settings.githubPAT;
+    const localGistId = DB.settings.gistId;
+    DB = parsed;
+    DB.settings.githubPAT = localPAT;
+    DB.settings.gistId    = localGistId;
+    saveData();
+    applyTheme();
+    applyColorTheme(DB.settings.colorTheme || 'ocean');
+    renderDashboard(); renderTasks(); renderInterviews(); renderInbox();
+    _updateSyncButtons();
+
+    indicator.style.background = '#16a34a';
+    indicator.textContent = '✅ Data synced from cloud';
+    setTimeout(() => indicator.remove(), 2500);
+  } catch(e) {
+    indicator.style.background = '#dc2626';
+    indicator.textContent = '⚠ Auto-sync skipped: ' + e.message;
+    setTimeout(() => indicator.remove(), 4000);
+  }
+})();
+
 // Schedule notifications on load if permission already granted
 if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
   scheduleNotifications();
