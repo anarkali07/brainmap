@@ -4890,8 +4890,12 @@ function exportData() {
 }
 
 function syncToGit() {
-  // Download brainmap-data.json to ManageDay folder, then show git command
-  const blob = new Blob([JSON.stringify(DB, null, 2)], { type: 'application/json' });
+  // Strip sensitive keys before exporting to git
+  const exportDB = JSON.parse(JSON.stringify(DB));
+  exportDB.settings.groqKey   = '';
+  exportDB.settings.apiKey    = '';
+  exportDB.settings.githubPAT = '';
+  const blob = new Blob([JSON.stringify(exportDB, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
   a.href = url;

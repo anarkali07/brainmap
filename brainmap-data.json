@@ -1,0 +1,985 @@
+{
+  "tasks": [
+    {
+      "id": "mpr7qyth70cx3",
+      "title": "Interview schedules Quess - L2",
+      "description": "",
+      "category": "",
+      "priority": "Medium",
+      "status": "Completed",
+      "dueDate": "",
+      "notes": "Amol P and Sudhakar k  (L2) schedule interview",
+      "createdAt": "2026-05-29T17:46:10.757Z",
+      "archived": false
+    },
+    {
+      "id": "mpr7q1bsekmkw",
+      "title": "Round 2 - Quess - Yogesh Barse",
+      "description": "",
+      "category": "Interviews",
+      "priority": "Medium",
+      "status": "New",
+      "dueDate": "",
+      "notes": "June 2 - In person - Connect with Ruma Dutta",
+      "createdAt": "2026-05-29T17:45:27.352Z",
+      "archived": false
+    },
+    {
+      "id": "mpr7ptpfno77s",
+      "title": "Softenger Screening",
+      "description": "",
+      "category": "Interviews",
+      "priority": "Medium",
+      "status": "New",
+      "dueDate": "",
+      "notes": "Check with Sajan",
+      "createdAt": "2026-05-29T17:45:17.475Z",
+      "archived": false
+    }
+  ],
+  "followUps": [],
+  "projects": [
+    {
+      "id": "mpr1x3ty8pofo",
+      "name": "Dynamic Mobile Scanner",
+      "description": "Automated DAST for iOS and Android apps in CI/CD",
+      "priority": "Critical",
+      "progress": 40,
+      "targetDate": "2026-06-10",
+      "notes": "Frida instrumentation setup in progress",
+      "createdAt": "2026-05-29T15:02:59.494Z"
+    },
+    {
+      "id": "mpr1x3ty3l9z9",
+      "name": "Burp Suite Extension —Hack Pilot",
+      "description": "Internal Burp extension for scanning and vulnerability analysis",
+      "priority": "Medium",
+      "progress": 50,
+      "targetDate": "2026-06-08",
+      "notes": "Final testing and documentation remaining",
+      "createdAt": "2026-05-29T15:02:59.494Z"
+    },
+    {
+      "id": "mpr1x3tyf70ju",
+      "name": "Claude Projects for AppSec Automation",
+      "description": "Using Claude API to automate code review and threat modeling",
+      "priority": "High",
+      "progress": 25,
+      "targetDate": "2026-09-26",
+      "notes": "Proof of concept stage, exploring prompt templates",
+      "createdAt": "2026-05-29T15:02:59.494Z"
+    }
+  ],
+  "interviews": [
+    {
+      "id": "mpr90r24g695n",
+      "candidateName": "Prabhat Kumar",
+      "position": "Cybersecurity Analyst",
+      "experience": 3,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Outworxs",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3 \nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Source Code Review\nBACKGROUND: Dedicated security analyst with experience in application security and DevSecOps\nFIT: The candidate has strong AppSec skills, including SAST, DAST, and pentesting, and meets the experience threshold of 2 years\nCOMPANIES: Network Intelligence, Citiustech",
+      "resumeText": "Prabhat kumar\n Cybersecurity Analyst\n prabhat8851799@gmail.com\n 8851799054\n Mumbai, India\n PROFILE\n CEH-certified and a cybersecurity\nprofessional with over 3 years of\nexperience in the field. Demonstrated\nexpertise in vulnerability assessment\nand penetration testing of the web,\nconfiguration review, cloud security\nreview (AWS and Azure), and\napplication security scanning like\nSoftware Composition Analysis\n(SCA), SAST (static application\nsecurity testing), and DAST (dynamic\napplication security testing) using\nmainstream tools like Burp Suite,\nCheckmarx, Qualys, Prisma Cloud,\nand OWASP Dependency-Check.\nSeeking a dynamic role to apply\nadvanced skills in a challenging\nenvironment.\n EDUCATION\n B-Tech\n RGPV\n 05/2017 – 05/2021 | Bhopal\n 9.21 CGPA\n 12th\n C.P.P College Hisar\n Borhar, Madhubani | Bihar\n 08/2015 – 05/2017\n ACHIEVMENTS\n I got promoted by Fastrack\nPromotion.\n Delivered detailed vulnerability\nreports with actionable remediation\nsteps.\n Successfully conducted manual and\nautomated WAPT assessments on\nover 50+ applications.\n PROFESSIONAL EXPERIENCE\n Network Intelligence\n Cybersecurity Analyst\n August 2024 - Present\n • Performed Blackbox Testing and Grey box Testing\nof various Web Applications.\n • Worked for ICICI bank, Performed application\nsecurity assessment for web applications.\n • Conducted Software Composition Analysis\n • Performed cloud security review of AWS and Azure\n • Conducted source code analysis\n • Implemented DevSecOps Using GitHub Actions\n • Building Secure CI/CD Pipelines\n • Produced security documents such as SBOM and\n • Vulnerability Matrix\n • Provided support during the remediation stage\n • Executed configuration review of Network devices\n(Firewall, Switches)\n Citiustech\n Software Engineer\n November 2021 - February 2024\n • Conducted VA scan of all infra servers\n • Conducted VA (ASV) scan of servers.\n • Performed Web Pentesting of various Web\nApplications.\n SKILLS\n • Vulnerability Assessment (VA)\n • Web-Penetration Testing\n • Application security testing (SCA, DAST, SAST)\n • Building Secure CI/CD Pipeline\n • Source code review\n • BurpSuit\n • Greybox Testing and Black Box\n • Network devices configuration review\n(Firewall,Switches)\n TECHNICAL PROFICIENCY\n PROGRAMMING LANGUAGES:\n HTML, CSS, JavaScript, PHP, Java\n Database: MySQL, NoSQL\n Software / Tools: BurpSuite ,Qualys,\nCheckmarx,SonarQube, OWASP Zap, OWASP\nDependency-Check, Synk,\n CERTIFICATES\n •CEH v12 (Certified Ethical Hacker) by EC-Council\n •API Penetrating Testing •VMDR with TruRisk by\nQualys\n •Cloud Agent by Qualys",
+      "rounds": [
+        {
+          "id": "mpr90r248k9o6",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T18:21:46.876Z",
+      "rank": 6,
+      "rankReason": "Strong AppSec skills, including SAST, DAST, and pentesting, and meets the experience threshold of 2 years",
+      "rankScore": 92,
+      "interviewQuestions": [
+        {
+          "id": "mps0fd0kso55n",
+          "question": "Identify a potential vulnerability in the following code snippet: 'String query = request.getParameter(\"query\"); Statement stmt = connection.createStatement(); stmt.executeQuery(\"SELECT * FROM users WHERE name = '\" + query + \"'\");'",
+          "expectedAnswer": "The code is vulnerable to SQL injection, and the candidate should explain how an attacker could exploit this by injecting malicious SQL code, recommending parameterized queries or prepared statements as a fix.",
+          "rating": "satisfactory"
+        },
+        {
+          "id": "mps0fd0khsrum",
+          "question": "You are performing a penetration test on a web application and have identified a potential cross-site scripting (XSS) vulnerability using Burp Suite, what steps would you take next to confirm the vulnerability?",
+          "expectedAnswer": "The candidate should describe how they would use Burp Suite to send a crafted request, observe the application's response, and check for any signs of code execution, such as pop-up alerts or modified page content.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0k1hkn6",
+          "question": "Describe how you would configure a SAST tool to scan a Java-based web application for security vulnerabilities, including any specific rules or plugins you would enable.",
+          "expectedAnswer": "The candidate should explain how they would configure the SAST tool to scan the application's source code, including enabling rules for common vulnerabilities such as SQL injection and cross-site scripting, and configuring any necessary plugins for Java-specific vulnerabilities.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0k1exs6",
+          "question": "You have been tasked with performing a secure code review on a newly developed feature, what steps would you take to identify potential security vulnerabilities?",
+          "expectedAnswer": "The candidate should describe how they would review the code for security best practices, such as input validation and error handling, and check for any potential vulnerabilities, such as buffer overflows or insecure deserialization, using tools like OWASP's Code Review Guide.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0kpqq6a",
+          "question": "Explain how you would use the OWASP Top 10 to guide your vulnerability identification and risk assessment process during a penetration test.",
+          "expectedAnswer": "The candidate should describe how they would use the OWASP Top 10 as a framework to identify and prioritize potential vulnerabilities, such as injection and cross-site scripting, and assess the risk of each vulnerability based on its likelihood and potential impact.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0kgxk1k",
+          "question": "You have identified a potential security incident, such as a suspected breach or malware outbreak, what steps would you take to respond to the incident?",
+          "expectedAnswer": "The candidate should describe how they would follow a structured incident response process, including containment, eradication, recovery, and post-incident activities, and explain how they would communicate with stakeholders and coordinate with other teams to respond to the incident.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0k9huu7",
+          "question": "Describe how you would use threat modeling to identify potential security threats to a web application, including any specific techniques or tools you would use.",
+          "expectedAnswer": "The candidate should explain how they would use threat modeling to identify potential security threats, such as STRIDE (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege), and describe any specific techniques or tools they would use, such as attack trees or threat modeling frameworks like PASTA or OCTAVE.",
+          "rating": null
+        },
+        {
+          "id": "mps0fd0khiq63",
+          "question": "You are using Burp Suite to perform a dynamic application security test (DAST) on a web application and have identified a potential vulnerability, how would you use the tool to further exploit and understand the vulnerability?",
+          "expectedAnswer": "The candidate should describe how they would use Burp Suite's features, such as the repeater and sequencer, to further exploit and understand the vulnerability, and explain how they would use the tool to gather more information about the vulnerability and its potential impact.",
+          "rating": "wrong"
+        },
+        {
+          "id": "mps0il4vmkdil",
+          "question": "You are performing a secure code review on a Node.js application and come across a line of code that uses the 'eval' function to execute user-inputted data. What potential security vulnerability does this introduce and how would you recommend it be remediated?",
+          "expectedAnswer": "The use of 'eval' introduces a potential code injection vulnerability, the candidate should recommend using a safer alternative, such as a JSON parser, and provide an example of how to implement it.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4v5yvef",
+          "question": "You have identified a potential SQL injection vulnerability in a web application using a SAST tool. Describe the steps you would take to manually verify the vulnerability, including any specific tools or techniques you would use.",
+          "expectedAnswer": "The candidate should describe how they would use a tool like Burp Suite to send a crafted request to the application, and then analyze the response to confirm the presence of the vulnerability, including checking for error messages or unexpected behavior.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4v07jq9",
+          "question": "You are using a DAST tool to scan a web application and have identified a potential cross-site request forgery (CSRF) vulnerability. How would you use the tool to further exploit and understand the vulnerability, and what recommendations would you make to remediate it?",
+          "expectedAnswer": "The candidate should describe how they would use the DAST tool to send a crafted request to the application, and then analyze the response to understand the vulnerability, including identifying any missing or ineffective CSRF tokens, and recommend implementing a token-based mitigation strategy.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4vo0w3g",
+          "question": "You have been tasked with performing a threat model on a new web application that allows users to upload and share files. Describe the steps you would take to identify potential security threats to the application, including any specific techniques or tools you would use.",
+          "expectedAnswer": "The candidate should describe how they would use a technique like STRIDE to identify potential threats, including threats related to unauthorized access, data tampering, and denial of service, and recommend implementing controls such as authentication, authorization, and input validation.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4v54a29",
+          "question": "You have identified a potential vulnerability in a third-party library used by a web application. Describe the steps you would take to assess the risk of the vulnerability and recommend remediation, including any specific tools or techniques you would use.",
+          "expectedAnswer": "The candidate should describe how they would use a tool like the National Vulnerability Database (NVD) to assess the severity of the vulnerability, and then recommend remediation steps, such as updating the library or implementing a workaround, based on the risk assessment.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4vca18d",
+          "question": "You are using Burp Suite to perform a penetration test on a web application and have identified a potential vulnerability in the application's authentication mechanism. Describe the steps you would take to further exploit and understand the vulnerability, and what recommendations you would make to remediate it.",
+          "expectedAnswer": "The candidate should describe how they would use Burp Suite to send crafted requests to the application, and then analyze the responses to understand the vulnerability, including identifying any weaknesses in password storage or transmission, and recommend implementing a secure authentication mechanism, such as OAuth or OpenID Connect.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4v4bv3j",
+          "question": "You have been tasked with responding to a potential security incident, such as a suspected breach of a web application. Describe the steps you would take to contain and remediate the incident, including any specific tools or techniques you would use.",
+          "expectedAnswer": "The candidate should describe how they would follow an incident response process, including containment, eradication, recovery, and post-incident activities, and recommend using tools like logs and network captures to identify the root cause of the incident and implement measures to prevent similar incidents in the future.",
+          "rating": null
+        },
+        {
+          "id": "mps0il4v1et00",
+          "question": "You are performing a secure code review on a web application and come across a line of code that uses a hardcoded secret key for encryption. What potential security vulnerability does this introduce and how would you recommend it be remediated?",
+          "expectedAnswer": "The use of a hardcoded secret key introduces a potential confidentiality vulnerability, the candidate should recommend using a secure key management system, such as a secrets manager, and provide an example of how to implement it, including securely storing and rotating the key.",
+          "rating": null
+        }
+      ]
+    },
+    {
+      "id": "mpr90pudnvyp4",
+      "candidateName": "Omkar Dodal",
+      "position": "Application Security Consultant",
+      "experience": 2,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Outworxs",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2 \nAPPSEC: Mobile Security, SAST, DAST, Reverse Engineering, OWASP, Burp Suite\nBACKGROUND: Dedicated application security professional with mobile security expertise\nFIT: Strong AppSec skills, relevant experience, and certifications make Omkar a suitable candidate for the role\nCOMPANIES: CyRAACS Services Pvt Ltd, DCDIUM Technologies Pvt Ltd, SevenMentor",
+      "resumeText": "Omkar Dodal\n Ó +91-7972982805 R omkardodal15@gmail.com ° LinkedIn  GitHub  Medium\n Professional Summary\n Application Security Consultant with 2+ years of experience in application security, with a focus on mobile product security.\nBrings rare attacker-depth expertise in Android and iOS – including Frida-based runtime instrumentation, reverse engineering,\nand smali & native level analysis – paired with a consistent track record of developer collaboration, security capability\nbuilding, and published open-source mobile security tools. Has assessed UAT & Production applications across primarily\nfintech, banking, UPI, e-commerce, along with healthcare, and enterprise domains, identifying Critical and High severity\nvulnerabilities. Focuses on helping engineering teams ship more secure products – finding bugs and preventing their recurrence\n– and has conducted 110+ hours of technical training to improve application security maturity across multiple communities.\n Professional Experience\nCyRAACS Services Pvt Ltd May 2025 – Present\n Consultant – Technical Services Bengaluru, India\n • Conducted end-to-end security assessments on 135+ mobile applications (Android & iOS), 10+ web/API applications and 2+ thick\nclients, combining automated testing with code review & manual runtime analysis and exploitation.\n • Engineered 60+ Frida-based runtime instrumentation scripts and Python automation utilities to streamline bypass scenario testing,\nimprove assessment coverage, and generate reproducible PoCs – reducing per-engagement manual effort significantly across 135+\nmobile app assessments.\n • Performed dynamic analysis and runtime instrumentation using Frida and custom hooks to evaluate and bypass client-side security\ncontrols, including SSL pinning, root/jailbreak detection, anti-emulator & anti-Frida checks, runtime integrity controls, captcha,\nand biometric enforcement.\n • Identified and validated 100+ Critical and High-severity vulnerabilities, including payment and business-logic flaws, account\ntakeover vectors, OTP/MPIN manipulation, authorisation flaws (IDOR/BAC), insecure cryptographic implementations, hardcoded\nsecrets, and cloud misconfigurations.\n • Collaborated directly with engineering and DevOps teams to validate fixes, drive remediation, and reduce recurrence of\nvulnerability classes – shifting focus from report delivery to measurable improvement in product security posture.\n • Reverse-engineered mobile applications at application and runtime levels to analyze control flow, obfuscation techniques,\nthird-party SDK behaviour, and security-relevant data-handling logic.\n • Served as SPOC for 2+ managed clients and multiple short-term engagements, owning technical execution, reporting, client\ncommunication, and remediation verification across full engagement lifecycles.\n DCDIUM Technologies Pvt Ltd Sep 2024 – Apr 2025\n Cyber Security Engineer Pune, India\n • Performed in-depth security testing on 30+ web applications, 10+ mobile applications (Android/iOS), 150+ network assets, and\nthick-client software, covering web, mobile, network, and client-side attack surfaces.\n • Led end-to-end VAPT engagements including phishing simulation campaigns for mid-scale organisations (250+ employees) – from\nscoping and execution to remediation validation.\n • Assessed applications across 10+ domains like healthcare, e-commerce, and inventory management platforms, identifying\ndomain-specific business logic flaws and security risks.\n • Authored and delivered 70+ security assessment reports, uncovering critical and high-risk vulnerabilities (SQL injection, XSS,\naccess control flaws, insecure configurations) with developer-ready remediation guidance.\n • Conducted 40+ technical workshops and training sessions (85+ hours) on application security, secure development practices, and\npenetration testing methodologies.\n SevenMentor Jan 2024 – Jul 2024\n Application Security Intern Pune, India\n • Conducted penetration testing using Nessus, Nmap, and Kali Linux; identified and documented 30+ vulnerabilities with severity\nratings and remediation strategies.\n Technical Skills\n Mobile Security: Android & iOS application security, Frida instrumentation, smali analysis, runtime hooking,\nroot/jailbreak/detection check bypass, MobSF - static & dynamic analysis of Android, iOS & native binaries\n Application Security: Web & API VAPT, SAST, DAST, thick-client PT, business logic analysis, mobile level code review\n(Java, Kotlin, Smali, Objective-C – decompiled & source-level), OWASP Top 10 (Mobile, Web, API), CWE\n Reverse Engineering: Android, iOS & native binaries, Jadx, ApkTool, Ghidra, Blutter\n Developer Enablement: Security training, developer-oriented reporting, remediation collaboration, security awareness\nprograms\n Frameworks: OWASP MASVS, PTES, CVSS, SSDLC – threat modeling (STRIDE)\n Tools: Burp Suite, Frida, MobSF, Jadx, ApkTool, Ghidra, Drozer, OWASP ZAP, Imazing, Blutter, Nessus, Nmap,\nSQLMap, Shodan\n Languages: Python, Shell Scripting, Smali, Java\n\nCertifications\n • eWPTX – eLearnSecurity Web Application Penetration Tester eXtreme Issued May 2026 · Expires May 2029\n • eMAPT – eLearnSecurity Mobile Application Penetration Tester Issued Feb 2026 · Expires Feb 2029\n • CRTA – Certified Red Team Analyst Issued Oct 2025\n • CAP – Certified AppSec Practitioner Issued Mar 2025\n • ACP – APIsec Certified Practitioner Issued Jun 2025\n • Ethical Hacking Essentials – EC-Council\n Additional: Ethical Hacking by Internshala, Python for Beginners, Linux RHCE & RHCSA Training, CCNA Training, CEH Training\n Tooling & Open Source\n • no exit please & no-exit-please (iOS) – Developed cross-platform runtime hooks to neutralize application self-termination across\nJava, Objective-C, and native layers on Android and iOS – built after encountering the gap repeatedly across production app\nassessments.\n • SSLSlayer & SSLSlayerv3 – Built reusable Frida-based SSL pinning bypass tooling enabling dynamic interception of hardened\nAndroid applications; iterated to v3 based on real-world assessment gaps.\n • IOSSecurity Slayer – Engineered a hardened Frida script targeting the IOSSecurity framework’s aggregation layer, bypassing\njailbreak, debugger, hook, and reverse engineering detection via dual-strategy hooking (Objective-C runtime + regex-based symbol\nmatching) – designed to remain effective even against obfuscated or stripped binaries.\n • Slayer APIs Scanner – Designed and built a focused security assessment tool to detect misconfigured and abusable Google API\nkeys by validating real-world access across multiple Google services.\n Publications\n • Starting With Android VAPT in 2025–26\n • Building the Ultimate Android Hacking Lab\n • Android Static Analysis 101\n • Exported Components – Kickin’ Down the Doors Devs Left Unlocked\n Selected High & Critical Security Findings\n • Identified and validated 70+ Critical and High severity findings spanning fintech, banking, UPI, KYC, and enterprise platforms –\nincluding production Android, iOS, and thick-client applications.\n • Chained MPIN bypass, response manipulation, and broken authentication to demonstrate full account takeover in a production UPI\nwallet application – identified 9 Critical/High findings in a single engagement across the same attack surface.\n • Identified Critical business logic flaws enabling payment bypass in production Android and iOS fintech applications across multiple\npayment infrastructure clients, including UPI, prepaid card, and lending platforms.\n • Discovered Google Cloud Project misconfiguration in a large-scale consumer app enabling extraction of employee PII, internal data,\nprivate videos, and user credentials – reported with full exploitation proof-of-concept.\n • Reproduced and validated application cryptographic flows in a major iOS platform – identifying content decryption weaknesses, lack\nof transport encryption, and insecure implementation patterns across multiple app components.\n • Uncovered authorisation failures (IDOR, broken access control, locked-account bypass, unauthorised state transitions) across mobile\nbanking and enterprise iOS applications serving regulated financial clients.\n • Identified Critical Account Takeover vectors across Android and iOS KYC, banking, and enterprise applications – via OTP leakage,\nresponse manipulation, and reverse-engineering-assisted traffic decryption.\n Education\nWalchand Institute of Technology 2019 – 2023\n B.Tech – Information Technology Solapur\n Delhi Public School 2019\n Pre-University Education (10+2) Aligarh\n UNHS 2017\n SSC – 10th Grade Nagpur\n Achievements & Extracurricular\n • Delivered guest lectures on cybersecurity topics at colleges including SBUP.\n • Speaker & Volunteer at multiple communities, including SecurityBoat Community, Bengaluru chapter and others.\n • Completed “Dharma-Visharadh” degree after 4 years of study across 2 gurukuls, demonstrating strong discipline and public speaking.\n • Interests: Reading Books, Touring on Bike, Watching Anime/Web Series, Playing Guitar.",
+      "rounds": [
+        {
+          "id": "mpr90puecyvnu",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T18:21:45.302Z",
+      "rank": 16,
+      "rankReason": "Strong AppSec skills, relevant experience, and certifications make Omkar a suitable candidate for the role",
+      "rankScore": 82,
+      "interviewQuestions": [
+        {
+          "id": "mps0j82k5mxml",
+          "question": "Describe how you would identify and exploit a SQL Injection vulnerability in a mobile application using Burp Suite",
+          "expectedAnswer": "The candidate should explain how to configure Burp Suite to intercept and manipulate HTTP requests, identify potential SQL Injection vulnerabilities using tools like Burp's Scanner or Intruder, and demonstrate an understanding of how to exploit the vulnerability using Burp's Repeater tool. They should also discuss how to analyze the application's response to detect SQL Injection flaws.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82k65vep",
+          "question": "You are performing a secure code review of a mobile application and find a hardcoded API key, what steps would you take to address this issue",
+          "expectedAnswer": "The candidate should discuss removing the hardcoded API key and replacing it with a secure storage mechanism, such as encrypted storage or a secure token service, and also mention updating the code to handle errors and exceptions properly to prevent information disclosure. They should also recommend implementing proper key rotation and revocation procedures.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82kc3wtv",
+          "question": "Walk me through your process for conducting a threat model of a mobile application using the OWASP Threat Modeling framework",
+          "expectedAnswer": "The candidate should explain how to identify the application's assets, threats, and vulnerabilities using the OWASP Threat Modeling framework, and discuss how to analyze the application's data flow diagram to identify potential threat vectors. They should also describe how to prioritize and mitigate identified threats using risk-based approaches.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82kdfurs",
+          "question": "Describe how you would use a SAST tool to identify and report on vulnerabilities in a mobile application's source code",
+          "expectedAnswer": "The candidate should explain how to configure and run the SAST tool, such as SonarQube or Veracode, to scan the application's source code for vulnerabilities, and discuss how to analyze the tool's results to identify and prioritize vulnerabilities. They should also describe how to create a report detailing the identified vulnerabilities and recommended remediations.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82khvudf",
+          "question": "You are performing a DAST scan of a mobile application and the tool reports a potential Cross-Site Scripting (XSS) vulnerability, what steps would you take to validate and exploit the finding",
+          "expectedAnswer": "The candidate should explain how to use a tool like Burp Suite to validate the potential XSS vulnerability by manipulating user input and analyzing the application's response, and discuss how to exploit the vulnerability using techniques such as injecting malicious scripts. They should also describe how to recommend remediations to the development team.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82k9rm9c",
+          "question": "Suppose you found a vulnerability in a third-party library used by a mobile application, what steps would you take to report and mitigate the issue",
+          "expectedAnswer": "The candidate should discuss how to report the vulnerability to the library's maintainers and the development team, and describe how to implement mitigations such as updating the library to a patched version, applying workarounds, or disabling affected functionality. They should also mention how to monitor for updates and patches from the library maintainers.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82ks6yns",
+          "question": "Explain how you would use Reverse Engineering to analyze a mobile application's binary for potential security vulnerabilities",
+          "expectedAnswer": "The candidate should describe how to use tools like IDA Pro or Ghidra to disassemble and analyze the application's binary, and discuss how to identify potential vulnerabilities such as insecure data storage, inadequate encryption, or suspicious network communications. They should also explain how to use dynamic analysis techniques to analyze the application's runtime behavior.",
+          "rating": null
+        },
+        {
+          "id": "mps0j82k8basf",
+          "question": "You are responding to a security incident where a mobile application's user data has been compromised, what steps would you take to contain and remediate the incident",
+          "expectedAnswer": "The candidate should explain how to containment procedures such as taking the application offline, blocking affected user accounts, and notifying stakeholders, and discuss how to remediate the incident by implementing security patches, updating affected systems, and conducting a thorough investigation to identify root causes. They should also describe how to develop a plan to prevent similar incidents in the future.",
+          "rating": null
+        }
+      ]
+    },
+    {
+      "id": "mpr6xvybkubf6",
+      "candidateName": "Prafullakumar Kulkarni",
+      "position": "QA/Security Analyst",
+      "experience": 6,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 6.2\nAPPSEC: DAST, SAST, Burp Suite, OWASP, Threat Modelling, SDLC, Code Review\nBACKGROUND: Experienced security analyst with a strong background in application security testing and secure development lifecycle\nFIT: The candidate has a strong combination of experience, skills, and certifications, including 6.2 years of experience in security analysis, proficiency in DAST, SAST, and secure code review, and a Certified Ethical Hacker certification\nCOMPANIES: Advaya Softech Pvt. Ltd",
+      "resumeText": "Career Objective\n Analytical cy bersecurity professional with 6 .2 years of exper ience in Security Analysis . Skilled in VAPT, web and mobile application\n security testing, DAST, SAST, and secure code review. Experienced in threat modeling and secure architecture, focused on identifying\n vulnerabilities and delivering effective remediation to strengthen enterprise security posture.\n Professional Experience\n  Experience with Vulnerability Assessment and Penetration Testing (VAPT) tools including Kali Linux, Burp Suite, Nmap,\n OWASP ZAP, Metasploit, Nikto, Wireshark, Postman, SQLmap, Netcat, and Nessus for identifying and validating security\n vulnerabilities.\n  DAST (Dynamic Application Security Testing) Perfo rmed Vulnerability Assessment for web applications, API and Network.\n Validating the target for all the vulnerabilities like XSS, SQL Injection etc.\n  SAST (Static Application Security Testing) Performed source code scanning to the applications using enterpri se automated tools.\n  Basic Knowledge in SOC analysis and defensive security operations using SIEM tools like Splunk and Azure Sentinel.\n  Conducted security testing to identify web application vulnerabilities including SSRF, XXE, SQL Injection (SQLi), Remote Code\n Execution (RCE), Local/Remote File Inclusion (LFI/RFI), insecure file uploads, Cross - Site Request Forgery (CSRF), Cross - Site Scripting\n (XSS), and security misconfigurations.\n  Performed manual security testing to uncover and exploit complex business log ic vulnerabilities not identifiable through\n automated tools, improving overall application security.\n  E xperience with cloud platforms including AWS, and Digital Ocean for deployment and testing environments.\n  Proficient in database operations with MySQL/SQL, including backend data validation and query optimization.\n  Test Management tools: JIRA and Zoho for defect tracking, reporting, and test documentation.\n  API testing, API testing by using POSTMAN tool .\n  Mobile APP application security testing and Reverse engineering , SAST and DAST by using tools MobSF, JADX, ADB, Android\n Studio.\n  Server, WAF, and Infrastructure management: Apache2, Nginx, Fail2Ban, ModSecurity, JBoss for securing and maintaining web\n and application servers.\n  Knowledge in DevSe cOps practices , including CI/CD pipelines, Jenkins, Software Composition Analysis (SCA), Static Application\n Security Testing (SAST), and Infrastructure as Code (IaC).\n  Knowledge SAST tools such as Snyk, SonarQube, SonarLint, and Checkov to identify and remediate code vulnerabilities.\n  Security Architecture & OWASP , Designed and reviewed secure application architecture (application security) for web and\n mobile applications aligned with OWASP Top 10 .\n  Knowledge In Compliance (HIPAA, GDPR, PC I DSS), Supported compliance initiatives by mapping OWASP Top 10 vulnerabilities\n to regulatory controls and remediation actions.\n  Secure Development life cycle Implemented Secure SDLC processes to identify and mitigate secu rity risks early with left shift, SAST,\n DAST, and secure design reviews.\n  Knowledge in Threat Modeling: Common threat modeling frame work STRIDE and DREAD by using Microsoft threat modeling.\n  Implemented security testing (SAST, DAST, SCA) within CI/CD pipelines using Jenkins, and establishe d a shift - left framework to\n promote secure coding practices early in the development lifecycle\n C ertification\n Certified Ethical Hacker (CEH - ECC6293847051 )\n PRAFULLAKUMAR\n  +91 - 9148033304  prafullakumar.sk@gmail.com\n www.linkedin.com/in/prafullakumar - kulkarni - a1bb48383/\n ECC6293847051\n ECC6293847051\n\nT echnical Skills and Tools:\n Security Testing Tools : Kali Linux, Burp Suite, Nmap, OWASP ZAP, Metasploit, Nikto, Wireshark, postman, SQL Map, Nessus .\n Mobile Testing : MobSF, JADX, ADB, Android Studio , Frida.\n SIEM Tool For (SOC) : Splunk, Azure Sentinel\n Database : MySql\n API : Postman\n Cloude Platform : Digital Ocean , AWS\n Operating Systems : Linux (Ubuntu, Kali) & Window s\n Scripting : Java (Intermediator), Python (Beginner), Bash Scripting\n Experiences :\n Organization: Advaya Softech Pvt. Ltd\n Description: ERP software products company helping SMEs automate business processes.\n Position: QA / Security Analyst\n Tenure: Aug 2019 – Sep 2025\n Projects :\n 1. GEMS: Education ERP supporting deemed universities, autonomous and affiliated engineering colleges, and degree colleges.\n 2. BLAZE: Automated Industrial Manufacturing SaaS - based ERP application.\n Key Responsibilities & Achievements:\n  Conducted Dynamic Application Security Testing (DAST) using Burp Suite and OWASP ZAP (manual and automated) to identify\n and remediate web application vulnerabilities.\n  Performed application security Source Code Analysis (SAST) and secure code reviews to detect vulnerabilities such as injection\n flaws, authentication issues, insecure cryptography, and business logic weaknesses early in the development cycle.\n  Integrated security testing activities across the Secure Software Develo pment Life Cycle (SDLC), including requirement review,\n design validation, testing, and release sign - off.\n  Scheduled and monitored weekly/monthly internal and external security scans across diverse infrastructures and business\n units.\n  Performed penetration te sting on Linux and collaborated with engineering teams for vulnerability exploitation and mitigation.\n  Identified and implemented measures to strengthen network and system security , safeguarding critical business information.\n  Analysed test findings and collaborated with development teams to provide actionable mitigation steps for discovered\n vulnerabilities.\n  Implemented security testing (SAST, DAST, SCA) within CI/CD pipelines using Jenkins, and established a shift - left framework to\n promote secure coding practices early in the development lifecycle\n  Performed Android mobile application security testing using MobSF, identifying vulnerabili ties through static and dynamic analysis\n and recommending fixes.\n  Conducted API security assessments for web applications, identifying vulnerabilities such as IDOR, broken authentication, and\n insecure endpoints, and provided actionable remediation to enhanc e application security.\n Academics :\n  Bachelor of Engineering (B.E.): Electronics & Communication Engineering From\n Basvaklayana Engineering College, Bidar (VTU) .\n Personal Information\n Sex : Male\n Marital Status : Single\n Date of Birth :02/08/1993 PRAFULLAKUMAR",
+      "rounds": [
+        {
+          "id": "mpr6xvyb9ejzj",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:34.019Z",
+      "rank": 5,
+      "rankReason": "Experienced security analyst with strong background in application security testing and secure development lifecycle",
+      "rankScore": 93,
+      "interviewQuestions": [
+        {
+          "id": "mps0pf710iqvk",
+          "question": "How do you tune rules in Snyk to reduce false positives in a Node.js application, and what specific configuration options do you use to integrate it into a Jenkins CI/CD pipeline?",
+          "expectedAnswer": "Tuning rules by configuring severity thresholds, ignoring specific vulnerabilities, and using custom patches; integrating into Jenkins using the Snyk CLI and Jenkinsfile",
+          "rating": null
+        },
+        {
+          "id": "mps0pf71zjt3n",
+          "question": "Describe a scenario where you would use Burp Suite to test for JSON Web Token (JWT) vulnerabilities in a REST API, including the specific tool features and attack techniques you would employ",
+          "expectedAnswer": "Using Burp's Intruder and Repeater tools to manipulate JWT tokens, testing for weaknesses such as weak signing keys, token tampering, and information disclosure; also using Burp's JWT decoder and encoder",
+          "rating": null
+        },
+        {
+          "id": "mps0pf71j5k7f",
+          "question": "Explain how you structure a penetration test report for a web application, including the key elements you include and how you perform severity scoring using the CVSS framework",
+          "expectedAnswer": "Including executive summary, introduction, scope, findings, recommendations, and conclusion; using CVSS v3.1 to score vulnerabilities based on exploitability, impact, and mitigating factors",
+          "rating": null
+        },
+        {
+          "id": "mps0pf71namjt",
+          "question": "You are conducting a security assessment for a cloud-based application on AWS, and you discover an S3 bucket with publicly accessible objects. What steps do you take to secure the bucket, and what IAM policies would you implement to prevent similar misconfigurations?",
+          "expectedAnswer": "Updating the S3 bucket policy to restrict access, enabling versioning and default encryption; implementing IAM policies using AWS IAM roles and permissions, such as s3:GetObject and s3:PutObject, with condition statements to restrict access",
+          "rating": null
+        },
+        {
+          "id": "mps0pf71xnxg3",
+          "question": "How do you identify and exploit a Server-Side Request Forgery (SSRF) vulnerability in a web application using Burp Suite, and what specific tool features and techniques do you use",
+          "expectedAnswer": "Using Burp's Proxy and Repeater tools to capture and manipulate requests, testing for SSRF by injecting malicious URLs and observing responses; using Burp's Intruder tool to automate the attack",
+          "rating": null
+        },
+        {
+          "id": "mps0pf7143fhk",
+          "question": "Describe your approach to performing a secure code review for a Java-based web application, including the specific security vulnerabilities you look for and the tools you use to support the review",
+          "expectedAnswer": "Reviewing code for vulnerabilities such as SQL injection, cross-site scripting, and insecure deserialization; using tools such as SonarQube, FindBugs, and OWASP Java HTML Sanitizer; checking for secure coding practices such as input validation and secure configuration",
+          "rating": null
+        },
+        {
+          "id": "mps0pf711t7k3",
+          "question": "You are working as an AppSec engineer at Advaya Softech Pvt. Ltd, and you discover a critical vulnerability in a third-party library used by one of your company's web applications. What steps do you take to respond to the vulnerability, including notification, mitigation, and remediation",
+          "expectedAnswer": "Notifying the development team and management, assessing the risk and impact of the vulnerability, mitigating the vulnerability by implementing temporary fixes or workarounds, and remediating the vulnerability by updating the library or applying a patch",
+          "rating": null
+        },
+        {
+          "id": "mps0pf71l6f22",
+          "question": "Explain how you integrate SonarQube into a CI/CD pipeline using Jenkins, including the specific Jenkinsfile configuration and SonarQube settings you use to analyze code quality and security",
+          "expectedAnswer": "Using the SonarQube Jenkins plugin to integrate SonarQube into the Jenkins pipeline, configuring the Jenkinsfile to run SonarQube analysis, and using SonarQube settings such as quality gates and branch analysis to enforce code quality and security standards",
+          "rating": null
+        }
+      ]
+    },
+    {
+      "id": "mpr6xurapvf39",
+      "candidateName": "Chaithanya Damireddy",
+      "position": "Cyber Security Consultant (VAPT)",
+      "experience": 2,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2.5 \nAPPSEC: VAPT, Pentest, Burp Suite, OWASP, CVSS, API Security Testing\nBACKGROUND: Dedicated security consultant with experience in VAPT and security testing\nFIT: Strong AppSec skills with proven experience in VAPT, pentesting, and security testing, meeting the 2-year experience threshold\nCOMPANIES: Protechmanize Solutions Pvt Ltd, Rime Soft Limited",
+      "resumeText": "CHAITHANYA DAMIREDDY\n Cyber Security Consultant (VAPT) | Linked In\n Navi Mumbai, Maharashtra | 6303934286 | dchaitanya37822@gmail.com\n PROFESSIONAL S UMMARY\n • Cyber Security Consultant with 2+ years of experience delivering end - to - end Vulnerability Assessment and\n Penetration Testing (VAPT) across Web, API, Network, and Android platforms.\n • Proven track record of identifying critical vulnerabilities including BOLA, authentication bypass, and\n business logic flaws, improving application security posture across multiple environments.\n • Skilled in offensive security tools, CVSS - based risk analysis, and providing actionable remediation to\n strengthen secure development practices.\n CORE SKILLS\n • VAPT & Security Testing: Web Application Pentesting, API Security Testing, Network VAPT, Android\n Security Testing\n • Security Standards: OWASP Top 10, OWASP API Top 10, OWASP Mobile Top 10, CVSS v3.1\n • Tools: Web/API: Burp Suite, Postman, Kali Linux\n Mobile: Frida, MobSF, ADB, JADX, APKTool, Objection\n Network: Nmap, Nessus, Wireshark\n • Techniques: Authentication Bypass, BOLA, BFLA, Injection, Business Logic Testing, Session\n Management, Root Detection Bypass, SSL Pinning Bypass, Runtime Manipulation, Reverse Engineering .\n PROFESSIONAL EXPERIENCE\n PROTECHMANIZE SOLUTIONS PVT LTD\n Cyber Security Consultant | June 2025 – Present\n • Performed VAPT on web, API, and Android mobile applications, identifying critical vulnerabilities\n impacting authentication and access control.\n • Conducted Android application security testing including static and dynamic analysis using tools like\n MobSF, JADX, APKTool, and Frida.\n • Performed runtime testing using Frida and Objection to bypass root detection, SSL pinning, and modify\n application behavior.\n • Used ADB for device interaction, activity/service enumeration, and testing inter - process communication\n vulnerabilities.\n • Conducted API testing in conjunction with mobile apps , identifying issues like BOLA, BFLA, and\n improper access control.\n • Delivered client - ready reports with CVSS scoring, PoCs, and remediation guidance, improving overall\n application security posture.\n • Collaborated with development teams to fix vulnerabilities and strengthen secure coding practices for\n mobile applications.\n\nRIME SOFT LIMITED\n Associate Cyber Security Consultant | June 2024 – June 2025\n • Identified vulnerabilities across web applications using Burp Suite and manual testing techniques .\n • Performed API security testing including endpoint enumeration, parameter tampering, and rate - limit bypass\n testing .\n • Detected client - side vulnerabilities such as insecure storage, token exposure, and improper validation .\n • Conducted network vulnerability assessments identifying outdated components and misconfigurations .\n • Prepared security reports with CVSS scoring and prioritized remediation recommendations .\n • Assisted in retesting vulnerabilities after remediation , ensuring issues were fully resolved.\n • Participated in internal knowledge sharing sessions on Web & API VAPT techniques and OWASP Top\n 10 mitigation strategies.\n CERTIFICATIONS\n • APISEC Certified Practitioner\n • CEH (Certified Ethical Hacker)\n • Pursuing Multi - Cloud Red Team Analyst (MCRTA)\n • Purple Teaming Fundamentals - C - Edition (Completion Certificate)\n EDUCATION\n B. Tech in Civil Engineering\n ABR College of Engineering & Technology, 2024 — 72%\n Diploma in Civil Engineering\n St. Mary’s Group of Institutions — 80%\n LANGUAGES\n • Telugu\n • Hindi\n • English",
+      "rounds": [
+        {
+          "id": "mpr6xura4ry9r",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:32.470Z",
+      "rank": 7,
+      "rankReason": "Strong AppSec skills with proven experience in VAPT, pentesting, and security testing",
+      "rankScore": 91
+    },
+    {
+      "id": "mpr6xtnjbg93w",
+      "candidateName": "Ankit Mishra",
+      "position": "Application Security Consultant",
+      "experience": 2,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2 \nAPPSEC: DAST, SAST, Burp Suite, Penetration Testing, OWASP, API Security Testing\nBACKGROUND: Dedicated security analyst with hands-on experience in application security testing\nFIT: Strong AppSec skills and meets experience threshold with relevant experience in penetration testing, DAST, and SAST\nCOMPANIES: Accenture",
+      "resumeText": "ANKIT MISHRA\n LinkedIn : iamankitm | E mail : ankitmishra8121@gmail.com | Phone Number : 8421442556 | Mumbai, India\n OVERVIEW\n Cybersecurity professional with 2 years of experience in Vulnerability Assessment and Penetration Testing (VAPT) and\n application security. Hands - on experience in web and API penetration testing, DAST, SAST, and Android mobile application\n security testing. Possess a strong analytical mindset with a proven ability to identify, analyze, and report vulnerabilities .\n SKILLS\n Security Practices: Vulnerability Assessment & Penetration Testing (VAPT) , Web Application Security Testing , DAST, SAST,\n API Security Testing , Mobile PT(Android), Basic understanding of Network Security\n Tools & Technologies: Burp Suite Professional, Nessus, OWASP ZAP, Nmap, SQLMap, Postman, Kali Linux, Fortify SCA,\n Wireshark, Metasploit, THC Hydra, MobSF, Frida, Objection, JADX , A pktool\n Standards & Frameworks: OWASP Top 10, SANS CWE 25, ISO 27001, CIS Benchmarks\n Certificate: Certified Ethical Hacker (CEH) v13, P rofessional C loud S ecurity E ngineer (GCP - PCSE), Microsoft Compliance\n and Identity Fundamentals (SC - 900) , Associate Data Practitioner (ADP) , Google Digital Leader (GCP - CDL)\n Professional Experience\n Application Security Consultant | Accenture August 2024 - present\n • Performed Application Penetration Testing to identify vulnerabilities such as SQL Injection, XSS, CSRF,\n authentication & authorization flaws, JWT misconfigurations, session management issues.\n • Worked on API penetration testing using Postman & Burp Suite, testing for authentication, authorization, and data\n exposure issues.\n • Conducted dynamic (DAST) and static (SAST) application security testing using enterprise tools like Burp suite\n professional and Fortify, analyzing scan results to triage false positives and validate critical findings .\n • Performed Android application security testing using JADX and MobSF for static analysis, and Frida and Objection\n for dynamic analysis and runtime inspection.\n • Support technical efforts to remediate identified weaknesses and control gaps by collaborating with business\n units, IT teams, and system engineers. Assist in reporting and prioritizing vulnerability remediation plans in\n alignment with best practices.\n • Collaborated with application developers to validate and assess vulnerabilities, identify root causes, and\n implement effective mitigation strategies .\n Cybersecurity Intern | Accenture March 2024 – June 2024\n • Built foundational application security expertise by analyzing OWASP Top 10 vulnerability types, performing\n hands - on exploitation scenarios using Burp Suite to strengthen secure coding awareness.\n • Applied SAST and DAST methodologies across multiple applications, identifying and documenting code - level and\n runtime security issues, improving secure development practices and vulnerability remediation workflows.\n Education\n Thakur College of Engineering and Technology B.E. in I nformation T echnology | 2020 - 2024 | CGPI:9.5\n New English Jr. College HSC | 2018 – 2020 | 83%\n Mount Mary English High School SSC | 2005 – 2018 | 86%\nSourced by Softenger India Pvt. Ltd on 27 May, '26",
+      "rounds": [
+        {
+          "id": "mpr6xtnjo2e7s",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:31.039Z",
+      "rank": 10,
+      "rankReason": "Strong AppSec skills and meets experience threshold with relevant experience in penetration testing, DAST, and SAST",
+      "rankScore": 88
+    },
+    {
+      "id": "mpr6xsjsqpm4y",
+      "candidateName": "Aman Gupta",
+      "position": "Information Security Consultant",
+      "experience": 2,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2 \nAPPSEC: Penetration Testing, Burp Suite, OWASP, Secure Code Review, VAPT, API Security Testing\nBACKGROUND: Dedicated security consultant with hands-on experience in vulnerability assessment and penetration testing\nFIT: Meets the experience threshold with strong AppSec skills, including penetration testing, vulnerability assessment, and secure code review\nCOMPANIES: Synradar, Ansh Infosec",
+      "resumeText": "AMAN GUPTA\n Mumbai | P: 90 82854312 | Amangupta 981 9 76 @gmail.com\n PROFILE SUMMARY\n Results - driven Security Consultant with 2+ years of hands - on experience in Vulnerability\n Assessment , Penetration Testing (VAPT) . Currently focused on securing enterprise - level web\n applications, mobile platforms , and APIs combines deep technical skill with strong analytical and\n communication abilities to identify critical vulnerabilities and drive remediation .\n SKILLS\n ● Areas of Expertise: Vulnerability Assessment & Penetration Testin g (VAPT / Appsec ) , Privilege\n Escalation, Lateral Movement, Pivoting, Web & Mobile Application Security, Thick Client\n Testing, API Security Testing & Analysis, Network Architecture Design & Review, Secure Code\n Review , Continuous Security Monitoring & CI/CD Pipeline Integration .\n ● Technical Skills:\n ○ Languages: Python, Bash Scripting, C/C++, JavaScript, HTML/CSS, PowerShell\n ● Tools & Applications:\n ○ Penetration Testing & VAPT: Kali Linux, Nmap , Nessus Tenable, Metasploit\n Framework.\n ○ Web / API Testing: Burp Suite, Acunetix, OWASP ZAP, Sqlmap, Postman, SonarQube, Zap\n ○ Networking & Analysis: Wireshark, TCPdump\n ○ Operating Systems: Windows, Linux, Windows Server, Android\n ● Soft Skills: Technical Report Writing, Stakeholder Communication, Analytical & Problem - Solving\n Skills, Leadership & Teamwork, Negotiation\n EXPERIENCES\n Associate Security Analyst Onsite\n Ansh Infosec Jan 2024 – Jan 26\n • Conducting vulnerability assessments using tools like Nmap, Acunetix, and Metasploit\n • Performing penetration testing on internal networks and web applications\n • Engaging in IP/MAC tracking and connectivity reporting for threat detection\n • Assisting in Web Application Security assessments based on OWASP Top 10\n • Drafting technical findings and contributing to vulnerability reports\n • Understanding and reviewing firewall rules for security alignment\n • Supporting secure network implementation aligned with organizational policies\n Information Security Consultant Onsite\n Synradar Feb 2026 – Ongoing\n ● Conduct comprehensive security assessments for enterprise clients across web applications, mobile\n platforms (Android), and REST/SOAP APIs.\n ● Utilize manual and automated testing techniques to identify and exploit vulnerabilities, including\n OWASP Top 10, API Top 10.\n ● Develop and deliver detailed penetration testing reports to technical and non - technical stakeholders,\n providing clear risk analysis and strategic remediation guidance.\n ● Collaborate with development teams to integrate security best practices into the SDLC, promoting a\n proactive approach to threat mitigation.\n ● Security Reporting – CVSS Scoring, Technical Documentation & Executive Summaries .\n\nEDUCATION\n A.P SHAH - Mumbai University\n B. Tech – Electronics and telecommunications Engineering\n Cumulative GPA: 7. 33 /10\n COMMUNITY INVOLVEMENT & CONTRIBUTIONS\n ● Regularly participate in cybersecurity talks , conferences, and community meetups, sharing insights\n and learning from industry professionals [Eg: - Bsides Mumbai , Hack - The - Box Meetup].\n ● Mentor and guide aspiring cybersecurity professionals, providing career counseling to college\n graduates on breaking into and advancing within the cybersecurity Fi eld.",
+      "rounds": [
+        {
+          "id": "mpr6xsjsiiwb2",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:29.608Z",
+      "rank": 11,
+      "rankReason": "Meets the experience threshold with strong AppSec skills, including penetration testing, vulnerability assessment, and secure code review",
+      "rankScore": 87
+    },
+    {
+      "id": "mpr6xrjx01abn",
+      "candidateName": "Somil Jain",
+      "position": "Cyber Security Engineer",
+      "experience": 3,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2.7\nAPPSEC: Vulnerability Management, Penetration Testing, Burp Suite, OWASP, SAST\nBACKGROUND: Dedicated security analyst with experience in vulnerability management and penetration testing\nFIT: Strong AppSec skills and experience exceeding the 2-year threshold, with proficiency in tools like Burp Suite and expertise in addressing OWASP Top 10 risks\nCOMPANIES: TATA CONSULTANCY SERVICES",
+      "resumeText": "Somil Jain\n Contact No : (91) 6260528324 Email : somiljain045@gmail.com Linkedin : linkedin.com/in/somil3 5\n Professional Summary\n Cyber Security Engineer with 2.7 years of hands - on experience in Vulnerability Management, Penetration Testing (VAPT), and Security\n Assessments. Skilled in identifying, analyzing, and mitigating vulnerabilities in infrastructure, APIs, and web applications. Proficient in\n security tools like Te nable, Burp Suite, Metasploit, and Nmap, with expertise in addressing OWASP Top 10 risks and creating detailed\n security reports.\n Skills\n  Vulnerability Management Tools: Tenable, Burp Suite, Metasploit, Nmap\n  Security Standards & Frameworks: OWASP Top 10, SANS Top 25, CIS Benchmarks, CVE, CWE, CVSS, ISO 27001, NIST, PCI DSS\n  Programming & Scripting: Python (Data Analysis with Pandas)\n  Report Writing: Comprehensive VA/PT reporting with actionable\n  Penetration Testing: Infrastructure, API, and Web Applications .\n  Frameworks like IS027002. Additional familiarity with compliance certification .\n Professional Experience\n Security Analyst | TATA CONSULTANCY SERVICES | 2022 AUG - Till Date\n Key Responsibilities:\n ● Conducted infrastructure vulnerability assessments and penetration testing using tools like Tenable, Metasploit, and Nmap.\n ● Performed API and web application security testing using Burp Suite to address OWASP Top 10 vulnerabilities.\n ● Executed vulnerability and configuration reviews to ensure comp liance with CIS benchmarks.\n ● Created detailed reports summarizing findings and providing remediation strategies to stakeholders.\n ● Improved vulnerability management by automating data - driven remediation prioritization with Python (Pandas library).\n ● Designed and implemented a vulnerabilities dashboard (Single Pane of Glass) for real - time risk monitoring.\n ● Providing expertise and leadership for Incident Response capabilities including good understanding of Red Teaming . I provide both\n subjec t matter expertise and project management experience to serve as the “point person” of client engagement in domain .\n Key Achievements:\n  Delivered over 100 successful vulnerability assessments and penetration tests for web applications and services.\n  Recognize d with the \"On the Spot\" award for handling critical project deliveries.\n  Ranked in the Top 25 of TCS HackQuest Season 6.\n Certifications\n  Partner Sales Associate – Operational Technology (Tenable) , 2024\n  Python for Data Science (IBM), 2019\n  e Learning Junior Penetration Test ( eJPT ) (INE) , 2025\n Education\n B. Tech | 2018 - 2022 | ITM GOI, Gwalior, MP | 7.50 CGPA\n  Participated in Smart India Hackathons, applying technical problem - solving skills.\n  Developed a Covid Detection System using Deep Learning , achieving 96% accuracy.\n  Actively attended cybersecurity seminars to stay updated on industry trends.\n Personal Interests/Hobbies\n ● Badminton | Gardening | History",
+      "rounds": [
+        {
+          "id": "mpr6xrjxhtdm6",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:28.317Z",
+      "rank": 8,
+      "rankReason": "Strong AppSec skills and experience exceeding the 2-year threshold, with proficiency in tools like Burp Suite",
+      "rankScore": 90
+    },
+    {
+      "id": "mpr6xqj40y7pp",
+      "candidateName": "Shreyas Wagle",
+      "position": "Cyber Security Consultant",
+      "experience": 2,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ❌ Skip\nEXP: 1.75 \nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling \nBACKGROUND: Dedicated security analyst with VAPT experience\nFIT: The candidate has less than 2 years of experience, which does not meet the minimum experience threshold for the AppSec Engineer role.",
+      "resumeText": "SHREYAS WAGLE\n Cyber Security Consultant | VAPT Specialist\n Mumbai, Maharashtra, India | +91 8779416234 | shreyaswagle99@gmail.com\n LinkedIn: https://www.linkedin.com/in/shreyas - wagle - 161295218/\n PROFESSIONAL SUMMARY\n Cyber Security Consultant with 1 year 9 months of dedicated VAPT experience covering web applications, APIs,\n mobile (Android) applications, network infrastructure, and firewall configuration reviews. Skilled in black - box\n and grey - box methodologies aligned to OWASP Top 10 (2021), OWASP API Security Top 10 (2023), and CIS\n Benchmarks. Proven track record of identifying critical and high - severity vulnerabilities, delivering CERT - In\n compliant reports, and coordinating remediation with development teams and secur ity leadership.\n CyberWarfare Labs Certified Red Team Analyst (CRTA), ISC2 Certified in Cybersecurity (CC) and EC - Council Ethical\n Hacking Essentials certified.\n CORE COMPETENCIES\n • Web Application Penetration Testing | API Penetration Testing | Mobile (Android) Application Penetration\n Testing\n • Network VAPT (Internal & External) | Firewall Configuration Review (CIS Benchmarks) | Vulnerability\n Assessment\n • Manual Exploitation | Business Logic Testing | Authentication & Authorization Testing | Session\n Management Review\n • CVSS v3.1 Risk Scoring | CERT - In Compliant Reporting | Executive & Technical Report Writing\n • Vulnerability Lifecycle Management | Remediation Validation | Retesting & Closure | Stakeholder\n Coordination\n TECHNICAL SKILLS & TOOLS\n Penetration Testing Tools: Burp Suite, OWASP ZAP, Postman, Nessus, Acunetix, Nmap, Metasploit, Nikto\n Mobile Security Tools: Frida, ADB (Android Debug Bridge), JADX - GUI, Burp Suite (proxy interception), APKTool\n Operating Systems: Kali Linux, Windows 10/11\n Standards & Frameworks: OWASP Top 10 (2021), OWASP API Security Top 10 (2023), CIS Benchmarks, CERT - In,\n CVSS v3.1\n Project & Tracking: JIRA (vulnerability lifecycle, retesting workflows), Confluence\n Testing Approaches: Black - box, Grey - box, Manual validation, Automated scanning\n PROFESSIONAL EXPERIENCE\n Protechmanize Solutions Pvt Ltd Mumbai, India\n Cyber Security Consultant April 2024 – January 2026\n • Delivered end - to - end Vulnerability Assessment and Penetration Testing engagements across web\n applications, APIs, Android mobile applications, internal/external networks, and infrastructure for clients\n across [BFSI / Healthcare / E - commerce / SaaS / Manufac turing].\n • Conducted web application assessments and API assessments using black - box and grey - box methodologies\n aligned with OWASP Top 10 (2021) and OWASP API Security Top 10 (2023).\n • Performed network penetration testing on internal and external network ranges, including firewall\n configuration reviews (GUI and configuration file analysis) benchmarked against CIS standards.\n\n• Identified and validated critical and high - severity vulnerabilities including SQL Injection, Insecure Direct\n Object Reference (IDOR), Broken Access Control, Server - Side Request Forgery (SSRF), Cross - Site Scripting\n (XSS), JWT misconfiguration, insecure dese rialization, business logic flaws, and authentication bypass.\n • Executed Android application security testing on mobile applications using Frida, ADB, JADX - GUI, and Burp\n Suite, covering SSL pinning bypass, insecure data storage, hardcoded secrets, and exported component\n analysis.\n • Assigned accurate risk ratings using CVSS v3.1 base metrics and produced CERT - In compliant technical\n reports and executive summaries for technical teams and leadership stakeholders (CISO, CTO).\n • Managed the complete VAPT lifecycle in JIRA: scoping, testing, finding documentation, remediation tracking,\n retesting, and closure validation prior to sign - off.\n • Collaborated with development teams and Change Advisory Boards (CAB) to prioritize remediation, review\n code - level fixes, and validate secure implementation.\n • Conducted annual security re - assessments as part of compliance and maintenance cycles to ensure\n continued adherence to security baselines.\n • Presented VAPT findings to board - level stakeholders, translating technical vulnerabilities into business risks\n and actionable remediation plans.\n Eclerx Services Ltd Mumbai, India\n Financial Analyst – FI Operations (Trade Confirmation & Trade Support) October 2021 – March 2023\n • Confirmed North America fixed - income trades by validating economic parameters and coordinating with\n traders, settlement teams, and counterparties to ensure timely settlement.\n • Managed a team of 5 FTEs, performed root - cause analysis on processing errors, and recommended control\n implementations to leadership.\n CERTIFICATIONS\n • Certified Ethical Hacker (CEH) — EC - Council\n • Certified in Cybersecurity (CC) — ISC2 | Certificate No. 1451315 | 2024\n • Ethical Hacking Essentials (EHE) — EC - Council | Certificate No. 354439 | 2025\n • Certified Red Team Analyst (CRTA) — CyberWarfare Labs | Certificate No. 6933dd18e094d36ed04e1df9 |\n 2025\n NOTABLE VULNERABILITY CLASSES IDENTIFIED\n • Injection: SQL Injection and XSS Injection.\n • Access Control: IDOR, horizontal and vertical privilege escalation, broken function - level authorization.\n • Authentication & Session: Authentication bypass, JWT token bypass , weak session invalidation, predictable\n tokens.\n • Server - Side: SSRF (including blind SSRF to cloud metadata endpoints), file upload bypass.\n • Client - Side: Reflected, stored, and DOM - based XSS, CSRF on state - changing endpoints.\n • API - Specific: E xcessive data exposure, lack of rate limiting, broken object property level authorization.\n • Mobile: Insecure data storage, hardcoded API keys, insufficient transport layer protection, exported\n components, SSL pinning weakness.\n • Configuration: Misconfigured firewall rules, default credentials, insecure CORS, missing security headers.\n EDUCATION\n Bachelor of Commerce (B.Com) 2021\n Sterling College of Commerce, University of Mumbai CGPA: 6.35\n\nHigher Secondary Certificate (HSC) 2017\n Sterling College of Commerce, University of Mumbai 60%\n PROFESSIONAL STRENGTHS\n • Critical and analytical problem - solving with structured testing methodology.\n • Technical and executive report writing for both engineering and leadership audiences.\n • Cross - functional coordination with developers, CAB members, and security leadership.\n • Effective client communication and stakeholder management throughout the VAPT lifecycle.",
+      "rounds": [
+        {
+          "id": "mpr6xqj45nutg",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:26.992Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr6xpegvl4s5",
+      "candidateName": "Rutuja Chaudhari",
+      "position": "Security Analyst",
+      "experience": 3,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3.5\nAPPSEC: SAST, DAST, Penetration Testing, Burp Suite, OWASP, Secure Code Review\nBACKGROUND: Dedicated security analyst with experience in Web Application Security and Mobile Application Security\nFIT: Strong AppSec skills with experience exceeding the 2-year threshold, along with notable experience in manual and automated security assessments and security reporting\nCOMPANIES: AQM Technologies Pvt. Ltd.",
+      "resumeText": "Rutuja Chaudhari\n Security Analyst\n +91-8657108624\nchaudharirutu21@gmail.com\nhttps://www.linkedin.com/in/rutuja-c-38636b1a7/\n Professional Summary\n Security Analyst with 3.5 years of experience in Web Application Security, Mobile Application Secu-\nrity, Vulnerability Assessment, Penetration Testing, and Security Reporting. Experienced in manual and\nautomated security assessments, remediation support, stakeholder communication, and process documen-\ntation across government, banking, retail, e-commerce, manufacturing, and telecom environments. Skilled\nin identifying security weaknesses, validating vulnerabilities, and supporting remediation activities.\n Core Competencies\n • Web Application Security Assessment\n • Mobile Application Security Assessment\n • API and Web Service Security Testing\n • Vulnerability Assessment and Penetration Testing\n • Secure Code Review\n • SAST and DAST\n • Application and System Audit\n • Security Reporting and Remediation Tracking\n • Client Communication and Stakeholder Coordination\n • Security Documentation and Process Standardization\n Professional Experience\n AQM Technologies Pvt. Ltd. Aug 2022 – Present\n Security Analyst\n • Conduct Web Application and Mobile Application penetration testing based on defined scope, policies,\nand security requirements.\n • Perform manual and automated security assessments for clients across India and overseas environ-\nments.\n • Assess web applications, APIs, mobile applications, and system/network environments for security\nvulnerabilities.\n • Identify, validate, and document vulnerabilities with technical findings and remediation recommenda-\ntions.\n • Prepare detailed security assessment reports and support remediation closure activities.\n • Develop and maintain security testing checklists, templates, and process documentation.\n • Coordinate with clients, developers, and stakeholders to explain findings and remediation approaches.\n • Research emerging vulnerabilities and evaluate detection and prevention techniques.\n\nTechnical Skills\n Security Domains:\n Web Security, Mobile Security, API Security, Vulnerability Management, Penetration Testing, Audit\nMethodologies, Regulatory Compliance\n Tools:\n Burp Suite, OWASP ZAP, Nmap, SQLMap, Netsparker, MobSF, Android Studio, Frida, Postman, Sonar-\nQube, 3uTools, WinRa1n\n Education\n Bachelor of Information Technology 2021\nUniversity of Mumbai\n Certifications and Training\n • Certified Ethical Hacking (CEH) v12\n • Short Course on Penetration Testing — Charles Sturt University\n • C)SA1: Certified Security Awareness 1 — Mile2\n • Basics of an IT Audit — Riskpro India\n Selected Achievement\n • Reported CVE-2022-1643\nhttps://wpscan.com/vulnerability/73111c7e-c772-4bed-b282-854c1ae57444\n Languages\n English, Hindi, Marathi",
+      "rounds": [
+        {
+          "id": "mpr6xpegf2l36",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:25.528Z",
+      "rank": 9,
+      "rankReason": "Strong AppSec skills with experience exceeding the 2-year threshold, along with notable experience in manual and automated security assessments",
+      "rankScore": 89
+    },
+    {
+      "id": "mpr6xoazcuf3h",
+      "candidateName": "Prasad More",
+      "position": "Penetration Tester",
+      "experience": 3,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Softenger",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3 \nAPPSEC: Penetration Testing, OWASP, Burp Suite, Source Code Review, Vulnerability Assessment\nBACKGROUND: Dedicated security analyst with experience in penetration testing and vulnerability assessment\nFIT: Strong hands-on experience in web, API, mobile, and cloud security testing, with expertise in manual vulnerability discovery and exploitation\nCOMPANIES: Lumiverse Solutions Pvt Ltd",
+      "resumeText": "Prasad More\n Nashik , India prasadrmore786@gmail.com +919881893659 in/prasad-more-7859301b3\n SUMMARY\n Penetration Tester with 3 years of hands-on experience in Web, API, Mobile (Android/iOS), Cloud, Network, and Thick Client security testing. Strong\nexpertise in manual vulnerability discovery, exploitation, and source code review aligned with OWASP Top 10, ASVS, and MASVS. Experienced in\ndelivering CVSS-based risk assessments, proof-of-concepts, and actionable remediation guidance while working closely with development teams.\n SKILLS\n Domains:\n Web Application Security, API Security Testing, Mobile Application Penetration Testing (Android, iOS), Network Penetration Testing, Thick Client\nSecurity, Cloud Security Testing, Vulnerability Assessment & Penetration Testing (VAPT), Source Code Review\n Tools:\n Burp Suite, OWASP ZAP, Nmap, Metasploit, Nessus, MobSF, Drozer, Frida, Objection, SSL Kill Switch 2, Postman, JWT tools, wpscan, dirb, dirbuster\n EXPERIENCE\n Cybersecurity Analyst / Penetration Tester\n Lumiverse Solutions Pvt Ltd December 2023 - Present\n • Conducted penetration testing across Web, API, Mobile (Android/iOS), Cloud, Network, and Thick Client applications for multiple client\nenvironments.\n • Identified and exploited 150+ vulnerabilities including High and Critical issues such as IDOR, authentication bypass, SQL Injection, XSS, SSRF, RCE,\ncommand injection, and business logic flaws.\n • Performed manual API testing (REST, SOAP, GraphQL), mobile static and dynamic analysis, and network/infrastructure assessments.\n • Executed source code reviews to uncover authentication, cryptographic, input validation, and logic-level vulnerabilities.\n • Delivered CVSS-based risk assessments, detailed PoCs, and remediation guidance, supporting fix validation with development teams.\n Cybersecurity Intern\n Lumiverse Solutions Pvt Ltd June 2023 - November 2023\n • Assisted in Web and Network penetration testing across internal and client environments.\n • Identified vulnerabilities including misconfigurations, weak authentication, open ports, and insecure services.\n • Documented findings and supported vulnerability reporting aligned with OWASP Top 10.\n PROJECT\n PROJECTS & RESEARCH\n • Reported valid vulnerabilities including IDOR and Broken Access Control on HackerOne and Bugcrowd, earning accepted reports, bounties, and\nrecognition.\n • Performed automotive security testing, identifying vulnerabilities in vehicle communication components and attack surfaces as part of controlled\nsecurity research.\n EDUCATION\n Bachelor of Technology (B.Tech) – Computer Science & Engineering\n R.V. Parankar College of Engineering & Technology\n Diploma – Computer Technology\n Guru Gobind Singh Polytechnic, Nashik\n CERTIFICATIONS\n EC-Council Ethical Hacking Essentials\n Certified Network Security Practitioner\n Multi-Cloud Red Team Analyst\nSourced by Softenger India Pvt. Ltd on 27 May, '26",
+      "rounds": [
+        {
+          "id": "mpr6xoaz2enha",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, Cybersecurity Specialist",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:23:24.107Z",
+      "rank": 13,
+      "rankReason": "Strong hands-on experience in web, API, mobile, and cloud security testing, with expertise in manual vulnerability discovery and exploitation",
+      "rankScore": 85
+    },
+    {
+      "id": "mpr6rxval2awk",
+      "candidateName": "Vamsi Pothuganti",
+      "position": "Application Security Engineer",
+      "experience": 4,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4.2\nAPPSEC: Penetration Testing, Vulnerability Assessment, SAST, DAST, OWASP, Burp Suite\nBACKGROUND: Dedicated security professional with experience in application security, penetration testing, and vulnerability assessment.\nFIT: Strong AppSec skills, including penetration testing, vulnerability assessment, and experience with OWASP, Burp Suite, and other relevant tools, make this candidate a good fit for the role.\nCOMPANIES: Happiest Minds Technologies, Institute for Development and Research in Banking Technology (IDRBT), Artech Infosystems Pvt. Ltd.",
+      "resumeText": "Sl /No \nMandatory Skills \nYrs of Experience \nProjects worked \n1 \nTotal exp \n4.2 Years \n2 \n2 \nApplication Security Specialist   \n4.2 years \n2 \n3 \nWeb &amp; App \n4.2 years \n2 \n\n\nVamsi Pothuganti \nApplication Security Engineer · Penetration Tester · VAPT Specialist \n+91-7671059768 | vamsipothuganti45@gmail.com | Krosuru , Guntur – 522410, Andhra Pradesh | linkedin.com/in/ vamsipothuganti \nPROFESSI ONAL SUMMARY \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nCybersecurity professional with 4.2 years of hands-on experience in vulnerability assessment and penetration testing across web, API, and mobile platforms. Skilled at identifying OWASP Top 10 vulnerabilities, authentication weaknesses, and business-logic f laws — and translating findings into clear, risk-ranked reports that engineering teams act on immediately. Experienced across the full security lifecycle: manual exploit development, network reconnaissance, threat intelligence operations, and malware foren sics. Holds Microsoft Azure AZ-900 certification. \nCORE COMPET ENCIES \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nPenetration Testing: Web · API · Mobile (OWASP / PTES methodology) \nVulnerability Assessment: SAST · DAST · MAST · Manual code &amp; config review \nThreat Intelligence: CSAP · CTIX · IB-C art platform operations \nNetwork Security: Reconnaissance · Enumeration · Post-exploitation \nMalware Analysis: Static &amp; Dynamic Analysis · Sandbox triage (Any. Run) \nSource Code Review: Insecure coding · Hardcoded credentials · Input validation \nReporting &amp; Communication: CVSS scoring · Executive-ready VAPT reports \nT OOLS &amp; T ECHNOLOGIES \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nOffensive / Assessment: Burp Suite · Metasploit Framework · Nessus · OWASP ZAP · Nmap · Frida · Fortify (SAST) · Air crack-ng · Any. Run \nVulnerability Management: CSAP · CTIX · IB-Cart · Wireshark \nOperating Systems: Kali Linux · Ubuntu · Windows Server \nLanguages &amp; Scripting: Python · Bash \nPROFESSI ONAL EXP ERIENCE \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nApplication Security Engineer \nHappiest Minds Technologies · Mumbai, India | Nov 2024 – Present \nConducted end-to-end vulnerability assessment and penetration testing of web, mobile, and API applications following OWASP methodology, identifying injection flaws, broken authentication, and business-logic weaknesses. Assessed 50 – 70 applications during this tenure. \nPerformed both automated and manual security testing using SAST, DAST, and MAST approaches to identify and mitigate security risks across web, mobile, and API layers. \nReverse-engineered Android APKs using JADX to uncover hardcoded cre dentials, insecure local data storage, and unprotected API endpoints in live mobile applications. \nPerformed source code review to identify security vulnerabilities including insecure coding practices, hardcoded credentials, and improper input validation a cross web and mobile application codebases. \nPrepared detailed VAPT reports with CVSS risk ratings, proof-of-concept reproduction steps, and prioritized remediation recommendations for engineering and management teams. \nCybersecurity Research Associate \nIn stitute for Development and Research in Banking Technology (IDRBT) · Hyderabad, India | Jul 2023 – Jul 2024 \nConducted vulnerability assessment and penetration testing of web and API applications, delivering findings aligned to OWASP standards and banking-sector security guidelines. Assessed 30 – 40 applications across banking and fintech environments. \nExecuted ne twork reconnaissance and enumeration using Nmap and Nessus, followed by targeted exploitation with Metasploit to validate network-layer risk for client infrastructure. \nOperated threat intelligence platforms (CSAP, CTIX, IB-Cart) monitor, triage, and corre late threat actor activity, escalating high-confidence threats to security operations teams. \nPrepared detailed VAPT reports with CVSS risk ratings, proof-of-concept reproduction steps, and prioritized remediation recommendations for engineering and manage ment teams. \nHandled malware incidents and performed forensic analysis using Any. Run sandbox and Wireshark, producing containment and remediation guidance for the security operations team. \nStayed current with the latest CVEs, threat intelligence feeds, a nd security advisories to continuously improve testing coverage and assessment of quality. \nSoftware Trainee \nArtech Infosystems Pvt. Ltd. · India | Sep 2021 – May 2023 \nConducted vulnerability assessment and penetration testing of web and API applic ations following OWASP methodology, identifying injection vulnerabilities, broken authentication, and privilege-escalation paths. Assessed 60 – 80 applications across diverse client engagements. \nExecuted network reconnaissance and enumeration using Nmap and Nessus, followed by targeted exploitation with Metasploit to validate network-layer risk and support evidence-based VAPT reporting. \nPerformed both automated and manual security testing using Burp Suite and OWASP ZAP to identify and mitigate security risk s across web and API layers. \nPrepared detailed VAPT reports with CVSS risk ratings, proof-of-concept reproduction steps, and prioritized remediation recommendations delivered to client engineering teams. \nEDUCAT ION \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nBachelor of Technology — Computer Science &amp; Engineering \nNarasaraopet Engineering College, Narasaraopet | 2016 – 2020 | CGPA: 7.40 / 10 \nIntermediate — Class XII \nSri Chaitanya Junior College | 2014 – 2016 | 81.2% \nSecondary School Certificate — Class X \nJai Bharath High School | 2014 | 87.0% \nCERT IFICAT IONS \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\n• Microsoft Certified: Azure Fundamentals — AZ-900 (Microsoft · Obtained during tenure at Artech Infosystems, 2021 – 2023) \nPROFESSI ONAL INT EREST S \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nIndependent vulnerability research an d evaluation of emerging security tools · Tracking CVE disclosures, zeroday advisories, and breach post-mortems · CTF competitions and application security conferences",
+      "rounds": [
+        {
+          "id": "mpr6rxvanq7ch",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:18:56.566Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr6rx382yjpr",
+      "candidateName": "DHARAMVEER PRASAD",
+      "position": "Application Security Engineer",
+      "experience": 3,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3\nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling\nBACKGROUND: Dedicated security analyst with hands-on experience in web, API, and mobile application security testing\nFIT: The candidate has strong AppSec skills, with experience in SAST, DAST, and threat modeling, and a proven ability to identify and remediate critical vulnerabilities, making them a suitable fit for the role\nCOMPANIES: Exegesis InfoTech India Pvt. Ltd., CyberSmithSECURE Pvt. Ltd.",
+      "resumeText": "Sl /No \nMandatory Skills \nYrs of Experience \nProjects worked \n1 \nTotal exp \n3 Years \n2 \n2 \nApplication Security Specialist   \n3 years \n2 \n3 \nWeb &amp; App \n3 years \n2 \n\n\nDHARAMVEER PRASAD \nApplication Security Engineer \n+91 8390758840 | prasaddharamveer08@gmail.com | Mumbai, India | linkedin.com/in/ dharamveer -prasad \nPROFESSIONAL SUMMARY \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nResults-driven Application Security Engineer with 3+ years of hands- on experience in Web, API, and Mobile application security testing, penetration testing, and Secure SDLC integration. Proficient in OWASP Top 10 methodologies, SAST/DAST tooling, vulnerability management, and secure code review. Proven ability to identify and remediate critical vulnerabilities including IDOR, SQL Injection, XSS, and authentication flaws. Experienced in risk-based reporting with CVSS scoring, threat modeling , and collaborating cross-functionally with development teams to embed security throu ghout the software development lifecycle. Actively pursuing MCA in Cybersecurity with certifications from EC-Council and TheSecOps Group. \nCORE COMPETENCIES \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nWeb Application Penetration Testing | API Security Testing | Mobile Application Security (An droid/iOS) | OWASP \nTop 10 \nSAST &amp; DAST | Secure Code Review | Threat Modeling | Vulnerability Management | CVSS Scoring | Risk \nAssessment \nSecure SDLC / DevSecOps | Incident Response | Security Documentation | Client Reporting | Agile Security \nIntegration \nPROFESSIONAL EXPERIENCE \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nApplication Security Engineer Oct 2023 – Present \nExegesis InfoTech India Pvt. Ltd. — Navi Mumbai \n▪ Conducted 50+ manual and automated security assessments for web, API, and mobile applications aligned with OWASP Top 10, identifying critical vulnerabilities across client portfolios. \n▪ Executed SAST and DAST assessments during development and runtime, in tegrating findings into the Secure SDLC pipeline to reduce vulnerabilities reaching production by early detection. \n▪ Identified and validated high- severity vulnerabilities including IDOR, SQL Injection, XSS, Broken Authentication, and Business Logic flaws across diverse application environments. \n▪ Performed API security testing using Burp Suite and Postman, evaluating REST APIs for OWASP API Top 10 risks including excessive data exposure and improper authorization. \n▪ Conducted mobile application security assessments on Android/iOS platforms using MobSF and JADX-GUI, identifying insecure data storage, improper session management, and reverse engineer ing risks. \n▪ Prepared risk-based penetration testing reports with CVSS scoring, executive summaries, and prioritized remediation recommendations, improving stakeholder understanding of risk posture. \n▪ Collaborated with development teams to deliver remedi ation guidance and secure coding training, reducing vulnerability recurrence across the SDLC. \n▪ Developed and maintained security process documentation, assessment templates, and incident response plans for application security events. \n▪ Stayed current w ith emerging CVEs, threat intelligence, and security tools to continuously enhance assessment methodology. \nPenetration Tester May 2022 – Oct 2023 \nCyberSmithSECURE Pvt. Ltd. — Remote \n▪ Conducted internal and external penetration tests for web applicatio ns and network environments, delivering actionable findings for 20+ client engagements. \n▪ Identified and exploited vulnerabilities aligned with OWASP Top 10 and infrastructure security frameworks using Burp Suite, Nmap, Metasploit, and Nessus. \n▪ Developed detailed penetration testing reports with risk ratings, PoC evidence, and step-by-step remediation guidance tailored to technical and non-technical stakeholders. \n▪ Coordinated directly with clients to present findings, clarify risk impact, and r ecommend mitigation strategies, improving client security posture and satisfaction. \nINTERNSHIPS \n▪ Blue Teaming Internship — Cyber Secure India (Nov 2022 – Dec 2022) \n▪ Cybersecurity Internship — Cyber Secure India (Jan 2022 – May 2022) \n▪ Cybersecurity I nternship — SISTMR Australia (Oct 2022 – Feb 2023) \nEDUCATION \n\nMaster of Computer Applications (MCA) – Cybersecurity \n2024 – 2026 \nJAIN University, Bangalore \nBachelor of Computer Application (BCA) Dr. CV Raman University, Thane Mumbai \nCERTIFICATIONS \n2020 – 2023 \n▪ Certified AppSec Practitioner (CAP) — TheSecOps Group \n▪ Ethical Hacking Essentials (EHE) — EC-Council \n▪ Digital Forensics Essentials (DFE) — EC-Council \n▪ Badges — Official (ISC)² \nTECHNICAL TOOLS \n\nOffensive &amp; Testing: Burp Suite, OWASP ZAP, Metasploit, Nmap, Nessus, Postman \nMobile Security: MobSF , JADX-GUI \nNetwork &amp; Monitoring: Wireshark, Nessus \nACHIEVEMENTS &amp; RECOGNITION \n\n▪ Worked with Cybercrime Investigation unit — provided security expertise for real-world case analysis. \n▪ Discovered and responsibly disclosed multiple vulnerabilities across public-facing web applications. \n▪ Listed in Hall of Fame by organizations for responsible vulnerability disclosure. \n▪ Earned official (ISC)² badges recognizing cybersecurity knowledge and engagement. \nLANGUAGES \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nEnglish (Professional Proficiency) | Hindi (Native)",
+      "rounds": [
+        {
+          "id": "mpr6rx38scnkj",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:18:55.556Z",
+      "rank": 14,
+      "rankReason": "The candidate has strong AppSec skills, with experience in SAST, DAST, and threat modeling, and a proven ability to identify and remediate critical vulnerabilities",
+      "rankScore": 84
+    },
+    {
+      "id": "mpr6rwf9rmlrt",
+      "candidateName": "AAROHI GORDE",
+      "position": "Application Security Engineer",
+      "experience": 2,
+      "finalStatus": "Under Review",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2.4\nAPPSEC: VAPT, OWASP Top 10, Burp Suite, Web and API Security, Threat Analysis, Penetration Testing\nBACKGROUND: Cybersecurity professional with hands-on experience in Application Security and Vulnerability Assessment\nFIT: The candidate's strong foundation in Application Security, hands-on experience with industry-standard security tools, and certifications like CEH make them a suitable fit for the AppSec Engineer role.",
+      "resumeText": "Sl /No \nMandatory Skills \nYrs of Experience \nProjects worked \n1 \nTotal exp \n2.4 years \n2 \n2 \nApplication Security Specialist   \n2.4 years \n2 \n3 \nWeb &amp; App \n2.4 years \n2 \n\n\nPROFESSIONAL SUMMARY \nAAROHI GORDE \n+91 7498 580145 \nAPPLICATION SECURITY ENGINEER \n• \ngordeaarohi@gmail.com \nPune \n• \nPROFESSIONAL SUMMARY \nAAROHI GORDE \n+91 7498 580145 \nAPPLICATION SECURITY ENGINEER \n• \ngordeaarohi@gmail.com \nPune \n• \nCybersecurity professional with 2 years of hands-on experience in Vulnerability Assessment and Penetration Testing (VAPT), specialized in Web and API Security. Strong foundation in identifying OWASP Top 10 vulnerabilities, threat analysis, and risk mitigat ion. Skilled in using industry-standard security tools to perform manual and automated testing, along with validating remediation efforts. Adept at analyzing security flaws and delivering actionable insights to enhance organizational security posture. \nTECH NICAL SKILLS RELEVANT SKILLS \nApplication Security : Web &amp; API, VAPT, OWASP Top 10,Thick Client Analytical Thinking \n4492108-251651\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nSecurity Testing. Clear Communication \nNetworking: Nmap, Wireshark, Nessus, TCP/IP. Team Collaboration \nMobile Security: OWASP Mobile To p 10, MASVS, Android. Threat Analysis \nProgramming Languages: HTML, CSS, Python, JavaScript, Java. Attack Simulation \nDatabase: MySQL, MongoDB \nSECURITY TOOLS \nBurp Suite Namp JADX OWASP ZAP Fortify \n18522-1496826\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nPostman Nessus MobSF Dirbuster SCASonaQube \nSQL Map Dirbuster Frida/Objection Kali Linux Checkmarx \nWORK EXPERIENCE \nAccenture , Pune Oct 2024 - Present \nApplication Security Engineer \n7465352786\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nPerformed Web, API, and Mobile VAPT using manual and automated techniques. Ide ntified vulnerabilities aligned with OWASP Top 10 &amp; API Top 10 Standards. \nConducted manual testing using Burp Suite and scanning with Nmap, SQLmap \nExecuted API Security Testing using Postman and Burp Suite for identifying OWASP API Top 10 vulnerabilities. \nPerformed Mobile Application Security testing against OWASP Mobile Top 10 &amp; MASVS . \nPrepared VAPT reports including PoC , CVSS scoring, and remediation recommendations. Collaborated with developers to validate fixes and ensure secure coding practices. \nCodify Software Services , Pune Mar 2024 - Sep 2024 \nCyber Security Analyst - Intern \nLearning efforts on VAPT for Application Security Testing leveraging OWASP Top 10 for Web &amp; API. \nAssisted in Web Application Security Testing aligned with OWASP Top 10 Vulnerabilities. Gained hands-on experience with security tools and vulnerability analysis techniques. \nKe y Achievements \nIdentified and reported 200+ Critical &amp; High severity vulnerabili ties across Web and API applications \nImproved application security posture by recommending and validating remediation strategies \nDelivered comprehensive security reports enabling stakeholders to prioritize and resolve vulnerabilities efficiently \nAREA OF E XPERTISE \nApplication Security Testing \nSkilled in Application Security Testing and Vulnerability Assessment &amp; Penetration Testing (VAPT). \nStrong knowledge of Web and API Security Testing. \nHands-on experience in identifying and analyzing security vulnerabilities. \nExposure to security tools for vulnerability discovery, analysis and exploitation. \nFamiliar with industrial security standars like OWASP Top 10, SANS, NIST, and other. \nCRETIFICATION S \nCertified Ethical Hacker ( CEH) EC Council \n2626-2988483\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nOWASP API Top 10 APIsec University API Penetration Testing APIsec University TESTING METHODOLOGY \n19091-64414\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nBlack Box and Grey Box security testing to identify and exploit vulnerabilities across Web and API applications. \nExecuted end-to-end VAPT including reconnaissance, vulnerability identification, exploitation, impact analysis, and remediation validation \nEDUCATION \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nBachelors of Engineering - Computer Engineering 2020 - 2024 \nSavitribai Phule Pune University \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\nCGPA - 8.06",
+      "rounds": [
+        {
+          "id": "mpr6rwfa56pnn",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:18:54.694Z",
+      "rank": 15,
+      "rankReason": "The candidate's strong foundation in Application Security, hands-on experience with industry-standard security tools, and certifications like CEH",
+      "rankScore": 83
+    },
+    {
+      "id": "mpr6atnp3f7hh",
+      "candidateName": "Manish Ratilal Patil",
+      "position": "Lead Application Security Engineer",
+      "experience": 4,
+      "finalStatus": "Under Review",
+      "level": "L2",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4.6 \nAPPSEC: VAPT, SAST, DAST, Burp Suite, OWASP, Threat Modelling, Secure Code Review\nBACKGROUND: Dedicated security analyst with strong focus on application security\nFIT: Strong AppSec skills, hands-on experience in VAPT, SAST, and DAST, and relevant certifications like CEH, make them a suitable candidate\nCOMPANIES: Exegesis Infotech Pvt. Ltd.",
+      "resumeText": "Sl /No   \nMandatory Skills   \nYrs of Experience   \nProjects worked    \n1 \n Application Security, IAM \n4.6 Years \n6 \n2 \nWeb/API security \n4.6 Years \n6 \n3 \nOWASP &amp; VAPT \n4.6 Years \n6 \n4 \nCloud (AWS/Azure) \n4.6 Years \n6 \n\n\n\n\n\n\n\n\n\nMANISH RATILAL PATIL \nLead Application Security Engineer | VAPT Specialist \n+91 8668621159 | manishpatil3032@gmail.com \nCEH Certified \n4+ Years Experience \nMCA Cybersecurity \nPROFESSIONAL SUMMARY \nResults-driven Lead Application Security Engineer with 4 + years of hands-on experience in Vulnerability Assessment and Penetration Testing (VAPT) for Web, API, and Mobile (Android/iOS) applications. Expert in endpoint security implementation, IIS server hardening, database encryption, web.config analysis, and I SO 27001 compliance. Proficient in secure code review using SonarQube, third-party API secure integration, and SDLC/DevSecOps practices. Holds CEH and Web-RTA certifications. Currently upskilling in Cloud Security (AWS/Azure) and AI Security to stay ahead of evolving threat landscapes. \nCORE COMPETENCIES \nWeb / API / Mobile VAPT \nEndpoint Security Implementation \nIIS Server Hardening \nOWASP Top 10 &amp; CVSS Scoring \nDatabase Encryption &amp; web.config \nSecure Code Review (SonarQube) \nISO 27001 Audit &amp; Compliance \n3rd-Party API Secure Integration \nCloud &amp; AI Security (In Progress) \nWORK EXPERIENCE \nLead Application Security Engineer \nExegesis Infotech Pvt. Ltd., Mumbai \nDec 202 1 – Present \nSpearheaded end-to-end VAPT engagements for 20+ web, mobile (Android/iOS), and API applications, uncovering OWASP Top 10 critical vulnerabilities including SQLi, XSS, CSRF, IDOR, and broken authentication — reducing client attack surface by 80 %. \nImplemente d endpoint security controls and IIS server hardening across client environments, reducing server-level misconfigurations and unauthorized access vectors. \nResolved database encryption issues on production servers, ensuring data-at-rest protection and compl iance with data security standards. \nConducted web.config security analysis to identify insecure configurations, eliminating sensitive data leakage and enabling proper error handling and access restrictions. \nPerformed secure code reviews using SonarQube, id entifying critical code-level vulnerabilities (injection flaws, hardcoded secrets, insecure dependencies) and collaborating with developers for remediation. \nLed secure integration reviews for third-party APIs, validating OAuth flows, token security, rate l imiting, and input validation to prevent supply-chain and injection risks. \nConducted ISO 27001 internal security audits across multiple clients, identifying control gaps and delivering compliance roadmaps. \nExecuted SAST and DAST assessments using Burp Suit e Pro, MobSF, JADX, Drozer, OWASP ZAP, and Frida; produced CVSS-rated reports with PoCs and fix recommendations. \nTracked vulnerability lifecycle from discovery through remediation and retest, maintaining 95%+ closure rate within agreed SLA windows. \nActed a s security liaison between development, infrastructure, and client stakeholders — translating technical findings into business-risk language for C-suite reporting. \n\n\n\n\n\n\n\nTECHNICAL SKILLS \nVAPT &amp; Testing \nOWASP Top 10, VAPT, SAST, DAST, Vulnerability Assessment, Threat Modeling, Business Logic Testing \nWeb Security Tools \nBurp Suite Pro, OWASP ZAP, NMAP, Nikto, DIRB, SQLMap, Wireshark, SSL Scan, Kali Linux \nMobile App Security \nMobSF, Genymotion , ADB Shell, JADX/GUI, AndroBugs, Frida, Drozer, Santoku OS \nAPI Security \nPostman – REST API testing, OAuth token analysis, Broken Auth, Injection, Mass Assignment testing \nSecure Code Review \nSonarQube – SAST scanning, vulnerability triage, code-level reme diation guidance \nEndpoint &amp; Server \nEndpoint security implementation, IIS hardening, web.config analysis, database encryption \nCompliance \nISO 27001 internal audit, risk assessment, control gap analysis, CVSS scoring \nDevSecOps / SDLC \nDevSecOps integration \nCloud &amp; AI Security \nAWS/Azure security fundamentals (in progress), AI security concepts (in progress) \nProgramming \nHTML, JavaScript (fundamentals) \nCERTIFICATIONS \nCertified Ethical Hacker (CEH) — EC-Council \nWeb-RTA (Web Application Runtime Testing &amp; Analysis) \nEDUCATION \nMaster of Computer Applications – Cybersecurity \nJain University, Bangalore \n202 4 – 2026 (3rd Sem) | 8.0 SGPA \nB.E. – Electronics &amp; Telecommunication \nSGDCOE, Jalgaon (North Maharashtra University) \n2014 – 2017 | 70.3% \nDiploma – Electronics &amp; Telecommunication \nSmt. S. S. Patil Polytechnic, Chopda \n2011 – 2014 | 81.71% \nPERSONAL DETAILS \nDate of Birth: \n10 January 1996 \nNationality: \nIndian \nLanguages: \nEnglish, Hindi, Marathi \nLocation: \nAmalner, Jalgaon, Maharashtra \n\n\nDate: \nPlace: Manish Ratilal Patil",
+      "rounds": [
+        {
+          "id": "mpr6atnpunnqo",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:05:37.957Z",
+      "rank": 4,
+      "rankReason": "Strong AppSec skills, hands-on experience in VAPT, SAST, and DAST, and relevant certifications",
+      "rankScore": 94
+    },
+    {
+      "id": "mpr6asvq0wxnf",
+      "candidateName": "Amol P.",
+      "position": "Senior Application Security Engineer",
+      "experience": 8,
+      "finalStatus": "Scheduled",
+      "level": "L2",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 8.5\nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling, SDLC, Code Review\nBACKGROUND: Dedicated Application Security Engineer with strong security background\nFIT: Strong Application Security skills, extensive experience, and diverse skill set make this candidate a great fit\nCOMPANIES: Accenture, Capgemini, Primus Global Technologies, Atos Paladion",
+      "resumeText": "Sl/No \nMandatory Skills \nYrs of Experience \nProjects worked \n1 \n Application Security, IAM \n8.5 Years \n4 \n2 \nWeb/API Security \n8.5 Years \n4 \n3 \nOWASP &amp; VAPT \n8.5 Years \n4 \n4 \nCloud (AWS/Azure) \n8.5 Years \n4 \n5 \nL2 \n4 Years \n2 \n\n\nAmol P. \nSenior Application Security Engineer \nMobile : (+91) 9619881720 Email: ayp.infosec@proton.me GitHub ( https://github.com/ayp-sec-ops ) \nLinkedIn ( https://www.linkedin.com/in/ayp-sec-ops / \n\nImmediate Availability | Open to Global Relocation &amp; Visa Sponsorship | Pan-India Opportunities \n\nProfessional Summary \nSenior Application Security Engineer with 8.5+ years of experience in safeguarding critical digital and physical assets. Expertise in Vulnerability Assessment &amp; Penetration Testing (VAPT), AI/LLM Security Auditing, DevSecOps integration, and Cloud-Native Security across Web, API, Mobile (Android/iOS), and Thick Client platforms.Skilled in Zero Trust Architecture, threat modeling, secure SDLC, and enterprise risk mitigation. Proven ability to lead security initiatives, conduct advanced penetration testing, and strengthen cyber resilience for global organizations. \n\nKey Skills \nWeb, Mobile &amp; API VAPT \nRed Teaming \nThreat Modeling \nNetwork Penetration Testing \nDevSecOps &amp; CI/CD Security \nZero Trust Architecture \nCloud Security (AWS/Azure) \nSecure SDLC &amp; Code Review \nReverse Engineering \nOWASP Top 10 &amp; MASVS \nISO 27001 / GDPR Compliance \nNIST Cybersecurity Framework \nPrompt Injection Mitigation \nAI/LLM Security (OWASP) \n\nProfessional Experience \nAccenture \nSenior Application Security Engineer \nAug 2023 – Aug 2025 \nLed AI/LLM security audits for enterprise Generative AI deployments. \nIdentified and remediated Prompt Injection and Insecure Output Handling vulnerabilities in enterprise chatbots. \nConducted 50+ security assessments for web applications and APIs. \nReduced exploitable vulnerabilities by 30% using manual penetration testing and automation tools such as Burp Suite and OWASP ZAP. \nIntegrated security controls into CI/CD pipelines to strengthen DevSecOps practices. \nDeveloped cloud threat models to improve application security posture and incident readiness. \nDelivered secure coding training to development teams, reducing recurring vulnerabilities by 40%. \n\nCapgemini \nInformation Security Consultant \nMar 2022 – Aug 2023 \nConducted 120+ penetration tests for financial and brokerage applications for UK-based clients. \nAchieved a 95% vulnerability mitigation rate within defined SLAs. \nAutomated security testing processes within CI/CD pipelines, reducing manual effort by 30%. \nAssisted organizations in achieving ISO 27001 and GDPR compliance through security assessments and advisory services. \n\nPrimus Global Technologies (Deputed to Capgemini) \nSenior Engineer \nApr 2021 – Mar 2022 \nPerformed comprehensive security assessments for web and API applications. \nDeveloped custom threat profiles aligned with application architecture and business requirements. \nCollaborated with Engineering and QA teams to implement long-term remediation solutions. \nAuthored developer-focused security reports to accelerate remediation activities. \n\nAtos Paladion \nSenior Engineer \nApr 2017 – Feb 2021 \nConducted internal and external vulnerability assessments for banking infrastructure. \nPerformed Android and iOS mobile penetration testing using Frida, MobSF, Drozer, and Objection. \nExecuted SAST, DAST, and SCA assessments to identify insecure storage and cryptographic weaknesses. \nApplied OWASP MASVS and MASTG standards for compliance benchmarking and reporting. \n\nAtos Paladion (Formerly Paladion Networks) \nProduct Support Engineer \nApr 2014 – Apr 2017 \nDesigned complex security workflow diagrams for MDR-VM security products using Lucidchart and Draw.io. \nProvided onsite support for banking security teams during vulnerability reporting cycles. \nServed as technical liaison between developers, business analysts, and security teams. \nConducted troubleshooting via Putty (SSH) and RDP sessions for product environments. \nSupported vulnerability triage and reporting processes for banking clients. \n\nEducation \nBachelor of Science (B.Sc.) \nMumbai University — 2017 \n\nCertifications \nCISSP (Planned: Post-employment) \n\nTools &amp; Technologies \nPentest / Vulnerability Assessment \nBurp Suite Pro, OWASP ZAP, Metasploit, SQLMap, Nmap, Nikto, Nessus, Qualys, Kali Linux Tools \nMobile Security \nFrida, Objection, MobSF, Drozer, APKTool, JADX, Xcode Tools \nDevSecOps / Cloud Security \nCheckmarx, Fortify, SonarQube, Semgrep, Postman, CloudSploit, Trivy \nAI / LLM Security \nPromptmap, Garak",
+      "rounds": [
+        {
+          "id": "mpr6asvq4ee79",
+          "round": "R1",
+          "interviewDate": "2026-06-03",
+          "panelMembers": "",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Scheduled",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:05:36.950Z",
+      "rank": 1,
+      "rankReason": "Strong Application Security skills, extensive experience, and diverse skill set",
+      "rankScore": 98
+    },
+    {
+      "id": "mpr6as2ax80h2",
+      "candidateName": "Sudhakar K",
+      "position": "Senior Application Security Consultant",
+      "experience": 7,
+      "finalStatus": "Scheduled",
+      "level": "L2",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 7.2 \nAPPSEC: SAST, DAST, Burp Suite, Threat Modelling, OWASP, Vulnerability Assessment and Penetration Testing\nBACKGROUND: Dedicated application security consultant with experience in security assessments and penetration testing\nFIT: Strong AppSec skills, including SAST, DAST, and threat modelling, with over 5 years of experience in application security, meeting the experience threshold\nCOMPANIES: Hover Graphics Pvt. Ltd., ANB Solution Pvt. Ltd., QSEAP INFOTECH PVT LTD, Sutherland Healthcare Solution PVT. Ltd., Conizo.org Pvt.Ltd",
+      "resumeText": "Skill \nYears of experience  \nRate out of 10 \nOver all experience \n7.2 years \n8 \nApplication security \n5 years \n8 \nVulnerability Assessment and Penetration Testing (VAPT) \n5 years \n8 \nOWASP \n5 years \n8 \nL2 Support \n3 Years \n8 \nSudhakar K Contact: +917993396026 \nE mail: ksudhakar46937@gmail.com \n\nProfessional Summary: \n438149269669\nSenior Application Security Consultant with 7 years and 2 months of experience performing security assessments across web applications, APIs, mobile applications, cloud environments, and enterprise platforms. Experienced in penetration testing, secure code review, Software Composition Analysis , threat modeling, vulnerability management, configuration reviews, identity and access management, and AWS cloud security. Proven track record delivering client-facing security consulting engagements, supporting secure SDLC initiatives, and aligning assessments w ith OWASP, NIST, and industry best practices. Specific knowledge of the OWASP Top 10 for LLM Applications and experience using AI to security test the workflows \nPerformed Application Penetration Testing and security assessments for multiple clients acros s diverse environments. \nConducted Dynamic Application Security Testing (DAST) on 100+ business-critical web applications, identifying and validating security vulnerabilities. \nPerformed white box application security assessments and secure code reviews f or 29 applications across Java , and Python. \nExecuted threat modelling, vulnerability assessments, penetration testing, and secure code reviews to identify and mitigate security risks early in the SDLC. \nDeveloped and reviewed Web Application Firewall (WAF) rul es to inspect, monitor, and filter malicious HTTP traffic, strengthening application protection. \nIdentified and validated vulnerabilities including Cross-Site Scripting (XSS), SQL Injection, Authentication and Authorization Bypass, Weak Cryptography, and S ession Management flaws. \nConducted security testing aligned with OWASP, SANS, NIST, and ISO 27001 standards using both manual techniques and automated tools. \nUtilized security tools including Burp Suite, IBM AppScan, Web Inspect , Acunetix, Wire shark , Nmap, and Checkmarks for penetration testing and source code analysis. \nSupported vulnerability management activities, including scan coordination, risk assessment, remediation tracking, and closure validation. \nPrepared test coverage definitions, security test plans, and test cases for new features and implementations. \nCollaborated with development teams to analyses findings, debug issues, and drive remediation by explaining exploitability and business impact. \nPublished monthly security dashboards and vuln erability metrics, tracking remediation progress and risk reduction. \nUsed defect tracking and project management tools, including Jira and Rally for issue management and remediation follow-up. \nReported security findings using industry-standard risk rating and reporting frameworks. \nContinuously researched emerging attack techniques and newly disclosed vulnerabilities to strengthen security posture. \nIdentified critical assets, analyses threat actors and attack scenarios, and recommended security controls as part of ongoing threat modelling activities. \nWorked effectively with cross-functional teams, clients, and operational stakeholders in both independent and team-based environments. \n\n\nCertification: eMAPT (CompTIA),(CEHv13) , (Oscp) \n43814948257\n\n\nVulnerability Assessment Tools \nAppscan, Burp suite, OWASP ZAP, Web Inspect, , Nexpose, NMap, CSRF PoC Generator, Wire Shark \nSAST \nCheckmarks Languages Java . ASP.NET , PYTHON \nAPI Testing Tools \nPostman, Burp Suite \nInfrastructure Security, Configuration review Tools \nRapid7 \nSCA \nSnyk \nDefect Management Tools \nJIRA, Rally \nVulnerability Management \nTenable, Rapid7, Nessus \nMobile Application Security \nFrida, Burp Suite, Mobsf , genymotion \nOperating Systems \nWindows, Linux. \nweb application firewall \nF5 Advanced WAF \nDAST \nBurp suite \n\n438149242345Work Experience: \nCurrently working at Hover Graphics Pvt. Ltd. in Pune from Apr 2025 till date . \nEarlier work ed with ANB Solution Pvt. Ltd., Mumbai, from Jul 2023 to Mar 2025 \nEarlier work ed with QSEAP INFOTECH PVT LTD Mumbai from Jan 20 23 to Jul 20 23 \nEarlier work ed with Sutherland Healthcare Solution PVT. Ltd., Bangalore, from Sep 2021 to Jan 2023 \nEarlier worked with Conizo.org Pvt.Ltd Hyderabad f rom Feb 2019 to Sep 2021 \nEducational Qualification: 43814950779\n\nB. SC (Computer) from Acharya Nagarjuna University Guntur in 2016. M.sc (Computer) from Acharya Nagarjuna University Guntur in 2018 \n\n\n\nProject #1 \nClient : Deutsche Bank \nRole : S enior cyber security analyst \nDuration : April 2025 \n\n\n\nResponsibilities: 8790305198755\n\n\n\n\nClient : Vodafone Idea Limited \nRole : Application security consultant \nDuration : July 2023 to March2025 \n\n\n\n\n\nClient : Vodafone Idea Limited \nRole : Application security consultant \nDuration : July 2023 to March2025 \n\n\nPerformed manual and automated application security assessments, including VAPT and DAST, for 100+ business-critical web applications across client environments. \nConducted secure code reviews for 29 applications across Java, ASP.NET, and Python, identifying security weaknesses and recommending remediation strategies. \nDe livered application security testing aligned with OWASP, SANS, NIST, and ISO 27001 standards using both manual techniques and automated tools. \nIdentified and validated vulnerabilities including XSS, SQL Injection, Authentication Bypass, Authorization flaws , cryptographic weaknesses, and session management issues. \nPerformed threat modeling exercises to identify critical assets, attack scenarios, trust boundaries, and recommend mitigating security controls. \nConducted SAST analysis using Checkmarks , validated findings, reduced false positives, and delivered prioritized risk reports to stakeholders. \nSupported vulnerability management lifecycle including discovery, severity classification, remediation tracking, retesting, and closure verification. \nCollaborated wi th development and engineering teams to explain exploitability, business impact, and remediation requirements for identified vulnerabilities. \nDeveloped executive dashboards, technical assessment reports, and client-shareable deliverables for senior managem ent and project stakeholders. \nReviewed and supported implementation of web application firewall (WAF) rules and security controls to strengthen application-layer protection. \nConducted developer awareness sessions and secure coding workshops to improve secu rity maturity and reduce recurring vulnerabilities. \nSupported client engagements by preparing effort estimates, scoping security assessments, and contributing to consulting deliverables. \nDelivered manual and automated application security assessments acros s enterprise web applications using Fortify, Web Inspect , and Burp Suite to identify, validate, and assess security risks. \nProvided risk-based remediation advisory and control improvement recommendations for vulnerabilities identified through penetration testing, secure code reviews, and security control validations. \nPartnered with application development teams and stakeholders to communicate findings, exploitation impact, and remediation strategies, improving overall application security posture. \nEvaluated security control weaknesses and recommended corrective action s to strengthen control effectiveness and reduce risk exposure. \nDeveloped executive-level assessment reports, technical deliverables, and presented findings to clients and stakeholders through closing meetings and risk briefings. \nSupported consulting eng agements through assessment scoping, effort estimation, and delivery support for both short-term and strategic client initiatives. \nDelivered developer security awareness sessions and secure coding guidance to improve security maturity and reduce recurring vulnerabilities. \nLed defect triage, vulnerability classification, and severity prioritization using risk-based methodologies to support effective remediation planning. \n\n\nProject #2: \nClient : Vodafone Idea Limited \nRole : Senior cyber security analyst \nDuration : July 2023 to March2025 \n\nResponsibilities: \n\nLed delivery of manual and automated application security assessments, including Vulnerability Assessment and Penetration Testing (VAPT), to identify and validate security risks across enterprise web applications. \nManaged execution of DAST and SAST assess ments using industry-standard tools, including validation of findings, false-positive reduction, and quality assurance of security deliverables. \nDirected secure code review and vulnerability assessment activities, identifying application security weakness es and recommending risk-based remediation strategies. \nAdvised development and application teams on exploitability, business impact, and remediation approaches through technical walkthroughs and consultation sessions. \nOversaw retesting and remediation validation activities to confirm closure of identified vulnerabilities and support risk reduction objectives. \nLed defect triage and vulnerability severity classification using industry-standard risk rating methodologies. \nDeveloped and reviewed detailed assessment reports, executive summaries, and client-shareable deliverables for technical and senior stakeholder audiences. \nPrepared and presented monthly vulnerability dashboards, remediation metrics, and risk summaries to senior management and client stakeholders. \nPartnered with engineering teams to improve remediation effectiveness and strengthen application security posture across the software development lifecycle. \nDelivered developer security awareness workshops and secure coding guidance to improve security maturity and reduce recurring vulnerabilities. \nSupported consulting engagements through assessment planning, effort estimation, and delivery support for short-term and strategic client initiatives. \n\n\n\nProject #3: \nClient \n: Yes bank,RBLBANK \nRole \n: Security Engineer \nDuration \n: January2023 to July 2023 \n\nResponsibilities: \n\nDelivered manual and automated application security assessments across enterprise web applications using Fortify, Web Inspect, and Burp Suite to identify, validate, and assess security risks. \nProvided risk-based remediation advisory and control improvemen t recommendations for vulnerabilities identified through penetration testing, secure code reviews, and security control validations. \nPartnered with application development teams and stakeholders to communicate findings, exploitation impact, and remediatio n strategies, improving overall application security posture. \nEvaluated security control weaknesses and recommended corrective actions to strengthen control effectiveness and reduce risk exposure. \nDeveloped executive-level assessment reports, technical d eliverables, and presented findings to clients and stakeholders through closing meetings and risk briefings. \nSupported consulting engagements through assessment scoping, effort estimation, and delivery support for both short-term and strategic client init iatives. \nDelivered developer security awareness sessions and secure coding guidance to improve security maturity and reduce recurring vulnerabilities. \nLed defect triage, vulnerability classification, and severity prioritization using risk-based methodolo gies to support effective remediation planning. \nPerformed secure code review and security report quality assurance to improve consistency, accuracy, and action ability of assessment outcomes. \nPrepared assessment summary reports, validated findings, and s upported remediation verification and closure activities. \nProject #4: \n\nClient : Anthem \nRole : Security Engineer \nDuration : from Sep 2021 to January 2023 \n\nResponsibilities: \n\nDelivered manual and automated application security assessments, including Vulnerability Assessment and Penetration Testing (VAPT), to identify and validate risks across enterprise web applications. \nExecuted DAST and SAST assessments using enterprise secu rity tools, including validation of findings, reduction of false positives, and development of prioritized remediation recommendations. \nPerformed exploitation-driven testing to identify application vulnerabilities and assess business impact, supporting risk-informed remediation decisions. \nAdvised development teams on vulnerability root causes, exploitability, and remediation strategies th rough technical walkthroughs and troubleshooting sessions. \nLed remediation retesting and validation activities to confirm closure of vulnerabilities and reduce residual risk exposure. \nConducted defect triage, vulnerability severity classification, and ri sk prioritization aligned with industry-standard methodologies. \nPerformed secure code review and control validation activities to identify weaknesses in application security controls and recommend corrective actions. \nDeveloped technical assessment report s, executive summaries, and client-shareable deliverables communicating risk observations and remediation priorities. \nPrepared monthly vulnerability dashboards and remediation metrics for senior management reporting and governance oversight. \nPartnered wi th development teams to strengthen secure SDLC practices and improve overall application security posture. \nDelivered security awareness workshops and secure coding guidance to improve security maturity and reduce recurring vulnerabilities. \n\n\nProject #5 : \n\nClient : big commerce \nRole : Security Engineer \nDuration : February 2019 to Sep2021 \n\nResponsibilities: \n\nDelivered manual and automated vulnerability assessments and penetration testing engagements to identify and validate security risks across web applications. \nExecuted DAST and SAST assessments using enterprise security tools (including Checkmarks ), valida ted findings, reduced false positives, and produced detailed risk assessment reports. \nIdentified and validated application vulnerabilities through exploitation testing, including analysis of business impact and remediation recommendations. \nAdvised develo pment teams during remediation and troubleshooting sessions on exploitability, root causes, and secure remediation approaches. \nPerformed remediation retesting and closure validation to confirm resolution of identified vulnerabilities and reduction of resi dual risk. \nConducted defect triage and severity classification using risk-based methodologies to support remediation prioritization. \nPerformed secure code review and security report assurance activities to identify control weaknesses and improve applicat ion security posture. \nDeveloped summary reports, technical deliverables, and client-shareable assessment reports for technical and senior management stakeholders. \nPrepared monthly vulnerability dashboards and metrics reporting to support governance overs ight and remediation tracking. \nPartnered with development teams to strengthen secure development practices and improve remediation effectiveness. \nDelivered developer security awareness workshops and secure coding guidance to improve security maturity and reduce recurring vulnerabilities. \n\n\nPersonal Information: \n\n\nName : K. Sudhakar Marital Status : Single Languages : English, Telugu, Hindi \nAddress : \nGuntur– 50 \nDECLARATION \nI hereby declare that the information provided above is true to the best of my knowledge and belief. \nDate: 30 April 2025 Place: Pune 0000",
+      "rounds": [
+        {
+          "id": "mpr6as2bmehoj",
+          "round": "R1",
+          "interviewDate": "2026-06-03",
+          "panelMembers": "",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Scheduled",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:05:35.891Z",
+      "rank": 2,
+      "rankReason": "Strong AppSec skills, including SAST, DAST, and threat modelling, with over 5 years of experience",
+      "rankScore": 96
+    },
+    {
+      "id": "mpr6ar72zsu2h",
+      "candidateName": "Niranjan Venkata Krishna BELLAMKONDA",
+      "position": "Security Consultant",
+      "experience": 6,
+      "finalStatus": "Under Review",
+      "level": "L2",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 6\nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling\nBACKGROUND: Dedicated security analyst with experience in application security and penetration testing\nFIT: Strong experience in application security, penetration testing, and vulnerability assessment, with a good balance of technical and communication skills\nCOMPANIES: Lance Soft Engineering Pvt Ltd, Onward Technologies Pvt Ltd, Boven Technologies Pvt Ltd, EssaeTeraoka Pvt Ltd",
+      "resumeText": "Sl /No   \nMandatory Skills   \nYrs of Experience   \nProjects worked    \n1 \n Application Security, IAM \n5 Years \n6 \n2 \nWeb/API security \n5 Years \n6 \n3 \nOWASP &amp; VAPT \n5 Years \n6 \n4 \nCloud (AWS/Azure) \n5 Years \n6 \n\n\n\n\n\nNiranjan Venkata Krishna BELLAMKONDA \nHyderabad, Telangana, 500070, India 1 niraniankrish27@gmail.co m | 8712491989 \n840510709158Profile \nWith over 6 years of IT experience, including 4 years in Vulnerability Assessment and Penetration Testing (VAPT) for web, mobile, API, and network applications, I've worked across eCommerce, banking, and healthcare sectors. I have a strong command of the OWASP Top 10 and SANS Top 2S guidelines, along with expertise in DAST, SAST, and secure Software Development Life Cycle (SDLC) practices. After conducting over 180 security scans, I provide actionable remediation support that strengthens engineering teams. Recognized for my analytical skills and effective communication, I am proficient with tools like Burp Suite, MobSF , and several open-source security tools. \nProfessional Experience \nSecurity Consultant, Lance Soft Engineering Pvt Ltd. \n\nHands-on experience in Application Security Analysis for web applications, including both manual and automated testing using Burp Suite. \nCurrently working as a Security Analyst, performing both Dynamic Application Security \nTesting (DAST) and Static Application Security Testing (SAST). \nConducted DAST assessments using tools such as Burp Suite, SOLmap , and Nuclei. \nPerformed secure code reviews and effectively triaged false positives identified during automated scans. \nExecuted Grey-box, Black-box, and White-box penetration testing for web applications. \nProvided remediation validation, review, and actionable recommendations for vulnerabilities identified during security assessments. \nSuggested remediation strategies for failed security controls identified during vulnerability assessments and code reviews. \nPrepared detailed technical and executive-lev el security assessment reports and conducted closing meetings with clients. \nSupported short-term client engagements for Vulnerability Assessment and Penetration Testing (VAPT). \nDemonstrated strong communication skills, effectively interacting with stakeholders at all organizational levels through clear written and verbal communication. \nReported web application vulnerabilities, clearly distinguishing and justifying true positives and false positives in automated scan reports. \nAnalyzed and reproduced vulnerabilities based on OWASP Top 10 risk factors to understand impact and exploitability. \nManaged manual report generation and submission as part of daily operational and maintenance activities. \nCollaborated with cross-functional teams, coordinated issue resolution, and drove \nidentified security issues to closure. \nSenior Penetration Tester, Onward Technologies Pvt Ltd \n\nManual walk-throughs of web applications to understand functionality and business logic. \nIdentified risk-prone parameters and gathered application-specific input points for security testing. \n\nConducted Vulnerability Assessments using Burp Suite Professional. \nAnalyzed and validated vulnerability assessment scan results. \nPerformed manual security testing using Burp Suite Proxy to verify findings and eliminate false positives. \nPrepared comprehensive security assessment reports detailing identified vulnerabilities, impact, and remediation recommendations. \nJunior Penetration Tester, Boven Technologies Pvt Ltd. \n85186888384\nConducted manual walk-throughs of applications to understand functionality and business workflows. \nCollaborated with senior team members to perform assigned Level 1 security checks. \nIdentified risk-prone parameters and collected application-specific details, reporting findings to senior analysts. \nPerformed Vulnerability Assessments using Burp Suite Professional. \nAnalyzed vulnerability assessment scan results for accuracy and impact. \nConducted manual security testing using Burp Suite Proxy to validate findings and eliminate false positives. \nPrepared comprehensive security assessment reports outlining identified vulnerabilities, risks, and remediation recommendations. \nExecuted internal network vulnerability assessments using Nessus. \nSales Executive, EssaeTeraoka Pvt Ltd. \n85186879886\nRecommend products, design pricing strategies, and close deals efficiently. \nExecutive market strategies for quick scaling. Create sales decks to win customers. Assist in email outreach campaigns. Evaluate projects using KPIs and feedback. \nKEY SKILLS \nSkilled in performing Web Application, API, and Mobile Application Penetration Testing. \nPractical experience in security testing across various domains including Fintech, \nHealthcare, IT Services, Banking, E-commerce, and Crypto Trading. Identified numerous high and critical severity vulnerabilities. \nWeb Application Security: Follows OWASP, WASC, and SANS guidelines. Strong focus on business logic testing to uncover critical security flaws. \nNetwork Security: Perform open port and service enumeration, identify service versions, and assess for known exploits. \nWell-versed in identifying application-level vulnerabilities such as XSS, SOL Injection, SSRF, Response Splitting, Session Hijacking, Authorization Bypass, Weak Cryptography, Authentication Flaws, and Design-Level Weaknesses. Familiar with appropriate defense mechanisms. \nCapable of developing custom exploit code to demonstrate real-world impact of vulnerabilities. \nExperience in GraphoL Security Testing. Proficient with security tools including Proxy \nEditors, Network Sniffers, and Vulnerability Scanners like Burp Suite, HCLAppScan , and \nAcunetix . \nMobile Application Security: \n\nProficient in decompiling and recompiling Android applications using tools like apktool and dex2jar. \nExperienced in conducting static analysis on decompiled Java code. \nSkilled in using Frida scripts to analyze cryptographic implementations. \nFamiliar with Android heap memory profiling to detect sensitive data leaks, including cryptographic keys. \nKnowledgeable in runtime analysis of Android apps using tools like Frida and Objection. \n840510713673Education \nEngineering Staff College of India \n851868831798518681054310Sri Indu College of Engineering and Technology Sri Chaitanya Junior College \n85186867735\nS.S.C \n85186857667\nTools \nBurp Suite, ZAP Proxy, HTTP ToolKit , Fiddler, Nessus, Nmap, HCL AppScanner , sqlmap , Metasploit, MobSF , Frida, Objection, Acunetix \nProject Hightlight \nConducted end-to-end security assessments across Web, Mobile (Android/iOS), API (REST &amp; GraphOL ), and Cloud Infrastructure, identifying and mitigating security flaws. \nE-Commerce Platform (React.js + Node.js + MongoDB,Firebase , AWS) \nPerformed penetration testing on customer-facing web and mobile apps. \nIdentified critical issues such as Insecure Direct Object References (IDOR ) , \nBusiness Logic Bypass, and Improper Authentication in payment workflows. \nValidated S3 bucket mis-configurations, and exposed Firebase database instances. \nCRM Application (Angular + PostgreSOL , AWS) \nLedAPIandbackendassessments focusingon authentication, cryptographic flaws, and race conditions in trading engines. \nDiscovered and reported JWT signature bypass, and improper implementation of rate-limiting allowing brute-force attacks. \nFinance Sector Applications (Java/Spring Boot + Swift/Flutter + Oracle DB, Azure) \nPerformed mobile reverse engineering (including APK/IPA analysis) to uncover hardcoded secrets, insecure storage, and debug flag exposure. \nIdentified Broken Access Controls, SQLi , SSRF, and Server Misconfigurations during backend/ APIassessments . \nValidated secure implementation of REST APIs with |WT/OAuth2 flows and recommended improvements in token expiration, refresh logic, and input validat ion.",
+      "rounds": [
+        {
+          "id": "mpr6ar720x2vf",
+          "round": "R1",
+          "interviewDate": "",
+          "panelMembers": "Hiring Manager, Application Security Lead, HR",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Under Review",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T17:05:34.766Z",
+      "rank": 3,
+      "rankReason": "Strong experience in application security, penetration testing, and vulnerability assessment",
+      "rankScore": 95
+    },
+    {
+      "id": "mpr5ryomnt4h2",
+      "candidateName": "Afsana Nadaf",
+      "position": "Cyber Security Analyst - Application Security",
+      "experience": 4,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4 \nAPPSEC: SAST, DAST, VAPT, OWASP, Threat Modelling, Burp Suite\nBACKGROUND: Dedicated security analyst with experience in application security assessments and secure SDLC practices\nFIT: Strong AppSec skills and experience meet the threshold, with a focus on web and API security assessments, vulnerability management, and secure SDLC practices.",
+      "resumeText": "--- Page 1 ---\n# AFSANA NADAF  \nCyber Security Analyst - Application Security | Web & API Security  \n+91 8862027422  \nafsanaad1999@gmail.com  \nMumbai, Maharashtra  \n\n## ABOUT ME  \nApplication Security and Information Security professional with 4+ years of experience in Web/API security assessments, secure SDLC practices, vulnerability management, and risk-based security analysis across enterprise environments. Experienced in conducting VAPT engagements, coordinating with development and business teams for remediation, supporting security governance activities, and contributing to secure application releases. Familiar with OWASP standards, security tools, risk assessment methodologies, cloud security fundamentals, and stakeholder communication in large MNC environments.  \n{ SHAPE \\* MERGEFORMAT }\n\n## WORK EXPERIENCE  \n### Accenture | 2022-Mar, 2026  \n#### Cyber Security Analyst (VAPT | Web & API Security)  \n- Led end-to-end Web, API, and application security assessments for 100+ enterprise applications, performing manual and automated VAPT to identify critical and high-risk OWASP Top 10 vulnerabilities prior to production release.  \n- Conducted advanced API security testing covering OAuth2, JWT, BOLA, Broken Authentication, Mass Assignment, authorization flaws, and business logic vulnerabilities.  \n- Executed SAST and DAST assessments using Fortify SCA, validated findings, reduced false positives, and collaborated with development teams to remediate code-level security issues.  \n- Managed multiple security assessment engagements simultaneously, ensuring timely vulnerability identification, remediation tracking, and closure of critical findings within defined timelines.  \n- Collaborated with development, QA, infrastructure, and business stakeholders to integrate Secure SDLC practices and strengthen enterprise application security posture.  \n- Performed risk-based security assessments and provided mitigation recommendations aligned with business impact, exploitability, and organizational risk tolerance.\n\n--- Page 2 ---\n- Performed risk-based security assessments and provided mitigation recommendations aligned with business impact, exploitability, and organizational security requirements.\n\n- Prepared detailed security assessment reports including CVSS scoring, executive summaries, PoC evidence, risk prioritization, and remediation guidance for technical and management stakeholders.\n\n- Supported security governance, audit, and client security review activities by contributing to security standards, assessment procedures, and compliance-related documentation.\n\n- Worked closely with cross-functional teams to support secure release processes and reduce overall organizational security risk exposure.\n\n- Mentored junior analysts, reviewed vulnerability findings, and ensured quality and consistency across security testing engagements.\n\n## TECHNICAL SKILLS\n\nApplication Security: Web & API VAPT, OWASP Top 10, Secure SDLC, Threat Modeling Fundamentals, Risk-Based Vulnerability Assessment\n\n- API Security: Oauth2, JWT, Authentication & Authorization Testing, BOLA, Business Logic Testing, API Security Testing Security Testing: \n\n- Manual Testing, Penetration Testing, DAST, SAST, Vulnerability Validation Security Tools: Burp Suite, OWASP ZAP, Nmap, Postman, Fortify, Web Inspect.\n\n- Vulnerability Management: CVSS Scoring, Risk Classification, Vulnerability Prioritization, Remediation Tracking\n\n- Cloud Security Fundamentals: AWS Security Basics, IAM Concepts, Security Groups, Cloud Security Best Practices\n\n- Security Governance & Risk:Risk Assessment, Security Reporting, Security Best Practices, Security Compliance Awareness\n\n- Soft Skills: Stakeholder Communication, Cross-Team Collaboration, Analytical Thinking, Risk-Based Decision Making\n\n## ACHIEVEMENTS\n\nACE AWARD\n\nAccenture Celebrates Excellence (2024)\n\nRecognized for significant contribution to application security testing, identification of \n\n## CERTIFICATIONS \n\n- Qualys Vulnerability Management, \n- Detection & Response (VMDDR)\n- Qualys Web Application Scanning \n\n## API Security Fundamentals\n\n## Education\n\nBachelor of Engineering (Electronics & Communication) Shivaji University | 2017–2021",
+      "rounds": [
+        {
+          "id": "mpr5ryomtya7w",
+          "round": "R1",
+          "interviewDate": "2026-05-27",
+          "panelMembers": "Vaishali Rane",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Rejected",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:50:58.006Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr516jniu4i3",
+      "candidateName": "Yogesh Barse",
+      "position": "Cyber Security Analyst",
+      "experience": 4,
+      "finalStatus": "Scheduled",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4 \nAPPSEC: Pentest, OWASP, Burp Suite, SDLC, Vulnerability Assessment\nBACKGROUND: Dedicated security analyst with experience in application security testing\nFIT: Strong AppSec skills with hands-on experience in penetration testing, vulnerability assessment, and SDLC, making them a suitable candidate\nCOMPANIES: AQM Technologies Pvt. Ltd., Skill-mine Technologies Pvt Ltd.",
+      "resumeText": "Name: Yogesh Barse\n Phone: +91-8983629277\n Email: yogeshbarse21@gmail.com\n Professional Summary\n Security-focused professional with 3+ years of hands-on experience in Vulnerability Assessment and\n Penetra Ɵ on Tes Ɵ ng (VAPT) for Web, API, Mobile and network. Experience in the banking and e-commerce\n sectors, ensuring secure and reliable applica Ɵ on handling . Adept at iden Ɵ fying and mi Ɵ ga Ɵ ng security risks\n through ethical hacking and robust repor Ɵ ng. Proven ability to deliver detailed assessments aligned with\n OWASP TOP 10 standards. Strong communicator with a passion for cyber defence and con Ɵ nuous learning.\n Core Competencies\n  Web App & API Penetra Ɵ on Tes Ɵ ng (OWASP Top 10)\n  Infrastructure Tes Ɵ ng\n  Mobile Applica Ɵ on Tes Ɵ ng (Android and iOS)\n  Burp Suite, Nmap, Nessus, Wireshark, Kali Linux, Magisk, Frida\n  Repor Ɵ ng (Technical)\n Professional Experience\n AQM Technologies Pvt. Ltd. – Mumbai, India\n Cyber Security Analyst\n January 2024 – February 2026\n  Conducted penetra Ɵ on tests on web apps, APIs, and mobile pla ƞ orms using manual and automated tools.\n  Delivered detailed technical and execu Ɵ ve -level reports including PO Cs and remedia Ɵ on strategies.\n  Executed vulnerability assessments for enterprise networks (internal/external) using Nessus and Nmap,\n including infrastructure scanning with Nessus to iden Ɵ fy misconfigura Ɵ ons and vulnerabili Ɵ es.\n  Able to perform regular scans, analyse results, and assist teams in resolving issues to maintain a\n secure IT environment.\n  Involved in Software development Life cycle (SDLC) to ensure security controls are in place.\n  Coordinated red team engagements simula Ɵ ng APT - style a Ʃ acks to evaluate internal defenses.\n Skill-mine Technologies Pvt Ltd. – Bangalore, India\n Jr. Applica Ɵ on Security Engineer\n August 2022 – December 2023\n  Performed penetra Ɵ on tes Ɵ ng on Web app lica Ɵ ons, APIs, and mobile pla ƞ orms using manual and\n automated tools.\n  Involved in Software development Life cycle (SDLC) to ensure security controls are in place.\n  U Ɵ lized Burp Suite Pro extensively for dynamic tes Ɵ ng and automa Ɵ on via extensions.\n  Par Ɵ cipated in client calls to explain findings, clarify risks, and support mi Ɵ ga Ɵ on.\n\nCer Ɵ fica Ɵ ons\n Cer Ɵ fied Red Team Professional (CRTP) 2025 – ADLID11862\n Educa Ɵ on\n Bachelor of Engineering in Electronics and Communica Ɵ on\n North Maharashtra University – Graduated: 2014 - 2017\n Technical Tools & Pla ƞ orms\n Burp Suite Pro, OWASP ZAP, Nmap, Nessus, Metasploit, SQL Map, Wireshark, Kali Linux, Nikto, Postman, Dirb,\n Frida, Objec Ɵ on, MobSF, Drozer, APKTool, Magisk, Jadx-gui, Dopamine, Ghydra",
+      "rounds": [
+        {
+          "id": "mpr516jn5rtzw",
+          "round": "R1",
+          "interviewDate": "2026-05-28",
+          "panelMembers": "Vaishali Rane",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Selected",
+          "notes": ""
+        },
+        {
+          "id": "mpr5zomy29nch",
+          "round": "R2",
+          "interviewDate": "2026-06-02",
+          "panelMembers": "Vaishali Rane",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Scheduled",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:30:08.483Z",
+      "rank": 17,
+      "rankReason": "Strong AppSec skills with hands-on experience in penetration testing, vulnerability assessment, and SDLC",
+      "rankScore": 81
+    },
+    {
+      "id": "mpr5155w5ddnx",
+      "candidateName": "Kartik Oturkar",
+      "position": "Application Security Consultant",
+      "experience": 4,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4 \nAPPSEC: Manual Penetration, OWASP Top 10, API Security Testing, Burp Suite, Threat Modelling, SDLC\nBACKGROUND: Dedicated security analyst with experience in application security testing and penetration testing\nFIT: Candidate has strong AppSec skills, meets the experience threshold, and has hands-on experience with relevant tools and technologies, making them a suitable fit for the role.",
+      "resumeText": "Kartik Oturkar\n Application Security Consultant\n karthikoturkar @gmail.com 9545736705 Navi Mumbai\n SUMMARY\n Application Security Consultant with hands-on experience performing manual penetration testing on web and\nAPI applications, Red Teaming and Infrastructure Security, and Network Security Assessments Skilled in\nidentifying OWASP Top 10 vulnerabilities, including Broken Access Control, IDOR, authentication flaws, and\nbusiness logic vulnerabilities. Experienced in exploit validation, risk-based reporting, and collaborating with\ndevelopment teams to implement secure remediation within SDLC.\n TECHNICAL SKILLS\n Manual Penetration\n API Security Testing\n OWASP Top 10\n Security Audits\n Network Security Testing\n Red Team Assessments\n Mobile Application Security Testing (Android / iOS)\n Web Application Security\n Vulnerability Assessment\n Report Writing & Remediation Validation\n Analytical & Problem-Solving Skills\n Security and Risk Management\n Source code Review\n Infrastructure Security\n WORK EXPERIENCE\n Associate Information Security Consultant , Secureyes Infusing Security\n • Performed systematic identification of vulnerabilities in systems, applications,\nand networks\n • Use automated tools and manual techniques to generate comprehensive reports.\n 11/2024 – Present\n Navi Mumbai\n • Simulated real-world attacks to exploit vulnerabilities in systems, applications,\nand APIs and\n • Document findings with detailed proof-of-concept (PoC) and recommend\nmitigation strategies.\n • Strong understanding of cybersecurity principles and frameworks (e.g., OWASP,\nNIST, ISO 27001).\n • Utilized tools such as Burp Suite, OWASP ZAP, Nmap, Nessus, mobSF, Drozer,\nFrida, JEDX etc. to perform manual and automated testing.\n • Performed manual testing on web applications, API security testing, and Mobile\nsecurity Testing and Red Teaming\n • Conducted internal network assessment.\n • Performed enumeration, privilege escalation, lateral movement, and security\ncontrol validation.\n • Identified misconfigurations in Active Directory and infrastructure services, and\nSecure Configuration Standard Testing and security Control Review\n • Authored detailed security assessment reports outlining discovered\nvulnerabilities, potential impacts, and actionable remediation steps, helping\nstakeholders make informed decisions.\n\nSenior Executive , Ixambee\n • Executed manual and automated penetration to discover and validate critical\nweb application vulnerabilities including XSS, CSRF, and logic flaws, providing\nactionable remediation guidance.\n • Conducted Vulnerability Assessment and Penetration Testing (VAPT) on Web\nApplications, Mobile Applications, APIs, and Infrastructure environments and\nsecurity controls\n 01/2024\n Noida, Uttar Prades\n • Performed enumeration, privilege escalation, lateral movement, and security\ncontrol validation.\n • Identified misconfigurations in Active Directory and infrastructure services.\n • Managing web application security and coordinating between the application\ndevelopment team and stakeholders to make sure the vulnerabilities are\nmitigated before the grace period.\n Cyber Security Consultant , Mitroz Technologies\n • Penetration Testing (PT) on Servers, Endpoints, and Network Devices. (Using\nNessus Professional, Nmap).\n • Perform manual testing on web applications and API security testing.\n 01/2022 – 01/2023\n Pune, Maharashtra\n • Web application scanning uses a Static and dynamic approach using Burp Suite\nPro and other internal tools based on OWASP top 10\n • Find the vulnerabilities and report to the appropriate team also, provide the\nsolution to the team on how to patch that vulnerability.\n • Providing Threat intelligence reports and risk matrix every month for a better\nunderstanding of risk in the attack surface.\n QA Engineer , Credentek software & consultancy\n • Responsibility for smoke testing, reviewing and providing feedback on test cases,\npreparing daily execution reports\n • Prepared a Defect Profile Document and shared the same with the Development\nTeam and tracked the status of the bugs till they were closed (REDMINE)\n 01/2020 – 12/2021\n Pune, Maharashtra\n EDUCATION\n Bachelor of Engineering - BE, Computer Science ,\n DY Patil College of Engineering (Graduated With First Class From SPPU, Pune.)\n 03/2014 – 04/2019\n Pune, Maharashtra\n LANGUAGE\n English Hindi Marathi\n COURSES & CERTIFICATES\n Junior penetration Tester(eJPT) , INE\n Certificate no:- 17937273233\n 04/2026 – 04/2029\n Certified Ethical Hacker (CEH ISO/IEC 27001:2022 , V12)\n Certificate no :- ECC3046285917\n 01/2026 – 12/2026",
+      "rounds": [
+        {
+          "id": "mpr5155wx1dpg",
+          "round": "R1",
+          "interviewDate": "2026-05-28",
+          "panelMembers": "Vaishali Rane",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Rejected",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:30:06.692Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr513dgie0r7",
+      "candidateName": "Hemant Tulshidas Thale",
+      "position": "Application Security Engineer",
+      "experience": 5,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3 \nAPPSEC: SAST, DAST, Burp Suite, Penetration Testing, OWASP, Threat Modelling\nBACKGROUND: Dedicated security professional with hands-on experience in Application Security and penetration testing\nFIT: Strong AppSec skills, relevant certifications, and a proven track record of identifying vulnerabilities and delivering actionable reports make this candidate a suitable fit for the role.",
+      "resumeText": "HEMANT TULSHIDAS THALE\n Application Security Engineer | VAPT Consultant | CEH v12 Certified\n Panvel, Navi Mumbai 410206 | +91 9518740134 | hemantthale12@gmail.com | Bug Bounty: bugchaser_1212\n PROFESSIONAL SUMMARY\n Results - driven Application Security professional with 2+ years of hands - on experience in Web, API, and Network\n Penetration Testing across enterprise environments. Proven expertise in identifying OWASP Top 10 vulnerabilities,\n Threat Modeling (STRIDE), Secure Code Review, and SAST/DAS T/SCA integration in DevSecOps pipelines. CEH\n v12 certified with strong command of Burp Suite, Nessus, Metasploit, and Rapid7. Experienced in delivering\n actionable VAPT reports to technical and C - level stakeholders and supporting ISO 27001, PCI - DSS, and CE RT - In\n compliance requirements. Active bug bounty hunter and CTF participant with a continuous learning mindset.\n PROFESSIONAL EXPERIENCE\n Cybersecurity Engineer — VAPT May 2023 – July 2025\n Galaxy Office Automation Pvt. Ltd. | Mumbai, India\n • Conducted 30+ Web, API, and Network VAPT assessments for enterprise applications, identifying 100+\n vulnerabilities including Critical and High severity findings across 20+ production systems.\n • Identified and reported OWASP Top 10 vulnerabilities — IDOR, SQL Injection, XSS, C SRF, Authentication\n Bypass, Business Logic Flaws, and Security Misconfigurations — with detailed proof - of - concept\n documentation.\n • Performed Threat Modeling (STRIDE) for 5+ applications during pre - release security reviews, enabling early\n identification of de sign - level security flaws and reducing post - deployment vulnerability count.\n • Conducted Secure Code Review sessions with development teams, flagging insecure coding patterns\n (hardcoded credentials, improper input validation, insecure deserialization) and pro viding secure coding\n guidance.\n • Used Burp Suite, Nmap, Nessus, Metasploit, SQLmap, Wireshark, and Postman for both manual exploitation\n and automated scanning — improving vulnerability detection efficiency by 40%.\n • Delivered 25+ professional pentest reports w ith CVSS - based risk ratings and prioritized remediation guidance\n for C - level and technical stakeholders.\n • Collaborated with 5+ development teams to validate patches and drive vulnerability closure, achieving 85%+\n remediation rate within agreed SLAs.\n • Managed security infrastructure including firewall configuration (Checkpoint, FortiGate), antivirus, and\n endpoint security using Trend Micro Apex One and Apex Central.\n • Supported ISO 27001 audits, CERT - In compliance assessments, and contributed to PCI - DSS pre - audit\n readiness activities.\n • Maintained threat intelligence database by tracking CVEs, CERT - In advisories, and zero - day vulnerabilities —\n assessing applicability to internal systems within 24 hours of disclosure.\n Trainee Engineer Dec 2020 – Dec 2021\n Pr asar Bharati Doordarshan Kendra | Mumbai, India\n • Supported LAN/WLAN infrastructure setup, maintenance, and IT operations for a government broadcasting\n organization.\n • Assisted in network monitoring, troubleshooting, and VLAN configuration across enterprise network\n infrastructure.\n PROFESSIONAL DEVELOPMENT\n July 2025 – Present | Actively deepening Application Security expertise through structured self - study and hands -\n on practice:\n • Completed 40+ labs on PortSwigger Web Security Academy covering advanced SQL Inj ection, XXE, SSRF,\n SSTI, deserialization, OAuth vulnerabilities, and HTTP request smuggling.\n\n• Active bug bounty hunter (handle: bugchaser_1212) on HackerOne and Bugcrowd — practicing real - world\n vulnerability discovery and responsible disclosure on live targ ets.\n • Completed multi - flag CTF challenges on Hacker101 including CBC bit - flipping attacks against AES - CBC\n encrypted tokens and UNION - based SQL injection authentication bypass scenarios.\n • Preparing for OSCP certification — building custom VAPT lab scenarios u sing Kali Linux, DVWA, OWASP\n Juice Shop, and HackTheBox machines.\n • Daily tracking of CVEs, CERT - In advisories, NVD feeds, and AppSec threat intelligence to stay current on\n emerging vulnerabilities and exploitation techniques.\n TECHNICAL SKILLS\n Penetration Te sting \nBurp Suite, Metasploit, Nmap, SQLmap, Nessus, Rapid7, OWASP ZAP,\n Nikto\n Web & API Security \nOWASP Top 10, IDOR, SQLi, XSS, CSRF, Auth Bypass, Business Logic,\n JWT Attacks, API Security Testing\n AppSec / DevSecOps \nSAST (SonarQube), DAST (OWASP ZAP), SCA, Secure Code Review,\n Threat Modeling (STRIDE), Secure SDLC, DevSecOps Pipeline Integration\n Network Security \nWireshark, Firewall (Checkpoint, FortiGate), VPN, Routing & Switching,\n VLANs\n Security Management \nTrend Micro Apex One, Apex Central, ManageEngine, Patch Manager, CVE\n Tracking\n Compliance & Reporting \nCERT - In, ISO 27001, PCI - DSS, RBI Guidelines, CVSS/EPSS Risk Rating,\n Professional VAPT Reporting\n Operating Systems Kali Linux, Ubuntu, Windows Server, TCP/IP, NAT, DHCP\n CERTIFICATIONS\n Certified Ethical Hacker (CEH v12) — EC - Council July 2024\n Certified Security Professional (CSP v3.1) — Telenetwork Institute 2022\n OSCP — Offensive Security (In Progress / Preparing) 2025 – Present\n EDUCATION\n B.E. in Electronics and Telecommunication Engineeri ng 2022\n Premier College, Department of Engineering & Technology\n PROJECTS & PERSONAL LAB\n • Built a personal VAPT lab using Kali Linux, DVWA, OWASP Juice Shop, and custom API environments —\n practicing real - world exploitation of OWASP Top 10 vulnerabilities and documenting PoCs for each finding.\n • Bug bounty hunting (bugchaser_1212) on HackerOne and Bugcrowd — performed recon, manual testing, and\n responsible disclosure on live targets across web and API programs.\n • CTF participation on Hacker101 — captured multiple flags using CBC bit - flipping, UNION - based SQLi auth\n bypass, blind SQL injection with wildcard extraction, and unauthenticated HTTP method abuse.\n • Created 10+ professional pentest reports with CVSS scoring, risk ratings, and remediation documentation —\n simul ating real client deliverables for BFSI, e - commerce, and enterprise web applications.\n • Actively solving advanced labs on PortSwigger Web Academy — completed server - side topics (SQLi, XXE,\n SSRF, SSTI, file uploads, deserialization) and client - side topics (XS S, CSRF, CORS, clickjacking).",
+      "rounds": [
+        {
+          "id": "mpr513dgwga6i",
+          "round": "R1",
+          "interviewDate": "2026-05-28",
+          "panelMembers": "Viraj",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Rejected",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:30:04.372Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr511w1bb3tj",
+      "candidateName": "Yogita Anil Patil",
+      "position": "Security Engineer",
+      "experience": 4,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 4.2 \nAPPSEC: VAPT, OWASP, DAST, Burp Suite, Pentest, Threat Modelling, SDLC, Code Review\nBACKGROUND: Dedicated security analyst with experience in application security and penetration testing\nFIT: The candidate has strong AppSec skills, including VAPT, OWASP, and DAST, and meets the experience threshold of 2+ years, making them a suitable candidate for the AppSec Engineer role.",
+      "resumeText": "Skill \nYears of experience  \nRate out of 10 \nOver all experience \n4. 2 years \n8 \nApplication security \n4.2 years \n8 \nVulnerability Assessment and Penetration Testing (VAPT) \n4.2 years \n8 \nOWASP \n4 .2 years \n8 \n626110328041000YOGITA ANIL PATIL \n+91 8180866877 | a.yogita1998@gmail.com | linkedin.com/in/ yogita-patil | Mumbai, India \nSUMMARY \nSecurity Engineer with 4+ years of hands-on experience specializing in Web, API, and Mobile Application Penetration Testing, with core domain expertise in securing banking and enterprise financial applications. Proven track record of identifying critical v ulnerabilities, implementing secure SDLC frameworks, and conducting comprehensive risk analysis aligned with OWASP and regulatory benchmarks. Skilled in bridging the gap between technical threat discovery and executive risk mitigation to protect sensitive customer data. \nSKILLS AND CORE COMPETENCIES \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nCore Competencies: Web, Mobile (Android), &amp; API Penetration Testing (VAPT) | Product Security Assessment Vulnerability Assessment: OWASP Top 10 | API Security Top 10 | SQLi | XSS | IDOR | Auth Bypass &amp; Missing Authorizations | File Upload | Rate Limiting | Business Logic Vulnerability Testing \nMethodologies &amp; Analysis: Manual &amp; Automated Security Testing | Static &amp; Dynamic Analysis (DAST) | Threat Modeling &amp; Security Review | CVSS v3 Risk Scoring | Remediation Va lidation &amp; Retesting \nProtocols &amp; Frameworks: REST, SOAP, JWT Manipulation, OAuth, SSL Pinning Bypass, API Interception, Insecure Local \nStorage Validation | Secure SDLC Implementation &amp; Security Best Practices | RBI Compliance \nTools &amp; OS: Burp Suite, Nmap, Nessus, Postman, OWASP ZAP, SQLmap , MobSF , JADX, Kali Linux \nCommunication: Client &amp; Stakeholder Management | Technical &amp; Executive VAPT Reporting \nPROFESSIONAL EXPERIENCE \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nTAC Security Mumbai, India \nSecurity Engineer March 2024 – February 2026 • Executed end-to-end VAPT for 40+ web, API, and mobile applications handling sensitive financial workflows, transaction validation, and customer data. \nDiscovered and validated over 100 critical to high-severity vulnerabilities, including SQL Injection, IDOR , Authentication Bypass, File Upload, and complex business logic flaws. \nIntercepted and analyzed mobile and API traffic utilizing JWT manipulation, rate limiting, SSL pinning bypass, and insecure storage validation to prevent sensitive data exposure. \nAuth ored detailed VAPT reports containing Proof-of-Concept (POC) documentation, CVSS scoring, and business impact analysis for enterprise stakeholders. \nCollaborated with cross-functional development and product teams during pre-production phases to provide sec ure coding recommendations and validate remediations. \nHardened production readiness by verifying secure application architecture and secure deployment controls under tight regulatory and delivery timelines. \nTalakunchi Pvt. Ltd. Mumbai, India \nSecurity Analy st / Penetration Tester December 2021 – February 2024 • Evaluated penetration testing using manual and automated testing techniques based on OWASP Top 10 and industry best practices. \nAudited input validation, authentication and authorization mechanisms acr oss web and API-based applications to mitigate unauthorized data access. \nGuided development teams on mitigation strategies, secure code implementations, and remediation tracking during the software development lifecycle (SDLC). \nCompiled comprehensive techn ical and management-level assessment reports mapping out identified security risks and closure verification status. \nManaged communications with technical and executive stakeholders to align security testing activities with business objectives. \nTARGETED SECURITY HIGHLIGHTS Banking Domain Application Security Assessment \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nAssessed core banking workflows, including fund transfer modules, authentication pipelines, and financial transaction validation mechanisms. \nMitigated financial risks by capturing critical authorization bypasses and transaction vulnerabilities, ensuring full alignment with secure banking requirements and RBI compliance guidelines. \nMobile Application Security Testing \nDeconstructed Android applic ation packages through static and dynamic analysis to uncover latent data exposure channels. \nBypassed endpoint protections via simulated client-side attacks to verify API security resilience before public deployment. \nEDUCATION &amp; CERTIFICATIONS B.Tech (Comp uter Science &amp; Engineering - Cyber Security &amp; Forensics) Graduated: 2020 \n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\nSandip University, Nashik \nCredentials: Certified Ethical Hacker (CEH) | Certified Network Security Practitioner (CNSP) | Cyber Security Cyber University (CS-CU) | Certified Appsec P ractitioner (CAP) Languages: English, Hindi, Marathi.",
+      "rounds": [
+        {
+          "id": "mpr511w1nh8bq",
+          "round": "R1",
+          "interviewDate": "2026-05-27",
+          "panelMembers": "Viraj Jadhav",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Rejected",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:30:02.449Z",
+      "rank": null,
+      "rankReason": null
+    },
+    {
+      "id": "mpr510oziy2n2",
+      "candidateName": "Poonam Gawade",
+      "position": "Application & Cloud Security Engineer",
+      "experience": 3,
+      "finalStatus": "Rejected",
+      "level": "L1",
+      "partner": "Quess",
+      "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3.11\nAPPSEC: SAST, DAST, IAST, OWASP, CSPM, WAF\nBACKGROUND: Application Security and Cloud Security professional with a strong background in computer science and cloud security expertise\nFIT: Meets the experience threshold with strong AppSec skills, including SAST, DAST, and OWASP, making them a suitable candidate for the AppSec Engineer role",
+      "resumeText": "Sl /No   \nMandatory Skills   \nYrs of Experience   \nProjects worked    \n1  \n Application Security, IAM \n3.6 Years \n1 \n2  \nWeb/API security \n3.6 Years \n1 \n3  \nOWASP &amp; VAPT \n3.6 Years \n1 \n4  \n Cloud (AWS/Azure) \n3.6 Years \n1 \n\n\n\n\nPOONAM GAWADE \nApplication &amp; Cloud Security Engineer \n\nEmail ID: poonamg1399@gmail.com Linkedin www.linkedin.com/in/poonamgawade \nMob.No . : + 91 7218396583 Address : Kolhapur - 416509,Maharashtra \n\n\n91440017462500PROFILE \nCloud Security professional with 3.11 years of experience in Application Security and Cloud Security. Hands-on expertise in CSPM using Wiz and Orca Security tool across AWS and Azure environments. Skilled in identifying cloud misconfigurations, IAM/RBAC risks, public exposure and compliance gaps. Strong experience in risk prioritization, remediation guidance and working closely with DevOps teams. \n\n91440017462500SKILLS \nCloud Security - AWS &amp; Azure Security, CSPM , Cloud Misconfiguration Detection , Azure Security Architecture, Azu re Security Controls \nApplication Security - SAST, DAST, IAST , Secure Coding Practices, OWASP Top 10 , Code Security Reviews , Security monitoring , Incident response \nSecurity Tools - Wiz, Orca Security , Web Application Firewalls ( W AF ) , Firewalls, Endpoint Protection \nIdentity &amp; Access Security - IAM &amp; RBAC Hardening, RBAC Controls, Authentication &amp; Authorization, Access Management , Identity Governance \nCloud Infrastru cture Security- Storage &amp; Network Security, NSG Configuration, Azure AD Security , Network Segmentation, Encryption &amp; Key Management \nSecurity Risk &amp; Vulnerability Management - Risk Prioritization, Risk Identification, Malware Analysis , Attack Path Analys is, Security Remediation, Threat Modeling, Auditing &amp; Logging \nCompliance &amp; Frameworks - CIS Benchmarks , Security Compliance, Cloud Governance \nDocker, Container Security, CI/CD Pipeline - Azure Dev Ops, Python , Secure SDLC, Documentation \n91440017526000\nEXPERIENCE \nIT Analyst – Cloud &amp; Application Security \nZF India Pvt. Ltd., Pune ( Jan 2022 – Dec 2025) \nWorked on CSPM projects securing AWS and Azure cloud environments \nUsed Wiz and Orca Security for agentless cloud posture assessments \nIdentified critical risks such as public storage exposure, over-privileged IAM roles and insecure network configurations \nPerformed risk prioritization using Wiz Risk Graph and attack path analysis \nProvided remediation guidance to cloud and DevOps teams \nSupported compliance requirements aligned with CIS benchmarks \nConducted application security testing aligned with OWASP Top 10 \n\n\nInternship- Data Science Intern \nFlip Robo Technologies, Bangalore (Remote) ( Feb 2022 – Aug 2022) \nOptimized machine learning models for improved prediction accuracy and performance. \n8047980-619005Developed custom algorithms to solve unique challenges in data analysis and modeling. \nUtilized programming languages such as Python or R extensively throughout the internship – applying relevant libraries and frameworks when appropriate. \nCreated data visualization graphics, translating complex data sets into comprehensive visual representation. \n91440017526000PROJECTS \nCloud Security &amp; Posture Management (CSPM) \nImplemented Wiz and Orca Security for continuous cloud security monitoring \nReduced critical misconfigurations through proactive remediation \nImproved cloud visibility across IAM, storage and network layers. \nReduced exposure risks through proactive vulnerability identification and remediation workflows. \n91440017462500EDUCATION \n2018-2021 | Sant Gajanan Maharaj College of Engineering, Mahagaon - Shivaji University. \n13563001075301356300107530135630011401013487401225551303020191770Bachelor of Engineering in Computer Science &amp; Eng.| 75% | First Class with Distinction \n\n2015-2018 | Sant Gajanan Maharaj Rural Polytechnic , Mahagaon - MSBTE \nDiploma in Computer Science | 75% | First Class with Distinction",
+      "rounds": [
+        {
+          "id": "mpr510oz0s1kw",
+          "round": "R1",
+          "interviewDate": "2026-05-27",
+          "panelMembers": "Shamika Shewale",
+          "feedbackStatus": "Submitted",
+          "roundStatus": "Rejected",
+          "notes": ""
+        }
+      ],
+      "createdAt": "2026-05-29T16:30:00.899Z",
+      "rank": null,
+      "rankReason": null
+    }
+  ],
+  "teamMembers": [
+    {
+      "id": "mpr1x3tz8towv",
+      "name": "Sarah Chen",
+      "assignedTasks": 5,
+      "pendingActions": 2,
+      "escalations": 0,
+      "notes": "Lead for SAST tooling and developer outreach"
+    },
+    {
+      "id": "mpr1x3tz2bb9b",
+      "name": "Mike Patel",
+      "assignedTasks": 4,
+      "pendingActions": 1,
+      "escalations": 1,
+      "notes": "Mobile security specialist, handling pentest coordination"
+    },
+    {
+      "id": "mpr1x3tz327lo",
+      "name": "David Lowe",
+      "assignedTasks": 6,
+      "pendingActions": 3,
+      "escalations": 0,
+      "notes": "Cloud and infrastructure security, AWS certified"
+    }
+  ],
+  "goals": [
+    {
+      "id": "mpr1x3tz13au1",
+      "goal": "Achieve CISSP Certification",
+      "progress": 0,
+      "targetDate": "2026-09-26",
+      "notes": "Completed domains 1-3, studying domain 4",
+      "createdAt": "2026-05-29T15:02:59.495Z"
+    },
+    {
+      "id": "mpr1x3tzf17he",
+      "goal": "AWS Security Specialty Certification",
+      "progress": 20,
+      "targetDate": "2026-11-25",
+      "notes": "Started whitepapers and labs",
+      "createdAt": "2026-05-29T15:02:59.495Z"
+    },
+    {
+      "id": "mpr1x3tzp7srx",
+      "goal": "Read 12 security books this year",
+      "progress": 60,
+      "targetDate": "2026-12-25",
+      "notes": "7 of 12 done — next: \"The Web Application Hacker's Handbook\"",
+      "createdAt": "2026-05-29T15:02:59.495Z"
+    }
+  ],
+  "health": [
+    {
+      "id": "mpr1x3tzc5fvn",
+      "date": "2026-05-27",
+      "water": 8,
+      "sleep": 6.5,
+      "exercise": true,
+      "exerciseMinutes": 30,
+      "notes": "Felt tired, long review session"
+    },
+    {
+      "id": "mpr1x3tzkbjud",
+      "date": "2026-05-28",
+      "water": 10,
+      "sleep": 7,
+      "exercise": false,
+      "exerciseMinutes": 0,
+      "notes": "Skipped workout, back to back meetings"
+    },
+    {
+      "id": "mpr1x3tz4z2uk",
+      "date": "2026-05-29",
+      "water": 6,
+      "sleep": 7.5,
+      "exercise": true,
+      "exerciseMinutes": 45,
+      "notes": "Morning run, feeling good"
+    }
+  ],
+  "inbox": [],
+  "dailyPlanner": {
+    "2026-05-29": {
+      "top3": [
+        "Complete SAST findings review for Payment Service",
+        "Prepare Q3 metrics dashboard draft",
+        "Follow up on pentest escalation with VP Eng"
+      ],
+      "completed": "",
+      "pending": "",
+      "carryForward": ""
+    }
+  },
+  "customModules": {},
+  "settings": {
+    "theme": "light",
+    "aiProvider": "groq",
+    "aiModel": "llama-3.3-70b-versatile",
+    "groqKey": "",
+    "openL1": 2,
+    "openL2": 7,
+    "hiddenNav": [
+      "personal"
+    ],
+    "colorTheme": "ocean",
+    "userName": "Saumya",
+    "userRole": "AppSec Team Lead",
+    "appTitle": "BrainMap",
+    "apiKey": "",
+    "githubPAT": ""
+  }
+}
