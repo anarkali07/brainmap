@@ -5400,7 +5400,7 @@ async function pushToGist() {
   const payload = JSON.stringify(DB, null, 2);
   const body = {
     description: 'BrainMap Data Sync',
-    public: false,
+    public: false, // secret gist — readable via direct URL without token
     files: { 'brainmap-data.json': { content: payload } }
   };
 
@@ -5454,9 +5454,10 @@ async function pullFromGist() {
   pullBtns.forEach(b => { b.disabled = true; b.textContent = '⏳ Pulling…'; });
 
   try {
-    const res  = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: { 'Authorization': `token ${pat}` }
-    });
+    const headers = pat ? { 'Authorization': `token ${pat}` } : {};
+    let res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+    // fallback: try without token if auth fails
+    if (!res.ok && pat) res = await fetch(`https://api.github.com/gists/${gistId}`);
     if (!res.ok) throw new Error(`GitHub API error ${res.status}`);
 
     const data    = await res.json();
@@ -5912,32 +5913,39 @@ renderDashboard();
 
 // ── Auto-pull from Gist on load if configured ──────────────
 (async function autoSyncOnLoad() {
-  const pat    = DB.settings.githubPAT;
   const gistId = DB.settings.gistId;
-  if (!pat || !gistId) return; // not configured
+  if (!gistId) return; // Gist not configured — skip silently
 
   const indicator = document.createElement('div');
-  indicator.id = 'autosync-banner';
-  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;';
+  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;transition:background 0.3s;';
   indicator.textContent = '☁️ Syncing data from cloud…';
   document.body.appendChild(indicator);
 
   try {
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: { 'Authorization': `token ${pat}` }
-    });
-    if (!res.ok) throw new Error('Sync failed: ' + res.status);
-    const data    = await res.json();
+    // Pull uses token if available, but secret Gists are also readable without token
+    const pat = DB.settings.githubPAT;
+    const headers = pat ? { 'Authorization': `token ${pat}` } : {};
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+
+    // If token is invalid but gist is secret, try without token as fallback
+    const res2 = (!res.ok && pat)
+      ? await fetch(`https://api.github.com/gists/${gistId}`)
+      : null;
+
+    const finalRes = (res2 && res2.ok) ? res2 : res;
+    if (!finalRes.ok) throw new Error('HTTP ' + finalRes.status);
+
+    const data    = await finalRes.json();
     const content = data.files['brainmap-data.json']?.content;
-    if (!content) throw new Error('No data file in Gist');
+    if (!content) throw new Error('No data in Gist');
 
     const parsed = JSON.parse(content);
-    // preserve local token + gistId
-    const localPAT    = DB.settings.githubPAT;
-    const localGistId = DB.settings.gistId;
+    // always preserve local token + gistId so credentials aren't wiped
+    const keepPAT    = DB.settings.githubPAT;
+    const keepGistId = DB.settings.gistId;
     DB = parsed;
-    DB.settings.githubPAT = localPAT;
-    DB.settings.gistId    = localGistId;
+    DB.settings.githubPAT = keepPAT;
+    DB.settings.gistId    = keepGistId;
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
@@ -5948,9 +5956,9 @@ renderDashboard();
     indicator.textContent = '✅ Data synced from cloud';
     setTimeout(() => indicator.remove(), 2500);
   } catch(e) {
-    indicator.style.background = '#dc2626';
-    indicator.textContent = '⚠ Auto-sync skipped: ' + e.message;
-    setTimeout(() => indicator.remove(), 4000);
+    // Silent fail — don't block the app, just remove banner
+    indicator.remove();
+    console.warn('Auto-sync skipped:', e.message);
   }
 })();
 
