@@ -1173,11 +1173,13 @@ body[data-theme="light"] {
               </div>
               <label>GitHub Personal Access Token</label>
               <div style="display:flex;gap:6px;">
-                <input type="password" id="cfg-github-pat" placeholder="ghp_xxxxxxxxxxxx" style="flex:1;">
+                <input type="password" id="cfg-github-pat" placeholder="ghp_xxxxxxxxxxxx" style="flex:1;"
+                autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
                 <button onclick="togglePatVisibility()" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg2);color:var(--text-muted);cursor:pointer;font-size:0.78rem;flex-shrink:0;">👁</button>
               </div>
               <label>Gist ID <span style="font-weight:400;font-size:0.7rem;">(auto-filled after first push)</span></label>
-              <input id="cfg-gist-id" placeholder="Leave blank — auto-created on first push">
+              <input id="cfg-gist-id" placeholder="Leave blank — auto-created on first push"
+                autocorrect="off" autocapitalize="off" autocomplete="off" spellcheck="false">
               <div id="sync-status" style="font-size:0.75rem;margin-top:8px;min-height:18px;"></div>
               <div style="display:flex;gap:8px;margin-top:10px;">
                 <button onclick="testGistToken()" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--medium);background:rgba(251,191,36,0.1);color:var(--medium);font-weight:600;cursor:pointer;font-size:0.82rem;">🔍 Test Token</button>
