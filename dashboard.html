@@ -758,8 +758,7 @@ body[data-theme="light"] {
       <div id="header-title">Dashboard</div>
       <button class="header-btn primary" onclick="openQuickAdd()" title="Quick Add Task">&#43; Quick Add</button>
       <button class="header-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable Notifications">&#128276;</button>
-      <button id="hdr-push-btn" class="header-btn" onclick="pushToGist()" title="Push data to GitHub Gist" style="display:none;">☁️↑</button>
-      <button id="hdr-pull-btn" class="header-btn" onclick="pullFromGist()" title="Pull data from GitHub Gist" style="display:none;">☁️↓</button>
+      <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub">☁️ Sync</button>
       <button class="header-btn" onclick="exportData()">&#8595; Export</button>
       <label style="margin:0;cursor:pointer;">
         <button class="header-btn" onclick="this.closest('label').querySelector('input').click()">&#8593; Import</button>
@@ -4890,6 +4889,38 @@ function exportData() {
   URL.revokeObjectURL(url);
 }
 
+function syncToGit() {
+  // Download brainmap-data.json to ManageDay folder, then show git command
+  const blob = new Blob([JSON.stringify(DB, null, 2)], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'brainmap-data.json';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Show the git command to run
+  setTimeout(() => {
+    const cmd = `cd C:\\Tools\\ManageDay && move /Y "%USERPROFILE%\\Downloads\\brainmap-data.json" . && git add brainmap-data.json && git commit -m "sync data" && git push`;
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;';
+    modal.innerHTML = `
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:560px;width:90%;box-shadow:var(--shadow-lg);">
+        <div style="font-size:1rem;font-weight:700;margin-bottom:6px;">☁️ Sync to GitHub</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:14px;">
+          <strong>brainmap-data.json</strong> was downloaded. Now run this in PowerShell:
+        </div>
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;font-family:monospace;font-size:0.76rem;color:var(--low);word-break:break-all;user-select:all;cursor:text;margin-bottom:14px;"
+          onclick="navigator.clipboard.writeText(this.textContent).then(()=>this.style.outline='2px solid var(--accent)')">
+          cd C:\\Tools\\ManageDay &amp;&amp; move /Y "%USERPROFILE%\\Downloads\\brainmap-data.json" . &amp;&amp; git add brainmap-data.json &amp;&amp; git commit -m "sync data" &amp;&amp; git push
+        </div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:16px;">💡 Click the command above to copy it, then paste in PowerShell.</div>
+        <button onclick="this.closest('div[style*=fixed]').remove()" style="width:100%;padding:9px;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:600;cursor:pointer;">Done</button>
+      </div>`;
+    document.body.appendChild(modal);
+  }, 500);
+}
+
 function exportInterviewsCSV() {
   if (!DB.interviews.length) { alert('No interview data to export.'); return; }
   // Populate partner & position dropdowns dynamically
@@ -5913,34 +5944,21 @@ renderDashboard();
 
 // ── Auto-pull from Gist on load if configured ──────────────
 (async function autoSyncOnLoad() {
-  const gistId = DB.settings.gistId;
-  if (!gistId) return; // Gist not configured — skip silently
+  // Fetch from raw GitHub — no token needed (public repo)
+  const RAW_URL = 'https://raw.githubusercontent.com/anarkali07/brainmap/main/brainmap-data.json';
 
   const indicator = document.createElement('div');
-  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;transition:background 0.3s;';
-  indicator.textContent = '☁️ Syncing data from cloud…';
+  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;';
+  indicator.textContent = '☁️ Loading latest data…';
   document.body.appendChild(indicator);
 
   try {
-    // Pull uses token if available, but secret Gists are also readable without token
-    const pat = DB.settings.githubPAT;
-    const headers = pat ? { 'Authorization': `token ${pat}` } : {};
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, { headers });
+    const res = await fetch(RAW_URL + '?t=' + Date.now()); // cache-bust
+    if (res.status === 404) { indicator.remove(); return; } // no data file yet — first run
+    if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    // If token is invalid but gist is secret, try without token as fallback
-    const res2 = (!res.ok && pat)
-      ? await fetch(`https://api.github.com/gists/${gistId}`)
-      : null;
-
-    const finalRes = (res2 && res2.ok) ? res2 : res;
-    if (!finalRes.ok) throw new Error('HTTP ' + finalRes.status);
-
-    const data    = await finalRes.json();
-    const content = data.files['brainmap-data.json']?.content;
-    if (!content) throw new Error('No data in Gist');
-
-    const parsed = JSON.parse(content);
-    // always preserve local token + gistId so credentials aren't wiped
+    const parsed = JSON.parse(await res.text());
+    // preserve local credentials
     const keepPAT    = DB.settings.githubPAT;
     const keepGistId = DB.settings.gistId;
     DB = parsed;
@@ -5953,11 +5971,10 @@ renderDashboard();
     _updateSyncButtons();
 
     indicator.style.background = '#16a34a';
-    indicator.textContent = '✅ Data synced from cloud';
-    setTimeout(() => indicator.remove(), 2500);
+    indicator.textContent = '✅ Data loaded from cloud';
+    setTimeout(() => indicator.remove(), 2000);
   } catch(e) {
-    // Silent fail — don't block the app, just remove banner
-    indicator.remove();
+    indicator.remove(); // silent fail — load local data
     console.warn('Auto-sync skipped:', e.message);
   }
 })();
