@@ -5948,8 +5948,12 @@ renderDashboard();
 
 // ── Auto-pull from Gist on load if configured ──────────────
 (async function autoSyncOnLoad() {
-  // Fetch from raw GitHub — no token needed (public repo)
-  const RAW_URL = 'https://raw.githubusercontent.com/anarkali07/brainmap/main/brainmap-data.json';
+  // Only auto-sync when running on GitHub Pages (not local file)
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  if (!isGitHubPages) { return; } // local file — skip auto-sync
+
+  // Same-origin fetch (no CORS) — data file is in same repo
+  const RAW_URL = window.location.origin + '/brainmap/brainmap-data.json';
 
   const indicator = document.createElement('div');
   indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;text-align:center;padding:6px;';
