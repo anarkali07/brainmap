@@ -1955,6 +1955,13 @@ body[data-theme="light"] {
 </div>
 
 <script>
+window.onerror = function(msg, src, line, col, err) {
+  var d = document.createElement('div');
+  d.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#1e293b;color:#f87171;padding:20px;font-family:monospace;font-size:0.85rem;overflow:auto;';
+  d.innerHTML = '<b>JS ERROR (line ' + line + '):</b><br>' + msg + '<br><br><b>Source:</b> ' + src + '<br><br><button onclick="this.parentNode.remove()" style="margin-top:10px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;">Dismiss</button>';
+  document.body ? document.body.appendChild(d) : document.documentElement.appendChild(d);
+  return false;
+};
 /* ============================================================
    DATA LAYER
    ============================================================ */
