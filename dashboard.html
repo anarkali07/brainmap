@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BrainMap — BrainMap — because someone has to think</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
@@ -194,8 +195,12 @@ tbody tr:hover td { background: var(--accent-glass); }
   box-shadow: inset 2px 0 0 var(--accent);
 }
 .nav-item .nav-icon {
-  font-size: 1rem; width: 22px; text-align: center;
-  flex-shrink: 0;
+  width: 22px; text-align: center; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.nav-item .nav-icon svg {
+  stroke: currentColor; width: 16px; height: 16px;
+  transition: all var(--transition);
 }
 
 #sidebar-footer {
@@ -772,20 +777,20 @@ body[data-theme="light"] {
       </div>
     </div>
     <nav id="nav">
-      <div class="nav-item active" data-section="dashboard"><span class="nav-icon">⚡</span><span class="nav-label"> Dashboard</span></div>
+      <div class="nav-item active" data-section="dashboard"><span class="nav-icon"><i data-lucide="zap" style="width:16px;height:16px;"></i></span><span class="nav-label"> Dashboard</span></div>
       <div class="nav-section-label">Workspace</div>
-      <div class="nav-item" data-section="inbox"><span class="nav-icon">📋</span><span class="nav-label"> Scratch Pad</span></div>
-      <div class="nav-item" data-section="tasks"><span class="nav-icon">✅</span><span class="nav-label"> Tasks</span></div>
-      <div class="nav-item" data-section="work"><span class="nav-icon">📁</span><span class="nav-label"> Projects</span></div>
+      <div class="nav-item" data-section="inbox"><span class="nav-icon"><i data-lucide="notebook-pen" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scratch Pad</span></div>
+      <div class="nav-item" data-section="tasks"><span class="nav-icon"><i data-lucide="list-checks" style="width:16px;height:16px;"></i></span><span class="nav-label"> Tasks</span></div>
+      <div class="nav-item" data-section="work"><span class="nav-icon"><i data-lucide="folder-kanban" style="width:16px;height:16px;"></i></span><span class="nav-label"> Projects</span></div>
       <div class="nav-section-label">Hiring</div>
-      <div class="nav-item" data-section="interviews"><span class="nav-icon">🧑‍💼</span><span class="nav-label"> Interviews</span></div>
+      <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Interviews</span></div>
       <div class="nav-section-label">Life</div>
-      <div class="nav-item" data-section="personal"><span class="nav-icon">🌿</span><span class="nav-label"> Personal</span></div>
-      <div class="nav-item" data-section="timetracker"><span class="nav-icon">⏱</span><span class="nav-label"> Time Tracker</span></div>
-      <div class="nav-item" data-section="schedule"><span class="nav-icon">🗓</span><span class="nav-label"> Day Schedule</span></div>
+      <div class="nav-item" data-section="personal"><span class="nav-icon"><i data-lucide="heart-pulse" style="width:16px;height:16px;"></i></span><span class="nav-label"> Personal</span></div>
+      <div class="nav-item" data-section="timetracker"><span class="nav-icon"><i data-lucide="timer" style="width:16px;height:16px;"></i></span><span class="nav-label"> Time Tracker</span></div>
+      <div class="nav-item" data-section="schedule"><span class="nav-icon"><i data-lucide="calendar-days" style="width:16px;height:16px;"></i></span><span class="nav-label"> Day Schedule</span></div>
     </nav>
     <div id="sidebar-footer">
-      <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span><span class="nav-label"> Settings</span></div>
+      <div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:16px;height:16px;"></i></span><span class="nav-label"> Settings</span></div>
       <!-- Collapse / Expand toggle -->
       <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()"
         title="Collapse/Expand sidebar"
@@ -6850,6 +6855,8 @@ _updateSyncButtons();
 // restore active timer if one was running
 if (DB.activeTimer) { _startTickingTimer(); _updateHeaderTimer(); }
 renderDashboard();
+// init Lucide icons
+if (typeof lucide !== 'undefined') lucide.createIcons();
 
 // ── Auto-pull from Gist on load if configured ──────────────
 async function loadCloudData() {
