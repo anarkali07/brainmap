@@ -6455,22 +6455,31 @@ async function loadCloudData() {
 
 /* ── Save to cloud (mobile → GitHub repo) ── */
 async function saveToCloud() {
-  const pat = DB.settings.githubPAT;
+  // Read from field first (in case not saved yet), fallback to DB
+  const fieldPAT = document.getElementById('cfg-github-pat')?.value.trim();
+  const pat = fieldPAT || DB.settings.githubPAT;
   if (!pat) {
-    alert('No GitHub token set.\n\nGo to Settings → scroll down to GitHub Gist Sync → enter your token (needs repo scope) → Save.');
+    alert('No GitHub token set.\n\nGo to Settings → GitHub Gist Sync → enter your token → Save.');
     navigate('config');
     return;
   }
+  // persist it
+  DB.settings.githubPAT = pat; saveData();
 
   const btn = document.getElementById('hdr-save-btn');
   if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
 
+  // Try both auth schemes — fine-grained tokens prefer Bearer
+  const authHeaders = pat.startsWith('github_pat_')
+    ? { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
+    : { 'Authorization': `token ${pat}`,  'Accept': 'application/vnd.github.v3+json' };
+
   try {
     // Get current file SHA (needed for update)
     const getRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
-      headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
+      headers: authHeaders
     });
-    if (!getRes.ok) throw new Error('Cannot read file: ' + getRes.status);
+    if (!getRes.ok) throw new Error('Cannot read file: ' + getRes.status + ' — check token has Contents:Read/Write permission on the brainmap repo');
     const fileInfo = await getRes.json();
     const sha = fileInfo.sha;
 
@@ -6487,7 +6496,7 @@ async function saveToCloud() {
     // Push to repo
     const putRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
       method: 'PUT',
-      headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+      headers: { ...authHeaders, 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: 'sync from mobile', content: b64, sha })
     });
 
