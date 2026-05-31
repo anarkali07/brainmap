@@ -215,8 +215,9 @@ tbody tr:hover td { background: var(--accent-glass); }
   min-width: 52px !important;
 }
 #sidebar.collapsed #sidebar-logo .logo-text { display: none; }
+#sidebar.collapsed #sidebar-logo .logo-collapsed { display: block !important; }
 #sidebar.collapsed #sidebar-logo {
-  padding: 12px 0;
+  padding: 10px 0;
   display: flex; justify-content: center;
 }
 #sidebar.collapsed .nav-item .nav-label { display: none; }
@@ -765,8 +766,16 @@ body[data-theme="light"] {
   <!-- SIDEBAR -->
   <aside id="sidebar">
     <div id="sidebar-logo">
-      <div class="logo-mark" style="font-size:0.9rem;font-weight:800;letter-spacing:-0.02em;">BrainMap</div>
-      <div style="font-size:0.56rem;color:var(--text-muted);font-weight:400;margin-top:1px;font-style:italic;">because someone has to think</div>
+      <!-- Expanded: full wordmark -->
+      <div class="logo-text">
+        <div class="logo-mark" style="font-size:0.9rem;font-weight:800;letter-spacing:-0.02em;">BrainMap</div>
+        <div style="font-size:0.56rem;color:var(--text-muted);font-weight:400;margin-top:1px;font-style:italic;">because someone has to think</div>
+      </div>
+      <!-- Collapsed: stacked Brain/Map -->
+      <div class="logo-collapsed" style="display:none;text-align:center;line-height:1.1;">
+        <div class="logo-mark" style="font-size:0.72rem;font-weight:800;letter-spacing:-0.01em;">Brain</div>
+        <div class="logo-mark" style="font-size:0.72rem;font-weight:800;letter-spacing:-0.01em;">Map</div>
+      </div>
     </div>
     <nav id="nav">
       <div class="nav-item active" data-section="dashboard"><span class="nav-icon"><i data-lucide="zap" style="width:16px;height:16px;"></i></span><span class="nav-label"> Dashboard</span></div>
