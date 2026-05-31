@@ -951,7 +951,17 @@
       "notes": "Morning run, feeling good"
     }
   ],
-  "inbox": [],
+  "inbox": [
+    {
+      "id": "mpttj2k2ppchf",
+      "title": "from web",
+      "notes": "",
+      "category": "",
+      "priority": "Medium",
+      "dueDate": "",
+      "createdAt": "2026-05-31T13:31:26.258Z"
+    }
+  ],
   "dailyPlanner": {
     "2026-05-29": {
       "top3": [
@@ -966,7 +976,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "light",
+    "theme": "dark",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
@@ -980,6 +990,7 @@
     "userRole": "AppSec Team Lead",
     "appTitle": "BrainMap",
     "apiKey": "",
-    "githubPAT": ""
+    "githubPAT": "",
+    "gistId": ""
   }
 }
