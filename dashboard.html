@@ -1207,32 +1207,51 @@ body[data-theme="light"] {
         <h2>⏱ Time Tracker</h2>
 
         <!-- Timer bar -->
-        <div class="card" style="margin-bottom:16px;padding:14px 18px;">
-          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-            <input id="tt-desc" placeholder="What are you working on?" style="flex:2;min-width:180px;">
-            <select id="tt-project" style="flex:1;min-width:130px;">
-              <option value="">No Project</option>
+        <div class="card" style="margin-bottom:16px;padding:16px 18px;">
+          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px;">
+            <input id="tt-desc" placeholder="What are you working on?" style="font-size:0.95rem;">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <div id="tt-live-clock" style="font-size:1.5rem;font-weight:800;color:var(--accent);
+                font-variant-numeric:tabular-nums;min-width:90px;display:none;text-align:right;">00:00:00</div>
+              <button id="tt-start-btn" onclick="toggleTimer()"
+                style="padding:10px 24px;border-radius:8px;border:none;font-weight:700;
+                  font-size:0.9rem;cursor:pointer;white-space:nowrap;
+                  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+                  box-shadow:0 2px 10px var(--accent-glow);">▶ Start</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select id="tt-project" onchange="ttProjectChanged()" style="flex:1;min-width:140px;">
+              <option value="">📁 No Project</option>
             </select>
-            <select id="tt-billable" style="width:auto;min-width:100px;">
-              <option value="0">Non-billable</option>
-              <option value="1">Billable</option>
+            <select id="tt-task" style="flex:2;min-width:180px;">
+              <option value="">🔲 No Task</option>
             </select>
-            <button id="tt-start-btn" onclick="toggleTimer()"
-              style="padding:9px 20px;border-radius:8px;border:none;font-weight:700;
-                font-size:0.88rem;cursor:pointer;min-width:100px;
-                background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
-                box-shadow:0 2px 10px var(--accent-glow);">
-              ▶ Start
-            </button>
-            <div id="tt-live-clock" style="font-size:1.4rem;font-weight:800;color:var(--accent);
-              font-variant-numeric:tabular-nums;min-width:80px;display:none;">00:00:00</div>
+            <select id="tt-billable" style="width:auto;min-width:110px;">
+              <option value="0">⬜ Non-billable</option>
+              <option value="1">💰 Billable</option>
+            </select>
           </div>
         </div>
 
-        <!-- Today summary bar -->
-        <div id="tt-today-bar" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+        <!-- View toggle -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <button id="tt-view-timeline" onclick="setTTView('timeline')"
+            style="padding:6px 16px;border-radius:20px;border:1px solid var(--accent);
+              background:var(--accent-glass);color:var(--accent);font-size:0.8rem;
+              font-weight:600;cursor:pointer;">📅 Timeline</button>
+          <button id="tt-view-projects" onclick="setTTView('projects')"
+            style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);
+              background:transparent;color:var(--text-muted);font-size:0.8rem;cursor:pointer;">📁 By Project</button>
+          <button id="tt-view-tasks" onclick="setTTView('tasks')"
+            style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);
+              background:transparent;color:var(--text-muted);font-size:0.8rem;cursor:pointer;">✅ By Task</button>
+        </div>
 
-        <!-- Entries grouped by date -->
+        <!-- Summary bar -->
+        <div id="tt-today-bar" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;"></div>
+
+        <!-- Entries -->
         <div id="tt-entries"></div>
       </section>
 
@@ -2326,10 +2345,12 @@ function toggleTimer() {
 }
 
 function startTimer() {
-  const desc    = document.getElementById('tt-desc')?.value.trim() || 'Untitled';
-  const project = document.getElementById('tt-project')?.value || '';
+  const desc     = document.getElementById('tt-desc')?.value.trim() || 'Untitled';
+  const project  = document.getElementById('tt-project')?.value  || '';
+  const taskId   = document.getElementById('tt-task')?.value     || '';
   const billable = document.getElementById('tt-billable')?.value === '1';
-  DB.activeTimer = { startTime: new Date().toISOString(), description: desc, project, billable };
+  const task     = taskId ? (DB.tasks||[]).find(t=>t.id===taskId) : null;
+  DB.activeTimer = { startTime: new Date().toISOString(), description: desc, project, taskId, taskTitle: task?.title||'', billable };
   saveData();
   _startTickingTimer();
   renderTimeTracker();
@@ -2343,13 +2364,15 @@ function stopTimer() {
   if (!DB.timeEntries) DB.timeEntries = [];
   DB.timeEntries.unshift({
     id: uid(),
-    description: DB.activeTimer.description,
-    project:     DB.activeTimer.project,
-    billable:    DB.activeTimer.billable,
-    startTime:   DB.activeTimer.startTime,
-    endTime:     new Date().toISOString(),
-    duration:    secs,
-    date:        DB.activeTimer.startTime.slice(0,10)
+    description:  DB.activeTimer.description,
+    project:      DB.activeTimer.project     || '',
+    taskId:       DB.activeTimer.taskId      || '',
+    taskTitle:    DB.activeTimer.taskTitle   || '',
+    billable:     DB.activeTimer.billable,
+    startTime:    DB.activeTimer.startTime,
+    endTime:      new Date().toISOString(),
+    duration:     secs,
+    date:         DB.activeTimer.startTime.slice(0,10)
   });
   DB.activeTimer = null;
   saveData();
@@ -2396,15 +2419,43 @@ function deleteTimeEntry(id) {
   saveData(); renderTimeTracker();
 }
 
+let _ttView = 'timeline';
+function setTTView(v) {
+  _ttView = v;
+  ['timeline','projects','tasks'].forEach(id => {
+    const btn = document.getElementById('tt-view-'+id);
+    if (!btn) return;
+    const active = id === v;
+    btn.style.background   = active ? 'var(--accent-glass)' : 'transparent';
+    btn.style.borderColor  = active ? 'var(--accent)' : 'var(--border)';
+    btn.style.color        = active ? 'var(--accent)' : 'var(--text-muted)';
+    btn.style.fontWeight   = active ? '600' : '400';
+  });
+  _renderTTEntries();
+}
+
+function ttProjectChanged() {
+  const projSel = document.getElementById('tt-project');
+  const taskSel = document.getElementById('tt-task');
+  if (!taskSel) return;
+  const proj = projSel?.value || '';
+  const tasks = (DB.tasks||[]).filter(t => !t.archived && t.status !== 'Completed' &&
+    (!proj || t.category === proj || (DB.projects||[]).find(p=>p.name===proj&&p.name===t.category)));
+  taskSel.innerHTML = '<option value="">🔲 No Task</option>' +
+    tasks.map(t => `<option value="${t.id}">${esc(t.title)}</option>`).join('');
+  if (DB.activeTimer) taskSel.value = DB.activeTimer.taskId || '';
+}
+
 function renderTimeTracker() {
   // populate project dropdown
   const projSel = document.getElementById('tt-project');
   if (projSel) {
     const projs = (DB.projects||[]).map(p => p.name||'').filter(Boolean);
-    projSel.innerHTML = '<option value="">No Project</option>' +
+    projSel.innerHTML = '<option value="">📁 No Project</option>' +
       projs.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
     if (DB.activeTimer) projSel.value = DB.activeTimer.project || '';
   }
+  ttProjectChanged();
 
   // start/stop button
   const btn   = document.getElementById('tt-start-btn');
@@ -2444,60 +2495,116 @@ function renderTimeTracker() {
       <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">${t.label}</div>
     </div>`).join('');
 
-  // Group entries by date
+  _renderTTEntries();
+}
+
+function _entryCard(e) {
+  return `<div style="display:flex;align-items:center;gap:10px;background:var(--card);
+      border:1px solid var(--border);border-radius:10px;padding:10px 14px;
+      border-left:3px solid ${e.project ? 'var(--accent2)' : 'var(--accent)'};">
+    <div style="flex:1;min-width:0;">
+      <div style="font-size:0.86rem;font-weight:600;margin-bottom:3px;">${esc(e.description)}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        ${e.project   ? `<span style="font-size:0.7rem;background:var(--accent-glass);color:var(--accent);
+            padding:1px 7px;border-radius:20px;">📁 ${esc(e.project)}</span>` : ''}
+        ${e.taskTitle ? `<span style="font-size:0.7rem;background:rgba(52,211,153,0.1);color:var(--low);
+            padding:1px 7px;border-radius:20px;">✅ ${esc(e.taskTitle)}</span>` : ''}
+        ${e.billable  ? `<span style="font-size:0.7rem;color:var(--low);">💰</span>` : ''}
+        <span style="font-size:0.7rem;color:var(--text-muted);">
+          ${new Date(e.startTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})} –
+          ${new Date(e.endTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
+        </span>
+      </div>
+    </div>
+    <div style="font-size:1rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap;">${fmtDurShort(e.duration)}</div>
+    <button onclick="deleteTimeEntry('${e.id}')"
+      style="width:26px;height:26px;border-radius:6px;border:1px solid rgba(244,63,94,0.2);
+        background:rgba(244,63,94,0.07);color:var(--critical);font-size:0.75rem;
+        display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</button>
+  </div>`;
+}
+
+function _groupHeader(label, secs) {
+  return `<div style="display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:8px;padding:0 4px;">
+    <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;
+      letter-spacing:0.07em;color:var(--text-muted);">${label}</span>
+    <span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);">${fmtDurShort(secs)}</span>
+  </div>`;
+}
+
+function _renderTTEntries() {
   const entriesEl = document.getElementById('tt-entries');
   if (!entriesEl) return;
+  const entries  = DB.timeEntries || [];
+  const todayStr = today();
+
   if (!entries.length) {
     entriesEl.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px;font-size:0.9rem;">
-      No time tracked yet. Start the timer above ▶</div>`;
+      No time tracked yet — start the timer above ▶</div>`;
     return;
   }
 
-  // group by date
-  const byDate = {};
-  entries.forEach(e => { if (!byDate[e.date]) byDate[e.date] = []; byDate[e.date].push(e); });
-  const sortedDates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
-
-  entriesEl.innerHTML = sortedDates.map(date => {
-    const dayEntries = byDate[date];
-    const daySecs    = dayEntries.reduce((s,e) => s+e.duration, 0);
-    const dayLabel   = date === todayStr ? 'Today' :
-                       date === new Date(Date.now()-86400000).toISOString().slice(0,10) ? 'Yesterday' :
-                       new Date(date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
-    return `
-      <div style="margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;
-          margin-bottom:8px;padding:0 4px;">
-          <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;
-            letter-spacing:0.07em;color:var(--text-muted);">${dayLabel}</span>
-          <span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);">${fmtDurShort(daySecs)}</span>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:6px;">
-          ${dayEntries.map(e => `
-            <div style="display:flex;align-items:center;gap:10px;background:var(--card);
-              border:1px solid var(--border);border-radius:10px;padding:10px 14px;
-              border-left:3px solid var(--accent);">
-              <div style="flex:1;min-width:0;">
-                <div style="font-size:0.86rem;font-weight:600;margin-bottom:2px;">${esc(e.description)}</div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                  ${e.project ? `<span style="font-size:0.7rem;color:var(--accent);">📁 ${esc(e.project)}</span>` : ''}
-                  ${e.billable ? `<span style="font-size:0.7rem;color:var(--low);">💰 Billable</span>` : ''}
-                  <span style="font-size:0.7rem;color:var(--text-muted);">
-                    ${new Date(e.startTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})} –
-                    ${new Date(e.endTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
-                  </span>
-                </div>
-              </div>
-              <div style="font-size:1rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;
-                white-space:nowrap;">${fmtDurShort(e.duration)}</div>
-              <button onclick="deleteTimeEntry('${e.id}')"
-                style="width:26px;height:26px;border-radius:6px;border:1px solid rgba(244,63,94,0.2);
-                  background:rgba(244,63,94,0.07);color:var(--critical);font-size:0.75rem;
-                  display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</button>
-            </div>`).join('')}
-        </div>
+  if (_ttView === 'timeline') {
+    // ── Group by date ──
+    const byDate = {};
+    entries.forEach(e => { if (!byDate[e.date]) byDate[e.date] = []; byDate[e.date].push(e); });
+    entriesEl.innerHTML = Object.keys(byDate).sort((a,b)=>b.localeCompare(a)).map(date => {
+      const dayEntries = byDate[date];
+      const daySecs    = dayEntries.reduce((s,e)=>s+e.duration,0);
+      const dayLabel   = date === todayStr ? 'Today'
+        : date === new Date(Date.now()-86400000).toISOString().slice(0,10) ? 'Yesterday'
+        : new Date(date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+      return `<div style="margin-bottom:16px;">${_groupHeader(dayLabel,daySecs)}
+        <div style="display:flex;flex-direction:column;gap:6px;">${dayEntries.map(_entryCard).join('')}</div>
       </div>`;
-  }).join('');
+    }).join('');
+
+  } else if (_ttView === 'projects') {
+    // ── Group by project ──
+    const byProj = {};
+    entries.forEach(e => {
+      const k = e.project || '(No Project)';
+      if (!byProj[k]) byProj[k] = [];
+      byProj[k].push(e);
+    });
+    const totalSecs = entries.reduce((s,e)=>s+e.duration,0);
+    entriesEl.innerHTML = `
+      <div style="margin-bottom:14px;">
+        ${Object.entries(byProj).sort((a,b)=>b[1].reduce((s,e)=>s+e.duration,0)-a[1].reduce((s,e)=>s+e.duration,0)).map(([proj,ents]) => {
+          const secs = ents.reduce((s,e)=>s+e.duration,0);
+          const pct  = totalSecs ? Math.round(secs/totalSecs*100) : 0;
+          return `<div style="margin-bottom:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <span style="font-size:0.88rem;font-weight:700;color:var(--text);">📁 ${esc(proj)}</span>
+              <span style="font-size:0.82rem;font-weight:700;color:var(--accent2);">${fmtDurShort(secs)} <span style="font-size:0.7rem;color:var(--text-muted);">${pct}%</span></span>
+            </div>
+            <div style="height:6px;background:var(--border);border-radius:20px;margin-bottom:10px;">
+              <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:20px;"></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;">${ents.map(_entryCard).join('')}</div>
+          </div>`;
+        }).join('')}
+      </div>`;
+
+  } else if (_ttView === 'tasks') {
+    // ── Group by task ──
+    const byTask = {};
+    entries.forEach(e => {
+      const k = e.taskTitle || e.taskId || '(No Task)';
+      if (!byTask[k]) byTask[k] = [];
+      byTask[k].push(e);
+    });
+    entriesEl.innerHTML = Object.entries(byTask)
+      .sort((a,b)=>b[1].reduce((s,e)=>s+e.duration,0)-a[1].reduce((s,e)=>s+e.duration,0))
+      .map(([task,ents]) => {
+        const secs = ents.reduce((s,e)=>s+e.duration,0);
+        return `<div style="margin-bottom:16px;">
+          ${_groupHeader('✅ ' + task, secs)}
+          <div style="display:flex;flex-direction:column;gap:6px;">${ents.map(_entryCard).join('')}</div>
+        </div>`;
+      }).join('');
+  }
 }
 
 // Add pulse animation for timer dot
