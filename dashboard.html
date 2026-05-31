@@ -2392,6 +2392,8 @@ function stopTimer() {
   renderDashboard();
 }
 
+const _originalTitle = document.title;
+
 function _startTickingTimer() {
   _stopTickingTimer();
   _timerInterval = setInterval(() => {
@@ -2400,6 +2402,9 @@ function _startTickingTimer() {
     const hdrClock = document.getElementById('hdr-timer-clock');
     if (clock) clock.textContent = fmtDuration(secs);
     if (hdrClock) hdrClock.textContent = fmtDuration(secs);
+    // Show timer in browser tab title
+    const desc = DB.activeTimer?.description || 'Timer';
+    document.title = `⏱ ${fmtDuration(secs)}  ${desc.slice(0,20)}`;
   }, 1000);
 }
 
@@ -2409,6 +2414,8 @@ function _stopTickingTimer() {
   if (hdrTimer) hdrTimer.style.display = 'none';
   const clock = document.getElementById('tt-live-clock');
   if (clock) { clock.textContent = '00:00:00'; clock.style.display = 'none'; }
+  // Restore original tab title
+  document.title = DB.settings.appTitle ? `${DB.settings.appTitle} — ${DB.settings.userRole||''}` : _originalTitle;
 }
 
 function _updateHeaderTimer() {
