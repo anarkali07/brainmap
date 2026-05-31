@@ -782,6 +782,7 @@ body[data-theme="light"] {
       <div class="nav-section-label">Life</div>
       <div class="nav-item" data-section="personal"><span class="nav-icon">🌿</span><span class="nav-label"> Personal</span></div>
       <div class="nav-item" data-section="timetracker"><span class="nav-icon">⏱</span><span class="nav-label"> Time Tracker</span></div>
+      <div class="nav-item" data-section="schedule"><span class="nav-icon">🗓</span><span class="nav-label"> Day Schedule</span></div>
     </nav>
     <div id="sidebar-footer">
       <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span><span class="nav-label"> Settings</span></div>
@@ -1256,6 +1257,75 @@ body[data-theme="light"] {
         <!-- Entries -->
         <div id="tt-entries"></div>
       </section>
+
+      <!-- ======================================================
+           SECTION: DAY SCHEDULE
+           ====================================================== -->
+      <section id="sec-schedule" class="section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+          <h2 style="margin:0;">🗓 Day Schedule</h2>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <button onclick="schedNav(-1)" style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer;">◀</button>
+            <input type="date" id="sched-date" onchange="renderSchedule()" style="width:auto;padding:5px 10px;border-radius:7px;">
+            <button onclick="schedNav(1)"  style="padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text);cursor:pointer;">▶</button>
+            <button onclick="schedNav(0)"  style="padding:5px 12px;border-radius:7px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">Today</button>
+          </div>
+        </div>
+
+        <!-- Quick-add chips -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+          <span style="font-size:0.72rem;color:var(--text-muted);align-self:center;">Quick add:</span>
+          ${[
+            {label:'☕ Break',      start:'10:00',end:'10:15',type:'break'},
+            {label:'🥗 Lunch',      start:'13:00',end:'14:00',type:'break'},
+            {label:'💧 Water',      start:'11:00',end:'11:05',type:'break'},
+            {label:'📋 Meeting',    start:'10:00',end:'11:00',type:'meeting'},
+            {label:'🏃 Exercise',   start:'07:00',end:'08:00',type:'personal'},
+            {label:'📚 Learning',   start:'18:00',end:'19:00',type:'task'},
+          ].map(q=>`<button onclick="quickAddBlock('${q.label}','${q.start}','${q.end}','${q.type}')"
+            style="font-size:0.73rem;padding:4px 10px;border-radius:20px;border:1px solid var(--border);
+              background:var(--bg2);color:var(--text-muted);cursor:pointer;">${q.label}</button>`).join('')}
+          <button onclick="openBlockModal()"
+            style="font-size:0.73rem;padding:4px 12px;border-radius:20px;border:1px solid var(--accent);
+              background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">+ Custom</button>
+        </div>
+
+        <!-- Timeline -->
+        <div id="sched-timeline" style="position:relative;"></div>
+      </section>
+
+      <!-- Block edit modal -->
+      <div class="modal-overlay" id="block-modal">
+        <div class="modal" style="max-width:420px;">
+          <h3 id="block-modal-title">Add Time Block</h3>
+          <input type="hidden" id="block-id">
+          <label>Title</label>
+          <input id="block-title" placeholder="e.g. SAST Review, Lunch, Break…">
+          <label>Type</label>
+          <select id="block-type">
+            <option value="task">📋 Task / Work</option>
+            <option value="meeting">👥 Meeting</option>
+            <option value="break">☕ Break / Rest</option>
+            <option value="personal">🌿 Personal</option>
+            <option value="water">💧 Water / Health</option>
+          </select>
+          <label>Link to Task (optional)</label>
+          <select id="block-task-id">
+            <option value="">— No task —</option>
+          </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label>Start Time</label><input type="time" id="block-start"></div>
+            <div><label>End Time</label><input type="time" id="block-end"></div>
+          </div>
+          <label>Notes</label>
+          <textarea id="block-notes" rows="2" placeholder="Optional notes…"></textarea>
+          <div class="modal-footer">
+            <button class="btn-danger btn-sm" id="block-delete-btn" onclick="deleteBlock()" style="display:none;margin-right:auto;">🗑 Delete</button>
+            <button class="btn-secondary" onclick="closeModal('block-modal')">Cancel</button>
+            <button class="btn-primary" onclick="saveBlock()">Save</button>
+          </div>
+        </div>
+      </div>
 
       <!-- ======================================================
            SECTION: CONFIG
@@ -1996,7 +2066,7 @@ function emptyData() {
   return {
     tasks: [], followUps: [], projects: [], interviews: [],
     teamMembers: [], goals: [], health: [], inbox: [],
-    dailyPlanner: {}, timeEntries: [], activeTimer: null, customModules: {}, settings: {
+    dailyPlanner: {}, schedule: {}, timeEntries: [], activeTimer: null, customModules: {}, settings: {
       theme: 'dark',
       userName: '', userRole: 'AppSec Team Lead', appTitle: 'BrainMap',
       categories: ['Team Management','Projects','Partner Onboarding','Interviews','Learning','Personal','Health'],
@@ -2136,7 +2206,8 @@ function navigate(section) {
     interviews: renderInterviews,
     personal:   () => { renderGoals(); renderHealth(); renderPlanner(); },
     timetracker: renderTimeTracker,
-    config:     renderConfig,
+    schedule:    renderSchedule,
+    config:      renderConfig,
     search:     () => {}
   };
   if (renderMap[section]) {
@@ -2649,6 +2720,238 @@ function _renderTTEntries() {
 const _timerStyle = document.createElement('style');
 _timerStyle.textContent = `@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }`;
 document.head.appendChild(_timerStyle);
+
+/* ============================================================
+   DAY SCHEDULE / TIME BLOCKER
+   ============================================================ */
+const BLOCK_COLORS = {
+  task:     { bg:'rgba(79,142,247,0.15)',  border:'#4f8ef7', text:'#4f8ef7'  },
+  meeting:  { bg:'rgba(124,106,247,0.15)', border:'#7c6af7', text:'#7c6af7'  },
+  break:    { bg:'rgba(52,211,153,0.15)',  border:'#34d399', text:'#34d399'  },
+  personal: { bg:'rgba(251,191,36,0.15)', border:'#fbbf24', text:'#fbbf24'  },
+  water:    { bg:'rgba(6,182,212,0.15)',   border:'#06b6d4', text:'#06b6d4'  },
+};
+const BLOCK_ICONS = { task:'📋', meeting:'👥', break:'☕', personal:'🌿', water:'💧' };
+
+function schedNav(offset) {
+  const el = document.getElementById('sched-date');
+  if (!el) return;
+  if (offset === 0) { el.value = today(); }
+  else {
+    const d = new Date(el.value || today());
+    d.setDate(d.getDate() + offset);
+    el.value = d.toISOString().slice(0,10);
+  }
+  renderSchedule();
+}
+
+function renderSchedule() {
+  const dateEl = document.getElementById('sched-date');
+  if (dateEl && !dateEl.value) dateEl.value = today();
+  const date = dateEl?.value || today();
+  const blocks = (DB.schedule?.[date] || []).slice().sort((a,b) => a.start.localeCompare(b.start));
+  const el = document.getElementById('sched-timeline');
+  if (!el) return;
+
+  // Populate task dropdown in quick-add modal
+  const taskSel = document.getElementById('block-task-id');
+  if (taskSel) {
+    taskSel.innerHTML = '<option value="">— No task —</option>' +
+      (DB.tasks||[]).filter(t=>!t.archived&&t.status!=='Completed')
+        .map(t=>`<option value="${t.id}">${esc(t.title)}</option>`).join('');
+  }
+
+  // Build hour slots 6AM – 10PM
+  const START_H = 6, END_H = 22;
+  const totalMins = (END_H - START_H) * 60;
+  const PX_PER_MIN = 1.6; // height per minute
+  const LEFT_W = 52; // time label width
+
+  let html = `<div style="display:flex;gap:0;">
+    <!-- Hour labels -->
+    <div style="width:${LEFT_W}px;flex-shrink:0;position:relative;height:${totalMins*PX_PER_MIN}px;">`;
+
+  for (let h = START_H; h <= END_H; h++) {
+    const top = (h - START_H) * 60 * PX_PER_MIN;
+    html += `<div style="position:absolute;top:${top}px;font-size:0.68rem;color:var(--text-muted);
+      white-space:nowrap;transform:translateY(-50%);right:8px;">${h % 12 || 12}${h<12?'am':'pm'}</div>`;
+  }
+  html += `</div>
+
+    <!-- Grid + blocks -->
+    <div style="flex:1;position:relative;height:${totalMins*PX_PER_MIN}px;
+      border-left:2px solid var(--border);cursor:crosshair;" id="sched-grid"
+      onclick="schedGridClick(event,${PX_PER_MIN},${START_H})">`;
+
+  // Hour lines
+  for (let h = START_H; h <= END_H; h++) {
+    const top = (h - START_H) * 60 * PX_PER_MIN;
+    const isHalf = false;
+    html += `<div style="position:absolute;top:${top}px;left:0;right:0;
+      border-top:1px solid var(--border);opacity:0.5;pointer-events:none;"></div>`;
+    // 30-min line
+    if (h < END_H) {
+      const top30 = top + 30 * PX_PER_MIN;
+      html += `<div style="position:absolute;top:${top30}px;left:0;right:0;
+        border-top:1px dashed var(--border);opacity:0.3;pointer-events:none;"></div>`;
+    }
+  }
+
+  // Current time indicator
+  const now = new Date();
+  const nowMins = now.getHours() * 60 + now.getMinutes() - START_H * 60;
+  if (nowMins > 0 && nowMins < totalMins && date === today()) {
+    const nowTop = nowMins * PX_PER_MIN;
+    html += `<div style="position:absolute;top:${nowTop}px;left:0;right:0;height:2px;
+      background:var(--critical);z-index:5;pointer-events:none;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--critical);
+        position:absolute;left:-4px;top:-3px;"></div></div>`;
+  }
+
+  // Blocks
+  blocks.forEach(b => {
+    const [sh,sm] = b.start.split(':').map(Number);
+    const [eh,em] = b.end.split(':').map(Number);
+    const startMins = (sh*60+sm) - START_H*60;
+    const endMins   = (eh*60+em) - START_H*60;
+    const top  = Math.max(0, startMins * PX_PER_MIN);
+    const ht   = Math.max(20, (endMins - startMins) * PX_PER_MIN);
+    const clr  = BLOCK_COLORS[b.type] || BLOCK_COLORS.task;
+    const dur  = endMins - startMins;
+    const durLabel = dur >= 60 ? `${Math.floor(dur/60)}h${dur%60?` ${dur%60}m`:''}` : `${dur}m`;
+    html += `<div onclick="event.stopPropagation();openBlockModal('${b.id}')"
+      style="position:absolute;top:${top}px;left:4px;right:4px;height:${ht}px;
+        background:${clr.bg};border-left:3px solid ${clr.border};border-radius:5px;
+        padding:3px 7px;cursor:pointer;z-index:3;overflow:hidden;
+        box-shadow:0 1px 6px rgba(0,0,0,0.15);transition:opacity 0.15s;"
+      onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+      <div style="font-size:0.75rem;font-weight:700;color:${clr.text};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+        ${BLOCK_ICONS[b.type]||'📋'} ${esc(b.title)}
+      </div>
+      ${ht > 24 ? `<div style="font-size:0.65rem;color:var(--text-muted);">${b.start}–${b.end} · ${durLabel}</div>` : ''}
+    </div>`;
+  });
+
+  html += `</div></div>`;
+
+  // Summary bar
+  const totalTaskMins = blocks.filter(b=>b.type==='task'||b.type==='meeting').reduce((s,b)=>{
+    const [sh,sm]=b.start.split(':').map(Number),[eh,em]=b.end.split(':').map(Number);
+    return s+(eh*60+em)-(sh*60+sm);
+  },0);
+  const totalBreakMins = blocks.filter(b=>b.type==='break'||b.type==='water'||b.type==='personal').reduce((s,b)=>{
+    const [sh,sm]=b.start.split(':').map(Number),[eh,em]=b.end.split(':').map(Number);
+    return s+(eh*60+em)-(sh*60+sm);
+  },0);
+
+  const fmtM = m => m>=60?`${Math.floor(m/60)}h ${m%60?m%60+'m':''}`.trim():`${m}m`;
+  const summaryHtml = blocks.length ? `
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;">
+      <div style="padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.78rem;">
+        📋 <strong>${fmtM(totalTaskMins)}</strong> <span style="color:var(--text-muted);">work</span>
+      </div>
+      <div style="padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.78rem;">
+        ☕ <strong>${fmtM(totalBreakMins)}</strong> <span style="color:var(--text-muted);">breaks</span>
+      </div>
+      <div style="padding:8px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:0.78rem;">
+        🗓 <strong>${blocks.length}</strong> <span style="color:var(--text-muted);">blocks</span>
+      </div>
+    </div>` : '';
+
+  el.innerHTML = summaryHtml + `<div style="background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;padding:12px 8px;">` + html + `</div>
+    <div style="font-size:0.72rem;color:var(--text-muted);margin-top:8px;text-align:center;">
+      Click anywhere on the timeline to add a block · Click a block to edit
+    </div>`;
+}
+
+function schedGridClick(e, pxPerMin, startH) {
+  const grid = document.getElementById('sched-grid');
+  const rect  = grid.getBoundingClientRect();
+  const y     = e.clientY - rect.top;
+  const mins  = Math.round(y / pxPerMin / 15) * 15; // snap to 15min
+  const totalH = startH + Math.floor(mins/60);
+  const totalM = mins % 60;
+  const startStr = `${String(totalH).padStart(2,'0')}:${String(totalM).padStart(2,'0')}`;
+  const endH = totalH + (totalM+60>=60?1:0);
+  const endM = (totalM+60)%60;
+  const endStr = `${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`;
+  openBlockModal(null, startStr, endStr);
+}
+
+let _editBlockId = null;
+function openBlockModal(id, defStart, defEnd) {
+  _editBlockId = id || null;
+  document.getElementById('block-modal-title').textContent = id ? 'Edit Block' : 'Add Time Block';
+  document.getElementById('block-id').value = id || '';
+  document.getElementById('block-delete-btn').style.display = id ? '' : 'none';
+
+  // Populate task dropdown
+  const taskSel = document.getElementById('block-task-id');
+  taskSel.innerHTML = '<option value="">— No task —</option>' +
+    (DB.tasks||[]).filter(t=>!t.archived&&t.status!=='Completed')
+      .map(t=>`<option value="${t.id}">${esc(t.title)}</option>`).join('');
+
+  if (id) {
+    const date = document.getElementById('sched-date')?.value || today();
+    const b = (DB.schedule?.[date]||[]).find(x=>x.id===id);
+    if (b) {
+      document.getElementById('block-title').value   = b.title;
+      document.getElementById('block-type').value    = b.type;
+      document.getElementById('block-task-id').value = b.taskId || '';
+      document.getElementById('block-start').value   = b.start;
+      document.getElementById('block-end').value     = b.end;
+      document.getElementById('block-notes').value   = b.notes || '';
+    }
+  } else {
+    document.getElementById('block-title').value   = '';
+    document.getElementById('block-type').value    = 'task';
+    document.getElementById('block-task-id').value = '';
+    document.getElementById('block-start').value   = defStart || '';
+    document.getElementById('block-end').value     = defEnd   || '';
+    document.getElementById('block-notes').value   = '';
+  }
+  openModal('block-modal');
+}
+
+function quickAddBlock(label, start, end, type) {
+  const date = document.getElementById('sched-date')?.value || today();
+  if (!DB.schedule) DB.schedule = {};
+  if (!DB.schedule[date]) DB.schedule[date] = [];
+  DB.schedule[date].push({ id: uid(), title: label, type, start, end, notes: '', taskId: '' });
+  saveData(); renderSchedule();
+}
+
+function saveBlock() {
+  const title = document.getElementById('block-title').value.trim() || 'Untitled';
+  const type  = document.getElementById('block-type').value;
+  const start = document.getElementById('block-start').value;
+  const end   = document.getElementById('block-end').value;
+  const notes = document.getElementById('block-notes').value.trim();
+  const taskId = document.getElementById('block-task-id').value;
+  if (!start || !end) { alert('Please set start and end time.'); return; }
+  if (start >= end)   { alert('End time must be after start time.'); return; }
+
+  const date = document.getElementById('sched-date')?.value || today();
+  if (!DB.schedule) DB.schedule = {};
+  if (!DB.schedule[date]) DB.schedule[date] = [];
+
+  const id = document.getElementById('block-id').value;
+  if (id) {
+    const idx = DB.schedule[date].findIndex(b=>b.id===id);
+    if (idx>=0) DB.schedule[date][idx] = { ...DB.schedule[date][idx], title, type, start, end, notes, taskId };
+  } else {
+    DB.schedule[date].push({ id: uid(), title, type, start, end, notes, taskId });
+  }
+  saveData(); closeModal('block-modal'); renderSchedule();
+}
+
+function deleteBlock() {
+  const id   = document.getElementById('block-id').value;
+  const date = document.getElementById('sched-date')?.value || today();
+  if (!id) return;
+  DB.schedule[date] = (DB.schedule[date]||[]).filter(b=>b.id!==id);
+  saveData(); closeModal('block-modal'); renderSchedule();
+}
 
 function renderDashboard() {
   // ── data ─────────────────────────────────────────────────
