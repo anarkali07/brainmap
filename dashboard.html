@@ -2823,27 +2823,52 @@ function renderSchedule() {
         position:absolute;left:-4px;top:-3px;"></div></div>`;
   }
 
-  // Blocks
+  // ── Overlap detection: assign columns ──
+  const toMins = t => { const [h,m]=t.split(':').map(Number); return h*60+m; };
+  const cols = []; // each col is array of blocks
   blocks.forEach(b => {
-    const [sh,sm] = b.start.split(':').map(Number);
-    const [eh,em] = b.end.split(':').map(Number);
-    const startMins = (sh*60+sm) - START_H*60;
-    const endMins   = (eh*60+em) - START_H*60;
+    const bs = toMins(b.start), be = toMins(b.end);
+    let placed = false;
+    for (let ci = 0; ci < cols.length; ci++) {
+      const conflict = cols[ci].some(x => toMins(x.start) < be && toMins(x.end) > bs);
+      if (!conflict) { cols[ci].push(b); b._col = ci; placed = true; break; }
+    }
+    if (!placed) { cols.push([b]); b._col = cols.length - 1; }
+  });
+  const numCols = cols.length || 1;
+
+  // Render blocks with column-aware widths
+  blocks.forEach(b => {
+    const bs = toMins(b.start), be = toMins(b.end);
+    const startMins = bs - START_H*60;
+    const endMins   = be - START_H*60;
     const top  = Math.max(0, startMins * PX_PER_MIN);
-    const ht   = Math.max(20, (endMins - startMins) * PX_PER_MIN);
+    const ht   = Math.max(28, (endMins - startMins) * PX_PER_MIN);
     const clr  = BLOCK_COLORS[b.type] || BLOCK_COLORS.task;
-    const dur  = endMins - startMins;
-    const durLabel = dur >= 60 ? `${Math.floor(dur/60)}h${dur%60?` ${dur%60}m`:''}` : `${dur}m`;
+    const dur  = be - bs;
+    const durLabel = dur >= 60 ? `${Math.floor(dur/60)}h${dur%60?' '+dur%60+'m':''}` : `${dur}m`;
+
+    // Find how many cols this block actually competes with
+    const localCols = blocks.filter(x => toMins(x.start) < be && toMins(x.end) > bs).length > 1 ? numCols : 1;
+    const colW   = 100 / localCols;
+    const left   = (b._col||0) * colW;
+    const isWater = b.type === 'water';
+    const minHt  = isWater ? 22 : 32;
+    const actualHt = Math.max(minHt, ht);
+
     html += `<div onclick="event.stopPropagation();openBlockModal('${b.id}')"
-      style="position:absolute;top:${top}px;left:4px;right:4px;height:${ht}px;
-        background:${clr.bg};border-left:3px solid ${clr.border};border-radius:5px;
-        padding:3px 7px;cursor:pointer;z-index:3;overflow:hidden;
-        box-shadow:0 1px 6px rgba(0,0,0,0.15);transition:opacity 0.15s;"
-      onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-      <div style="font-size:0.75rem;font-weight:700;color:${clr.text};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-        ${BLOCK_ICONS[b.type]||'📋'} ${esc(b.title)}
+      style="position:absolute;top:${top}px;left:calc(${left}% + 3px);width:calc(${colW}% - 6px);
+        height:${actualHt}px;
+        background:${clr.bg};border-left:3px solid ${clr.border};border-radius:6px;
+        padding:${isWater?'3px 6px':'5px 8px'};cursor:pointer;z-index:3;overflow:hidden;
+        box-shadow:0 1px 5px rgba(0,0,0,0.12);transition:opacity 0.15s;"
+      onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">
+      <div style="display:flex;align-items:center;gap:4px;min-width:0;">
+        <span style="flex-shrink:0;font-size:${isWater?'0.75':'0.8'}rem;">${BLOCK_ICONS[b.type]||'📋'}</span>
+        <span style="font-size:${isWater?'0.68':'0.75'}rem;font-weight:${isWater?'500':'700'};color:${clr.text};
+          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(b.title.replace(/^[^ ]+ /,''))}</span>
       </div>
-      ${ht > 24 ? `<div style="font-size:0.65rem;color:var(--text-muted);">${b.start}–${b.end} · ${durLabel}</div>` : ''}
+      ${actualHt > 36 && !isWater ? `<div style="font-size:0.63rem;color:var(--text-muted);margin-top:1px;">${b.start}–${b.end} · ${durLabel}</div>` : ''}
     </div>`;
   });
 
@@ -2968,49 +2993,22 @@ function loadIdealDay() {
   if (!DB.schedule) DB.schedule = {};
 
   DB.schedule[date] = [
-    // ── Morning start ──
-    { id:uid(), title:'🌅 Morning Kickoff — emails, plan the day',  type:'task',     start:'08:30', end:'09:00', notes:'Review tasks, check messages, set top 3 priorities' },
-
-    // ── Water ──
-    { id:uid(), title:'💧 Water',  type:'water',    start:'09:00', end:'09:05', notes:'Drink a full glass of water' },
-
-    // ── Deep work 1 ──
-    { id:uid(), title:'🔒 Deep Work — AppSec / Security Reviews',  type:'task',     start:'09:00', end:'10:30', notes:'Focus block — SAST reviews, threat modelling, code review' },
-
-    // ── Break + water ──
-    { id:uid(), title:'☕ Short Break',               type:'break',    start:'10:30', end:'10:45', notes:'Step away, stretch, coffee' },
-    { id:uid(), title:'💧 Water',                     type:'water',    start:'10:45', end:'10:50', notes:'Drink a full glass of water' },
-
-    // ── Deep work 2 ──
-    { id:uid(), title:'📋 Deep Work — Interviews / Tasks',          type:'task',     start:'10:50', end:'12:30', notes:'Candidate screening, interview prep, task work' },
-
-    // ── Water ──
-    { id:uid(), title:'💧 Water',                     type:'water',    start:'12:30', end:'12:35', notes:'Drink a full glass of water' },
-
-    // ── Pre-lunch ──
-    { id:uid(), title:'📧 Emails & Admin',             type:'task',     start:'12:35', end:'13:30', notes:'Reply messages, schedule reviews, admin work' },
-
-    // ── Lunch ──
-    { id:uid(), title:'🥗 Lunch Break',               type:'break',    start:'13:30', end:'14:30', notes:'Full lunch — step away from desk, eat mindfully' },
-
-    // ── Water + recovery ──
-    { id:uid(), title:'💧 Water + Short Walk',         type:'water',    start:'14:30', end:'14:40', notes:'Hydrate, 5-min walk to reset focus' },
-
-    // ── Deep work 3 ──
-    { id:uid(), title:'🛡 Deep Work — Security Analysis',           type:'task',     start:'14:40', end:'16:15', notes:'Vulnerability assessment, documentation, tooling' },
-
-    // ── Tea break + water ──
-    { id:uid(), title:'☕ Tea Break',                  type:'break',    start:'16:15', end:'16:30', notes:'Break — tea/coffee, rest eyes' },
-    { id:uid(), title:'💧 Water',                     type:'water',    start:'16:30', end:'16:35', notes:'Drink a full glass of water' },
-
-    // ── Evening wrap ──
-    { id:uid(), title:'📝 Reviews & Planning',         type:'task',     start:'16:35', end:'17:30', notes:'Review progress, document findings, update tasks' },
-
-    // ── Day close ──
-    { id:uid(), title:'✅ Day Wrap-up',                type:'task',     start:'17:30', end:'18:00', notes:'Close tasks, set tomorrow\'s priorities, log time' },
-
-    // ── Final water ──
-    { id:uid(), title:'💧 Water',                     type:'water',    start:'17:30', end:'17:35', notes:'Last glass of water for the office day' },
+    { id:uid(), title:'🌅 Morning Kickoff — emails, plan the day',  type:'task',  start:'08:30', end:'09:00', notes:'Review tasks, check messages, set top 3 priorities' },
+    { id:uid(), title:'💧 Water',                                   type:'water', start:'09:00', end:'09:10', notes:'Drink a full glass of water before deep work' },
+    { id:uid(), title:'🔒 Deep Work — AppSec / Security Reviews',   type:'task',  start:'09:10', end:'10:30', notes:'Focus block — SAST reviews, threat modelling, code review' },
+    { id:uid(), title:'☕ Short Break',                              type:'break', start:'10:30', end:'10:45', notes:'Step away, stretch, coffee' },
+    { id:uid(), title:'💧 Water',                                   type:'water', start:'10:45', end:'10:55', notes:'Drink a full glass of water' },
+    { id:uid(), title:'📋 Deep Work — Interviews / Tasks',          type:'task',  start:'10:55', end:'12:30', notes:'Candidate screening, interview prep, task work' },
+    { id:uid(), title:'💧 Water',                                   type:'water', start:'12:30', end:'12:40', notes:'Drink a full glass of water' },
+    { id:uid(), title:'📧 Emails & Admin',                          type:'task',  start:'12:40', end:'13:30', notes:'Reply messages, schedule reviews, admin work' },
+    { id:uid(), title:'🥗 Lunch Break',                             type:'break', start:'13:30', end:'14:30', notes:'Full lunch — step away from desk, eat mindfully' },
+    { id:uid(), title:'💧 Water + Short Walk',                      type:'water', start:'14:30', end:'14:45', notes:'Hydrate, 5-min walk to reset focus' },
+    { id:uid(), title:'🛡 Deep Work — Security Analysis',           type:'task',  start:'14:45', end:'16:15', notes:'Vulnerability assessment, documentation, tooling' },
+    { id:uid(), title:'☕ Tea Break',                                type:'break', start:'16:15', end:'16:30', notes:'Break — tea/coffee, rest eyes' },
+    { id:uid(), title:'💧 Water',                                   type:'water', start:'16:30', end:'16:40', notes:'Drink a full glass of water' },
+    { id:uid(), title:'📝 Reviews & Planning',                      type:'task',  start:'16:40', end:'17:30', notes:'Review progress, document findings, update tasks' },
+    { id:uid(), title:'💧 Water',                                   type:'water', start:'17:30', end:'17:40', notes:'Last glass of water for the office day' },
+    { id:uid(), title:'✅ Day Wrap-up',                             type:'task',  start:'17:40', end:'18:00', notes:'Close tasks, set tomorrow\'s priorities, log time' },
   ];
 
   saveData();
