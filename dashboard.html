@@ -1518,8 +1518,27 @@ body[data-theme="light"] {
     <select id="t-status">
       <option>New</option><option>In Progress</option><option>Waiting</option><option>Completed</option>
     </select>
-    <label>Due Date</label>
-    <input type="date" id="t-due">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label>Due Date</label>
+        <input type="date" id="t-due">
+      </div>
+      <div>
+        <label>Due Time</label>
+        <input type="time" id="t-due-time" placeholder="HH:MM">
+      </div>
+    </div>
+    <label>⏰ Reminder</label>
+    <select id="t-reminder">
+      <option value="">No reminder</option>
+      <option value="0">At due time</option>
+      <option value="5">5 min before</option>
+      <option value="10">10 min before</option>
+      <option value="15">15 min before</option>
+      <option value="30">30 min before</option>
+      <option value="60">1 hour before</option>
+      <option value="1440">1 day before</option>
+    </select>
     <label>Notes</label>
     <textarea id="t-notes" rows="2"></textarea>
     <div class="modal-footer">
@@ -2977,6 +2996,8 @@ function openTaskModal(id) {
   document.getElementById('t-pri').value = 'Medium';
   document.getElementById('t-status').value = 'New';
   document.getElementById('t-due').value = '';
+  document.getElementById('t-due-time').value = '';
+  document.getElementById('t-reminder').value = '';
   showErr('t-title-err', false);
 
   if (id) {
@@ -2990,6 +3011,8 @@ function openTaskModal(id) {
     document.getElementById('t-pri').value = t.priority;
     document.getElementById('t-status').value = t.status;
     document.getElementById('t-due').value = t.dueDate || '';
+    document.getElementById('t-due-time').value = t.dueTime || '';
+    document.getElementById('t-reminder').value = t.reminderMinutes !== undefined ? t.reminderMinutes : '';
     document.getElementById('t-notes').value = t.notes || '';
   } else {
     document.getElementById('task-modal-title').textContent = 'Add Task';
@@ -3003,12 +3026,15 @@ function saveTask() {
   showErr('t-title-err', false);
 
   const id = document.getElementById('task-id').value;
+  const remVal = document.getElementById('t-reminder').value;
   const data = {
     title, description: document.getElementById('t-desc').value.trim(),
     category: document.getElementById('t-cat').value,
     priority: document.getElementById('t-pri').value,
     status: document.getElementById('t-status').value,
     dueDate: document.getElementById('t-due').value,
+    dueTime: document.getElementById('t-due-time').value || '',
+    reminderMinutes: remVal !== '' ? parseInt(remVal) : null,
     notes: document.getElementById('t-notes').value.trim()
   };
 
@@ -3019,6 +3045,7 @@ function saveTask() {
     DB.tasks.unshift({ id: uid(), ...data, createdAt: new Date().toISOString(), archived: false });
   }
   saveData(); closeModal('task-modal'); renderTasks();
+  scheduleTaskReminders(); // reschedule after save
 }
 
 function deleteTask(id) {
@@ -3069,7 +3096,10 @@ function renderTasks() {
       <td><span class="badge badge-gray">${esc(t.category)}</span></td>
       <td>${priBadge(t.priority)}</td>
       <td><span class="badge ${statusBadge}">${esc(t.status)}</span></td>
-      <td style="${overdue?'color:var(--critical)':todayDue?'color:var(--high)':''}">${fmtDate(t.dueDate)}</td>
+      <td style="${overdue?'color:var(--critical)':todayDue?'color:var(--high)':''}">
+        ${fmtDate(t.dueDate)}
+        ${t.dueTime ? `<div style="font-size:0.72rem;color:var(--text-muted);">🕐 ${t.dueTime}${t.reminderMinutes!=null?` ⏰${t.reminderMinutes===0?'@time':t.reminderMinutes>=60?'-'+t.reminderMinutes/60+'h':'-'+t.reminderMinutes+'m'}`:''}` : ''}
+      </td>
       <td>
         <div class="flex gap-8">
           <button class="btn-secondary btn-sm" onclick="openTaskModal('${t.id}')">&#9998;</button>
@@ -5653,25 +5683,59 @@ async function requestNotifPermission() {
   }
 }
 
+// Track scheduled reminder timeouts so we can cancel/reschedule
+const _reminderTimeouts = {};
+
 function scheduleNotifications() {
   if (Notification.permission !== 'granted') return;
   const t = today();
 
-  // Tasks due today
-  DB.tasks.filter(task => !task.archived && task.status !== 'Completed' && task.dueDate === t)
+  // Tasks due today without specific time — notify once on load
+  DB.tasks.filter(task => !task.archived && task.status !== 'Completed' && task.dueDate === t && !task.dueTime)
     .forEach(task => {
-      new Notification('Task Due Today', {
-        body: task.title,
-        icon: ''
-      });
+      new Notification('📋 Task Due Today', { body: task.title });
     });
 
   // Overdue follow-ups
   DB.followUps.filter(f => f.status !== 'Closed' && isOverdue(f.nextFollowUp))
     .forEach(f => {
-      new Notification('Overdue Follow-Up', {
-        body: `${f.subject} — waiting on ${f.waitingOn}`
-      });
+      new Notification('🔁 Overdue Follow-Up', { body: `${f.subject} — waiting on ${f.waitingOn}` });
+    });
+
+  scheduleTaskReminders();
+}
+
+function scheduleTaskReminders() {
+  if (Notification.permission !== 'granted') return;
+
+  // Cancel existing timeouts
+  Object.values(_reminderTimeouts).forEach(clearTimeout);
+  Object.keys(_reminderTimeouts).forEach(k => delete _reminderTimeouts[k]);
+
+  const now = Date.now();
+
+  DB.tasks.filter(t => !t.archived && t.status !== 'Completed' && t.dueDate && t.dueTime && t.reminderMinutes !== null && t.reminderMinutes !== undefined)
+    .forEach(task => {
+      // Calculate reminder fire time
+      const dueMs      = new Date(`${task.dueDate}T${task.dueTime}`).getTime();
+      const reminderMs = dueMs - (task.reminderMinutes * 60 * 1000);
+      const delay      = reminderMs - now;
+
+      if (delay < 0) return; // already passed
+
+      _reminderTimeouts[task.id] = setTimeout(() => {
+        const label = task.reminderMinutes === 0
+          ? 'due now!'
+          : task.reminderMinutes >= 60
+            ? `due in ${task.reminderMinutes / 60}h`
+            : `due in ${task.reminderMinutes} min`;
+
+        new Notification(`⏰ ${task.title}`, {
+          body: `${label} — ${task.dueTime}${task.category ? ' · ' + task.category : ''}`,
+          tag: task.id,
+          requireInteraction: true
+        });
+      }, delay);
     });
 }
 
