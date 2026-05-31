@@ -953,6 +953,15 @@
   ],
   "inbox": [
     {
+      "id": "mptu0bke2lytc",
+      "title": "from web 2",
+      "notes": "",
+      "category": "Team Management",
+      "priority": "Medium",
+      "dueDate": "",
+      "createdAt": "2026-05-31T13:44:51.086Z"
+    },
+    {
       "id": "mpttj2k2ppchf",
       "title": "from web",
       "notes": "",
@@ -990,7 +999,6 @@
     "userRole": "AppSec Team Lead",
     "appTitle": "BrainMap",
     "apiKey": "",
-    "githubPAT": "",
-    "gistId": ""
+    "githubPAT": ""
   }
 }
