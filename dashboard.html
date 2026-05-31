@@ -1273,7 +1273,15 @@ body[data-theme="light"] {
         </div>
 
         <!-- Quick-add chips — rendered by JS -->
-        <div id="sched-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;"></div>
+        <div id="sched-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;"></div>
+        <div style="margin-bottom:14px;">
+          <button onclick="loadIdealDay()" style="font-size:0.78rem;padding:6px 16px;border-radius:8px;
+            border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));
+            color:#fff;cursor:pointer;font-weight:600;box-shadow:0 2px 10px var(--accent-glow);">
+            ✨ Load My Ideal Day
+          </button>
+          <span style="font-size:0.7rem;color:var(--text-muted);margin-left:8px;">Replaces today's schedule with your optimal office day</span>
+        </div>
 
         <!-- Timeline -->
         <div id="sched-timeline" style="position:relative;"></div>
@@ -2950,6 +2958,63 @@ function saveBlock() {
     DB.schedule[date].push({ id: uid(), title, type, start, end, notes, taskId });
   }
   saveData(); closeModal('block-modal'); renderSchedule();
+}
+
+function loadIdealDay() {
+  const date = document.getElementById('sched-date')?.value || today();
+  const existing = DB.schedule?.[date] || [];
+  if (existing.length && !confirm(`Replace the ${existing.length} existing block(s) on this day with the ideal schedule?`)) return;
+
+  if (!DB.schedule) DB.schedule = {};
+
+  DB.schedule[date] = [
+    // ── Morning start ──
+    { id:uid(), title:'🌅 Morning Kickoff — emails, plan the day',  type:'task',     start:'08:30', end:'09:00', notes:'Review tasks, check messages, set top 3 priorities' },
+
+    // ── Water ──
+    { id:uid(), title:'💧 Water',  type:'water',    start:'09:00', end:'09:05', notes:'Drink a full glass of water' },
+
+    // ── Deep work 1 ──
+    { id:uid(), title:'🔒 Deep Work — AppSec / Security Reviews',  type:'task',     start:'09:00', end:'10:30', notes:'Focus block — SAST reviews, threat modelling, code review' },
+
+    // ── Break + water ──
+    { id:uid(), title:'☕ Short Break',               type:'break',    start:'10:30', end:'10:45', notes:'Step away, stretch, coffee' },
+    { id:uid(), title:'💧 Water',                     type:'water',    start:'10:45', end:'10:50', notes:'Drink a full glass of water' },
+
+    // ── Deep work 2 ──
+    { id:uid(), title:'📋 Deep Work — Interviews / Tasks',          type:'task',     start:'10:50', end:'12:30', notes:'Candidate screening, interview prep, task work' },
+
+    // ── Water ──
+    { id:uid(), title:'💧 Water',                     type:'water',    start:'12:30', end:'12:35', notes:'Drink a full glass of water' },
+
+    // ── Pre-lunch ──
+    { id:uid(), title:'📧 Emails & Admin',             type:'task',     start:'12:35', end:'13:30', notes:'Reply messages, schedule reviews, admin work' },
+
+    // ── Lunch ──
+    { id:uid(), title:'🥗 Lunch Break',               type:'break',    start:'13:30', end:'14:30', notes:'Full lunch — step away from desk, eat mindfully' },
+
+    // ── Water + recovery ──
+    { id:uid(), title:'💧 Water + Short Walk',         type:'water',    start:'14:30', end:'14:40', notes:'Hydrate, 5-min walk to reset focus' },
+
+    // ── Deep work 3 ──
+    { id:uid(), title:'🛡 Deep Work — Security Analysis',           type:'task',     start:'14:40', end:'16:15', notes:'Vulnerability assessment, documentation, tooling' },
+
+    // ── Tea break + water ──
+    { id:uid(), title:'☕ Tea Break',                  type:'break',    start:'16:15', end:'16:30', notes:'Break — tea/coffee, rest eyes' },
+    { id:uid(), title:'💧 Water',                     type:'water',    start:'16:30', end:'16:35', notes:'Drink a full glass of water' },
+
+    // ── Evening wrap ──
+    { id:uid(), title:'📝 Reviews & Planning',         type:'task',     start:'16:35', end:'17:30', notes:'Review progress, document findings, update tasks' },
+
+    // ── Day close ──
+    { id:uid(), title:'✅ Day Wrap-up',                type:'task',     start:'17:30', end:'18:00', notes:'Close tasks, set tomorrow\'s priorities, log time' },
+
+    // ── Final water ──
+    { id:uid(), title:'💧 Water',                     type:'water',    start:'17:30', end:'17:35', notes:'Last glass of water for the office day' },
+  ];
+
+  saveData();
+  renderSchedule();
 }
 
 function deleteBlock() {
