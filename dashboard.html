@@ -824,6 +824,7 @@ body[data-theme="light"] {
       </div>
       <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub" id="hdr-sync-btn">☁️ Sync</button>
       <button class="header-btn" onclick="loadCloudData()" title="Reload data from GitHub" id="hdr-load-btn" style="display:none;">☁️ Load</button>
+      <button class="header-btn primary" onclick="saveToCloud()" title="Save changes to GitHub" id="hdr-save-btn" style="display:none;">☁️ Save</button>
       <button class="header-btn" onclick="exportData()">&#8595; Export</button>
       <label style="margin:0;cursor:pointer;">
         <button class="header-btn" onclick="this.closest('label').querySelector('input').click()">&#8593; Import</button>
@@ -6442,14 +6443,67 @@ async function loadCloudData() {
 (function autoSyncOnLoad() {
   const isGitHubPages = window.location.hostname.includes('github.io');
   if (isGitHubPages) {
-    // Show Load, hide Sync (can't push from GitHub Pages)
     const syncBtn = document.getElementById('hdr-sync-btn');
     const loadBtn = document.getElementById('hdr-load-btn');
+    const saveBtn = document.getElementById('hdr-save-btn');
     if (syncBtn) syncBtn.style.display = 'none';
     if (loadBtn) loadBtn.style.display = '';
+    if (saveBtn) saveBtn.style.display = '';
     loadCloudData();
   }
 })();
+
+/* ── Save to cloud (mobile → GitHub repo) ── */
+async function saveToCloud() {
+  const pat = DB.settings.githubPAT;
+  if (!pat) {
+    alert('No GitHub token set.\n\nGo to Settings → scroll down to GitHub Gist Sync → enter your token (needs repo scope) → Save.');
+    navigate('config');
+    return;
+  }
+
+  const btn = document.getElementById('hdr-save-btn');
+  if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+
+  try {
+    // Get current file SHA (needed for update)
+    const getRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
+      headers: { 'Authorization': `token ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (!getRes.ok) throw new Error('Cannot read file: ' + getRes.status);
+    const fileInfo = await getRes.json();
+    const sha = fileInfo.sha;
+
+    // Strip secrets before saving
+    const exportDB = JSON.parse(JSON.stringify(DB));
+    exportDB.settings.groqKey   = '';
+    exportDB.settings.apiKey    = '';
+    exportDB.settings.githubPAT = '';
+
+    // Base64 encode
+    const jsonStr  = JSON.stringify(exportDB, null, 2);
+    const b64      = btoa(unescape(encodeURIComponent(jsonStr)));
+
+    // Push to repo
+    const putRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
+      method: 'PUT',
+      headers: { 'Authorization': `token ${pat}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'sync from mobile', content: b64, sha })
+    });
+
+    if (!putRes.ok) {
+      const err = await putRes.json();
+      throw new Error(err.message || putRes.status);
+    }
+
+    if (btn) { btn.textContent = '✅ Saved!'; btn.style.background = '#16a34a'; }
+    setTimeout(() => { if (btn) { btn.textContent = '☁️ Save'; btn.style.background = ''; btn.disabled = false; } }, 3000);
+
+  } catch(e) {
+    alert('Save failed: ' + e.message + '\n\nMake sure your token has "repo" scope.');
+    if (btn) { btn.textContent = '☁️ Save'; btn.disabled = false; }
+  }
+}
 
 // Schedule notifications on load if permission already granted
 if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
