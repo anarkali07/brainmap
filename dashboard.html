@@ -1272,23 +1272,8 @@ body[data-theme="light"] {
           </div>
         </div>
 
-        <!-- Quick-add chips -->
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
-          <span style="font-size:0.72rem;color:var(--text-muted);align-self:center;">Quick add:</span>
-          ${[
-            {label:'☕ Break',      start:'10:00',end:'10:15',type:'break'},
-            {label:'🥗 Lunch',      start:'13:00',end:'14:00',type:'break'},
-            {label:'💧 Water',      start:'11:00',end:'11:05',type:'break'},
-            {label:'📋 Meeting',    start:'10:00',end:'11:00',type:'meeting'},
-            {label:'🏃 Exercise',   start:'07:00',end:'08:00',type:'personal'},
-            {label:'📚 Learning',   start:'18:00',end:'19:00',type:'task'},
-          ].map(q=>`<button onclick="quickAddBlock('${q.label}','${q.start}','${q.end}','${q.type}')"
-            style="font-size:0.73rem;padding:4px 10px;border-radius:20px;border:1px solid var(--border);
-              background:var(--bg2);color:var(--text-muted);cursor:pointer;">${q.label}</button>`).join('')}
-          <button onclick="openBlockModal()"
-            style="font-size:0.73rem;padding:4px 12px;border-radius:20px;border:1px solid var(--accent);
-              background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">+ Custom</button>
-        </div>
+        <!-- Quick-add chips — rendered by JS -->
+        <div id="sched-chips" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;"></div>
 
         <!-- Timeline -->
         <div id="sched-timeline" style="position:relative;"></div>
@@ -2749,6 +2734,28 @@ function renderSchedule() {
   const dateEl = document.getElementById('sched-date');
   if (dateEl && !dateEl.value) dateEl.value = today();
   const date = dateEl?.value || today();
+
+  // Render quick-add chips
+  const chipsEl = document.getElementById('sched-chips');
+  if (chipsEl) {
+    const quickBlocks = [
+      {label:'☕ Break',    start:'10:00',end:'10:15',type:'break'},
+      {label:'🥗 Lunch',    start:'13:00',end:'14:00',type:'break'},
+      {label:'💧 Water',    start:'11:00',end:'11:05',type:'water'},
+      {label:'👥 Meeting',  start:'10:00',end:'11:00',type:'meeting'},
+      {label:'🏃 Exercise', start:'07:00',end:'08:00',type:'personal'},
+      {label:'📚 Learning', start:'18:00',end:'19:00',type:'task'},
+    ];
+    chipsEl.innerHTML = `<span style="font-size:0.72rem;color:var(--text-muted);align-self:center;">Quick add:</span>`
+      + quickBlocks.map(q =>
+        `<button onclick="quickAddBlock('${q.label}','${q.start}','${q.end}','${q.type}')"
+          style="font-size:0.73rem;padding:4px 10px;border-radius:20px;border:1px solid var(--border);
+            background:var(--bg2);color:var(--text-muted);cursor:pointer;">${q.label}</button>`
+      ).join('')
+      + `<button onclick="openBlockModal()"
+          style="font-size:0.73rem;padding:4px 12px;border-radius:20px;border:1px solid var(--accent);
+            background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">+ Custom</button>`;
+  }
   const blocks = (DB.schedule?.[date] || []).slice().sort((a,b) => a.start.localeCompare(b.start));
   const el = document.getElementById('sched-timeline');
   if (!el) return;
