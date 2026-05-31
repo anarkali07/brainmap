@@ -6097,14 +6097,22 @@ function removeCategory(idx) {
   renderCatList();
   refreshCategoryDropdowns();
 }
+const DEFAULT_CATS = ['Team Management','Projects','Partner Onboarding','Interviews','Learning','Personal','Health'];
+
 function refreshCategoryDropdowns() {
-  const cats = DB.settings.categories || [];
+  const cats = (DB.settings.categories && DB.settings.categories.length)
+    ? DB.settings.categories
+    : DEFAULT_CATS;
+  // ensure DB always has categories
+  if (!DB.settings.categories || !DB.settings.categories.length) DB.settings.categories = DEFAULT_CATS;
   const opts = cats.map(c => `<option>${c}</option>`).join('');
   ['task-filter-cat','t-cat','inbox-cat'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
+    const cur = el.value; // preserve current selection
     const first = id.includes('filter') ? '<option value="">All Categories</option>' : '';
     el.innerHTML = first + opts;
+    if (cur) el.value = cur;
   });
 }
 
