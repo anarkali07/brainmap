@@ -780,6 +780,7 @@ body[data-theme="light"] {
       <div class="nav-item" data-section="interviews"><span class="nav-icon">🧑‍💼</span><span class="nav-label"> Interviews</span></div>
       <div class="nav-section-label">Life</div>
       <div class="nav-item" data-section="personal"><span class="nav-icon">🌿</span><span class="nav-label"> Personal</span></div>
+      <div class="nav-item" data-section="timetracker"><span class="nav-icon">⏱</span><span class="nav-label"> Time Tracker</span></div>
     </nav>
     <div id="sidebar-footer">
       <div class="nav-item" data-section="config"><span class="nav-icon">⚙️</span><span class="nav-label"> Settings</span></div>
@@ -810,6 +811,17 @@ body[data-theme="light"] {
       <div id="header-title">Dashboard</div>
       <button class="header-btn primary" onclick="openQuickAdd()" title="Quick Add Task">&#43; Quick Add</button>
       <button class="header-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable Notifications">&#128276;</button>
+      <!-- Live timer chip -->
+      <div id="hdr-timer" onclick="navigate('timetracker')" title="Time Tracker"
+        style="display:none;align-items:center;gap:7px;padding:5px 12px;border-radius:20px;
+          border:1px solid var(--accent);background:var(--accent-glass);cursor:pointer;">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--critical);
+          animation:pulse 1s infinite;flex-shrink:0;"></span>
+        <span id="hdr-timer-label" style="font-size:0.72rem;color:var(--text-muted);max-width:120px;
+          overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+        <span id="hdr-timer-clock" style="font-size:0.82rem;font-weight:700;color:var(--accent);
+          font-variant-numeric:tabular-nums;min-width:48px;"></span>
+      </div>
       <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub" id="hdr-sync-btn">☁️ Sync</button>
       <button class="header-btn" onclick="loadCloudData()" title="Reload data from GitHub" id="hdr-load-btn" style="display:none;">☁️ Load</button>
       <button class="header-btn" onclick="exportData()">&#8595; Export</button>
@@ -1186,6 +1198,42 @@ body[data-theme="light"] {
         <h2>&#128269; Search</h2>
         <input id="global-search" placeholder="Search tasks, follow-ups, projects, interviews..." oninput="runSearch()">
         <div class="search-results" id="search-results"></div>
+      </section>
+
+      <!-- ======================================================
+           SECTION: TIME TRACKER
+           ====================================================== -->
+      <section id="sec-timetracker" class="section">
+        <h2>⏱ Time Tracker</h2>
+
+        <!-- Timer bar -->
+        <div class="card" style="margin-bottom:16px;padding:14px 18px;">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <input id="tt-desc" placeholder="What are you working on?" style="flex:2;min-width:180px;">
+            <select id="tt-project" style="flex:1;min-width:130px;">
+              <option value="">No Project</option>
+            </select>
+            <select id="tt-billable" style="width:auto;min-width:100px;">
+              <option value="0">Non-billable</option>
+              <option value="1">Billable</option>
+            </select>
+            <button id="tt-start-btn" onclick="toggleTimer()"
+              style="padding:9px 20px;border-radius:8px;border:none;font-weight:700;
+                font-size:0.88rem;cursor:pointer;min-width:100px;
+                background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
+                box-shadow:0 2px 10px var(--accent-glow);">
+              ▶ Start
+            </button>
+            <div id="tt-live-clock" style="font-size:1.4rem;font-weight:800;color:var(--accent);
+              font-variant-numeric:tabular-nums;min-width:80px;display:none;">00:00:00</div>
+          </div>
+        </div>
+
+        <!-- Today summary bar -->
+        <div id="tt-today-bar" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;"></div>
+
+        <!-- Entries grouped by date -->
+        <div id="tt-entries"></div>
       </section>
 
       <!-- ======================================================
@@ -1898,7 +1946,7 @@ function emptyData() {
   return {
     tasks: [], followUps: [], projects: [], interviews: [],
     teamMembers: [], goals: [], health: [], inbox: [],
-    dailyPlanner: {}, customModules: {}, settings: {
+    dailyPlanner: {}, timeEntries: [], activeTimer: null, customModules: {}, settings: {
       theme: 'dark',
       userName: '', userRole: 'AppSec Team Lead', appTitle: 'BrainMap',
       categories: ['Team Management','Projects','Partner Onboarding','Interviews','Learning','Personal','Health'],
@@ -2037,6 +2085,7 @@ function navigate(section) {
     work:       () => { renderProjects(); renderTeam(); },
     interviews: renderInterviews,
     personal:   () => { renderGoals(); renderHealth(); renderPlanner(); },
+    timetracker: renderTimeTracker,
     config:     renderConfig,
     search:     () => {}
   };
@@ -2248,6 +2297,214 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 /* ============================================================
    DASHBOARD RENDER
    ============================================================ */
+/* ============================================================
+   TIME TRACKER
+   ============================================================ */
+let _timerInterval = null;
+
+function fmtDuration(secs) {
+  const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60), s = secs%60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function fmtDurShort(secs) {
+  const h = Math.floor(secs/3600), m = Math.floor((secs%3600)/60);
+  return h ? `${h}h ${m}m` : `${m}m`;
+}
+
+function _timerSecs() {
+  if (!DB.activeTimer) return 0;
+  return Math.floor((Date.now() - new Date(DB.activeTimer.startTime).getTime()) / 1000);
+}
+
+function toggleTimer() {
+  if (DB.activeTimer) {
+    stopTimer();
+  } else {
+    startTimer();
+  }
+}
+
+function startTimer() {
+  const desc    = document.getElementById('tt-desc')?.value.trim() || 'Untitled';
+  const project = document.getElementById('tt-project')?.value || '';
+  const billable = document.getElementById('tt-billable')?.value === '1';
+  DB.activeTimer = { startTime: new Date().toISOString(), description: desc, project, billable };
+  saveData();
+  _startTickingTimer();
+  renderTimeTracker();
+  renderDashboard();
+}
+
+function stopTimer() {
+  if (!DB.activeTimer) return;
+  const secs = _timerSecs();
+  if (secs < 5) { DB.activeTimer = null; saveData(); _stopTickingTimer(); renderTimeTracker(); return; }
+  if (!DB.timeEntries) DB.timeEntries = [];
+  DB.timeEntries.unshift({
+    id: uid(),
+    description: DB.activeTimer.description,
+    project:     DB.activeTimer.project,
+    billable:    DB.activeTimer.billable,
+    startTime:   DB.activeTimer.startTime,
+    endTime:     new Date().toISOString(),
+    duration:    secs,
+    date:        DB.activeTimer.startTime.slice(0,10)
+  });
+  DB.activeTimer = null;
+  saveData();
+  _stopTickingTimer();
+  renderTimeTracker();
+  renderDashboard();
+}
+
+function _startTickingTimer() {
+  _stopTickingTimer();
+  _timerInterval = setInterval(() => {
+    const secs = _timerSecs();
+    const clock = document.getElementById('tt-live-clock');
+    const hdrClock = document.getElementById('hdr-timer-clock');
+    if (clock) clock.textContent = fmtDuration(secs);
+    if (hdrClock) hdrClock.textContent = fmtDuration(secs);
+  }, 1000);
+}
+
+function _stopTickingTimer() {
+  if (_timerInterval) { clearInterval(_timerInterval); _timerInterval = null; }
+  const hdrTimer = document.getElementById('hdr-timer');
+  if (hdrTimer) hdrTimer.style.display = 'none';
+  const clock = document.getElementById('tt-live-clock');
+  if (clock) { clock.textContent = '00:00:00'; clock.style.display = 'none'; }
+}
+
+function _updateHeaderTimer() {
+  const hdrTimer = document.getElementById('hdr-timer');
+  const hdrLabel = document.getElementById('hdr-timer-label');
+  const hdrClock = document.getElementById('hdr-timer-clock');
+  if (!hdrTimer) return;
+  if (DB.activeTimer) {
+    hdrTimer.style.display = 'flex';
+    if (hdrLabel) hdrLabel.textContent = DB.activeTimer.description;
+    if (hdrClock) hdrClock.textContent = fmtDuration(_timerSecs());
+  } else {
+    hdrTimer.style.display = 'none';
+  }
+}
+
+function deleteTimeEntry(id) {
+  DB.timeEntries = (DB.timeEntries||[]).filter(e => e.id !== id);
+  saveData(); renderTimeTracker();
+}
+
+function renderTimeTracker() {
+  // populate project dropdown
+  const projSel = document.getElementById('tt-project');
+  if (projSel) {
+    const projs = (DB.projects||[]).map(p => p.name||'').filter(Boolean);
+    projSel.innerHTML = '<option value="">No Project</option>' +
+      projs.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('');
+    if (DB.activeTimer) projSel.value = DB.activeTimer.project || '';
+  }
+
+  // start/stop button
+  const btn   = document.getElementById('tt-start-btn');
+  const clock = document.getElementById('tt-live-clock');
+  const desc  = document.getElementById('tt-desc');
+  if (DB.activeTimer) {
+    if (btn)   { btn.textContent = '⏹ Stop'; btn.style.background = 'linear-gradient(135deg,#f43f5e,#e11d48)'; }
+    if (clock) { clock.style.display = 'block'; clock.textContent = fmtDuration(_timerSecs()); }
+    if (desc)  { desc.value = DB.activeTimer.description; desc.disabled = true; }
+    _startTickingTimer();
+  } else {
+    if (btn)   { btn.textContent = '▶ Start'; btn.style.background = 'linear-gradient(135deg,var(--accent),var(--accent2))'; }
+    if (clock) clock.style.display = 'none';
+    if (desc)  desc.disabled = false;
+  }
+  _updateHeaderTimer();
+
+  // Today summary
+  const todayStr  = today();
+  const entries   = DB.timeEntries || [];
+  const todayEnts = entries.filter(e => e.date === todayStr);
+  const todaySecs = todayEnts.reduce((s,e) => s+e.duration, 0);
+  const weekStart = (() => { const d=new Date(); d.setDate(d.getDate()-d.getDay()); return d.toISOString().slice(0,10); })();
+  const weekSecs  = entries.filter(e => e.date >= weekStart).reduce((s,e) => s+e.duration, 0);
+  const billSecs  = todayEnts.filter(e => e.billable).reduce((s,e) => s+e.duration, 0);
+
+  const bar = document.getElementById('tt-today-bar');
+  if (bar) bar.innerHTML = [
+    { label:'Today',    val: fmtDurShort(todaySecs),  clr:'var(--accent)' },
+    { label:'This Week',val: fmtDurShort(weekSecs),   clr:'var(--accent2)' },
+    { label:'Billable', val: fmtDurShort(billSecs),   clr:'var(--low)' },
+    { label:'Entries',  val: todayEnts.length,        clr:'var(--text-muted)' },
+  ].map(t => `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;
+      padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:100px;">
+      <div style="font-size:1.1rem;font-weight:800;color:${t.clr};">${t.val}</div>
+      <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;">${t.label}</div>
+    </div>`).join('');
+
+  // Group entries by date
+  const entriesEl = document.getElementById('tt-entries');
+  if (!entriesEl) return;
+  if (!entries.length) {
+    entriesEl.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:40px;font-size:0.9rem;">
+      No time tracked yet. Start the timer above ▶</div>`;
+    return;
+  }
+
+  // group by date
+  const byDate = {};
+  entries.forEach(e => { if (!byDate[e.date]) byDate[e.date] = []; byDate[e.date].push(e); });
+  const sortedDates = Object.keys(byDate).sort((a,b) => b.localeCompare(a));
+
+  entriesEl.innerHTML = sortedDates.map(date => {
+    const dayEntries = byDate[date];
+    const daySecs    = dayEntries.reduce((s,e) => s+e.duration, 0);
+    const dayLabel   = date === todayStr ? 'Today' :
+                       date === new Date(Date.now()-86400000).toISOString().slice(0,10) ? 'Yesterday' :
+                       new Date(date+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;
+          margin-bottom:8px;padding:0 4px;">
+          <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;
+            letter-spacing:0.07em;color:var(--text-muted);">${dayLabel}</span>
+          <span style="font-size:0.78rem;font-weight:700;color:var(--text-muted);">${fmtDurShort(daySecs)}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          ${dayEntries.map(e => `
+            <div style="display:flex;align-items:center;gap:10px;background:var(--card);
+              border:1px solid var(--border);border-radius:10px;padding:10px 14px;
+              border-left:3px solid var(--accent);">
+              <div style="flex:1;min-width:0;">
+                <div style="font-size:0.86rem;font-weight:600;margin-bottom:2px;">${esc(e.description)}</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                  ${e.project ? `<span style="font-size:0.7rem;color:var(--accent);">📁 ${esc(e.project)}</span>` : ''}
+                  ${e.billable ? `<span style="font-size:0.7rem;color:var(--low);">💰 Billable</span>` : ''}
+                  <span style="font-size:0.7rem;color:var(--text-muted);">
+                    ${new Date(e.startTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})} –
+                    ${new Date(e.endTime).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}
+                  </span>
+                </div>
+              </div>
+              <div style="font-size:1rem;font-weight:800;color:var(--text);font-variant-numeric:tabular-nums;
+                white-space:nowrap;">${fmtDurShort(e.duration)}</div>
+              <button onclick="deleteTimeEntry('${e.id}')"
+                style="width:26px;height:26px;border-radius:6px;border:1px solid rgba(244,63,94,0.2);
+                  background:rgba(244,63,94,0.07);color:var(--critical);font-size:0.75rem;
+                  display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</button>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// Add pulse animation for timer dot
+const _timerStyle = document.createElement('style');
+_timerStyle.textContent = `@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }`;
+document.head.appendChild(_timerStyle);
+
 function renderDashboard() {
   // ── data ─────────────────────────────────────────────────
   const tasks      = DB.tasks.filter(x => !x.archived);
@@ -2303,11 +2560,13 @@ function renderDashboard() {
     ? `<div style="background:#fef3c7;border:1px solid #f59e0b55;border-radius:var(--radius);padding:7px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;"><span style="font-size:0.72rem;font-weight:700;color:#92400e;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;">⚠ Needs Attention</span><div style="display:flex;flex-wrap:wrap;gap:12px;font-size:0.78rem;color:#92400e;">${alerts.map(a=>`<span>${a}</span>`).join('')}</div></div>`
     : `<div style="background:#d1fae5;border:1px solid #22c55e44;border-radius:var(--radius);padding:7px 14px;"><span style="font-size:0.78rem;color:#065f46;font-weight:600;">✅ All clear — nothing urgent today</span></div>`;
 
-  // ── 6 pulse tiles ────────────────────────────────────────
+  // ── 7 pulse tiles ────────────────────────────────────────
+  const todayTimeSecs = (DB.timeEntries||[]).filter(e=>e.date===today()).reduce((s,e)=>s+e.duration,0);
   const tiles = [
     { icon:'✅', label:'Open Tasks',  val:openTasks.length,  clr:openTasks.length?'var(--accent)':'var(--text-muted)',  sub:`${overdue.length} overdue`, subClr:overdue.length?'var(--critical)':'var(--text-muted)' },
     { icon:'🔁', label:'Follow-Ups', val:pendingFU.length,  clr:pendingFU.length?'var(--medium)':'var(--text-muted)', sub:`${DB.followUps.length} total`, subClr:'var(--text-muted)' },
     { icon:'📁', label:'Projects',   val:activeProjects.length, clr:'var(--accent)', sub:'active', subClr:'var(--text-muted)' },
+    { icon:'⏱', label:'Time Today',  val: todayTimeSecs ? fmtDurShort(todayTimeSecs) : '—', clr: todayTimeSecs ? 'var(--accent2)' : 'var(--text-muted)', sub: DB.activeTimer ? '🔴 running' : `${(DB.timeEntries||[]).filter(e=>e.date===today()).length} entries`, subClr: DB.activeTimer ? 'var(--critical)' : 'var(--text-muted)' },
     { icon:'❤️', label:'Health Today', val: todayHealth ? `💧${todayHealth.water||0}` : '—', clr: todayHealth ? 'var(--low)' : 'var(--critical)', sub: todayHealth ? `😴 ${todayHealth.sleep||0}h sleep · ${todayHealth.exercise?'🏃 active':'rest day'}` : 'not logged today', subClr: todayHealth ? 'var(--text-muted)' : 'var(--critical)' },
     { icon:'🧑‍💼', label:'In Pipeline', val:allInt.filter(i=>i.finalStatus!=='Rejected').length, clr:'#06b6d4', sub:`${upcoming.length} this week`, subClr:upcoming.length?'var(--medium)':'var(--text-muted)' },
     { icon:'📌', label:'Scratch Pad', val:DB.inbox.length, clr:'var(--text-muted)', sub:'notes', subClr:'var(--text-muted)' },
@@ -6014,6 +6273,8 @@ refreshCategoryDropdowns();
 if (DB.settings.userRole) document.querySelector('#sidebar-logo span').textContent = DB.settings.userRole;
 if (DB.settings.appTitle) document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
 _updateSyncButtons();
+// restore active timer if one was running
+if (DB.activeTimer) { _startTickingTimer(); _updateHeaderTimer(); }
 renderDashboard();
 
 // ── Auto-pull from Gist on load if configured ──────────────
