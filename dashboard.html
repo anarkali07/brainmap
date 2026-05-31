@@ -6404,9 +6404,14 @@ async function loadCloudData() {
 
   const indicator = document.createElement('div');
   indicator.id = 'cloud-sync-bar';
-  // Invisible — only shows on error
   indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;color:#fff;font-size:0.82rem;font-weight:600;text-align:center;padding:8px;display:none;';
   document.body.appendChild(indicator);
+
+  // ⏳ hourglass on Load button
+  const lb = document.getElementById('hdr-load-btn');
+  const lbOrig = lb ? lb.textContent : '';
+  const lbOrigStyle = lb ? lb.style.cssText : '';
+  if (lb) { lb.textContent = '⏳'; lb.disabled = true; }
 
   try {
     const loadHeaders = (DB.settings.githubPAT || _ST)
@@ -6433,17 +6438,18 @@ async function loadCloudData() {
     _updateSyncButtons();
 
     indicator.remove();
-    // Briefly flash Load button green
-    const lb = document.getElementById('hdr-load-btn');
+    // ✅ green flash on Load button
     if (lb) {
-      const orig = lb.style.cssText;
-      lb.style.cssText += 'background:#16a34a;color:#fff;border-color:#16a34a;';
-      setTimeout(() => { if (lb) lb.style.cssText = orig; }, 2000);
+      lb.textContent = '✅';
+      lb.style.cssText = lbOrigStyle + 'background:#16a34a !important;color:#fff;border-color:#16a34a;';
+      lb.disabled = false;
+      setTimeout(() => { lb.textContent = lbOrig; lb.style.cssText = lbOrigStyle; }, 2500);
     }
   } catch(e) {
     indicator.style.cssText += 'display:block;background:#dc2626;';
     indicator.textContent = '❌ Sync error — tap to dismiss';
     indicator.onclick = () => indicator.remove();
+    if (lb) { lb.textContent = lbOrig; lb.style.cssText = lbOrigStyle; lb.disabled = false; }
     console.error('Cloud load failed:', e);
     // Don't auto-hide on error so user can read it
   }
