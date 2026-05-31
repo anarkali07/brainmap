@@ -2678,7 +2678,7 @@ function renderDashboard() {
     { icon:'🧑‍💼', label:'In Pipeline', val:allInt.filter(i=>i.finalStatus!=='Rejected').length, clr:'#06b6d4', sub:`${upcoming.length} this week`, subClr:upcoming.length?'var(--medium)':'var(--text-muted)' },
     { icon:'📌', label:'Scratch Pad', val:DB.inbox.length, clr:'var(--text-muted)', sub:'notes', subClr:'var(--text-muted)' },
   ];
-  const tileStrip = `<div style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:16px;">${tiles.map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow);"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">${t.icon} ${t.label}</div><div style="font-size:1.5rem;font-weight:700;color:${t.clr};line-height:1;">${t.val}</div><div style="font-size:0.65rem;color:${t.subClr};margin-top:3px;">${t.sub}</div></div>`).join('')}</div>`;
+  const tileStrip = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:16px;">${tiles.map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;box-shadow:var(--shadow);"><div style="font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">${t.icon} ${t.label}</div><div style="font-size:1.5rem;font-weight:700;color:${t.clr};line-height:1;">${t.val}</div><div style="font-size:0.65rem;color:${t.subClr};margin-top:3px;">${t.sub}</div></div>`).join('')}</div>`;
 
   // ── today's focus ────────────────────────────────────────
   const focusItems = [
@@ -6410,17 +6410,22 @@ async function loadCloudData() {
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
-    renderDashboard(); renderTasks(); renderInterviews(); renderInbox();
+    try { renderDashboard(); } catch(e) { console.warn('renderDashboard error:', e); }
+    try { renderTasks(); } catch(e) { console.warn('renderTasks error:', e); }
+    try { renderInterviews(); } catch(e) { console.warn('renderInterviews error:', e); }
+    try { renderInbox(); } catch(e) { console.warn('renderInbox error:', e); }
     _updateSyncButtons();
 
     indicator.style.background = '#16a34a';
-    indicator.textContent = `✅ ${(parsed.interviews||[]).length} candidates, ${(parsed.tasks||[]).length} tasks loaded`;
-    setTimeout(() => indicator.remove(), 3000);
+    indicator.textContent = `✅ ${(parsed.interviews||[]).length} candidates loaded — tap to dismiss`;
+    indicator.onclick = () => indicator.remove();
+    setTimeout(() => indicator.remove(), 5000);
   } catch(e) {
     indicator.style.background = '#dc2626';
-    indicator.textContent = '❌ ' + e.message;
-    setTimeout(() => indicator.remove(), 6000);
+    indicator.textContent = '❌ ' + e.message + ' — tap to dismiss';
+    indicator.onclick = () => indicator.remove();
     console.error('Cloud load failed:', e);
+    // Don't auto-hide on error so user can read it
   }
 }
 
