@@ -238,11 +238,12 @@ tbody tr:hover td { background: var(--accent-glass); }
 #header {
   background: var(--card);
   border-bottom: 1px solid var(--border);
-  padding: 10px 22px;
-  display: flex; align-items: center; gap: 10px;
+  padding: 6px 14px;
+  display: flex; align-items: center; gap: 5px;
   flex-shrink: 0;
   backdrop-filter: blur(12px);
 }
+.hbtn { padding: 4px 8px !important; font-size: 0.76rem !important; min-width: unset; }
 #hamburger { display: none; background: transparent; color: var(--text); font-size: 1.2rem; padding: 5px 8px; border-radius: var(--radius); }
 #hamburger:hover { background: var(--accent-glass); }
 #header-title { font-size: 0.95rem; font-weight: 600; flex: 1; color: var(--text); }
@@ -805,28 +806,24 @@ body[data-theme="light"] {
     <header id="header">
       <button id="hamburger" onclick="toggleSidebar()">&#9776;</button>
       <div id="header-title">Dashboard</div>
-      <button class="header-btn primary" onclick="openQuickAdd()" title="Quick Add Task">&#43; Quick Add</button>
-      <button class="header-btn" id="notif-btn" onclick="requestNotifPermission()" title="Enable Notifications">&#128276;</button>
+      <button class="header-btn primary hbtn" onclick="openQuickAdd()" title="Quick Add Task">+ Add</button>
       <!-- Live timer chip -->
       <div id="hdr-timer" onclick="navigate('timetracker')" title="Time Tracker"
-        style="display:none;align-items:center;gap:7px;padding:5px 12px;border-radius:20px;
+        style="display:none;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;
           border:1px solid var(--accent);background:var(--accent-glass);cursor:pointer;">
-        <span style="width:8px;height:8px;border-radius:50%;background:var(--critical);
-          animation:pulse 1s infinite;flex-shrink:0;"></span>
-        <span id="hdr-timer-label" style="font-size:0.72rem;color:var(--text-muted);max-width:120px;
-          overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-        <span id="hdr-timer-clock" style="font-size:0.82rem;font-weight:700;color:var(--accent);
-          font-variant-numeric:tabular-nums;min-width:48px;"></span>
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--critical);animation:pulse 1s infinite;flex-shrink:0;"></span>
+        <span id="hdr-timer-clock" style="font-size:0.75rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;"></span>
       </div>
-      <button class="header-btn primary" onclick="syncToGit()" title="Sync data to GitHub" id="hdr-sync-btn">☁️ Sync</button>
-      <button class="header-btn" onclick="loadCloudData()" title="Reload data from GitHub" id="hdr-load-btn" style="display:none;">☁️ Load</button>
-      <button class="header-btn primary" onclick="saveToCloud()" title="Save changes to GitHub" id="hdr-save-btn" style="display:none;">☁️ Save</button>
-      <button class="header-btn" onclick="exportData()">&#8595; Export</button>
-      <label style="margin:0;cursor:pointer;">
-        <button class="header-btn" onclick="this.closest('label').querySelector('input').click()">&#8593; Import</button>
+      <button class="header-btn primary hbtn" onclick="syncToGit()" title="Sync to GitHub" id="hdr-sync-btn">☁↑</button>
+      <button class="header-btn hbtn" onclick="loadCloudData()" title="Load from GitHub" id="hdr-load-btn" style="display:none;">☁↓</button>
+      <button class="header-btn primary hbtn" onclick="saveToCloud()" title="Save to GitHub" id="hdr-save-btn" style="display:none;">☁↑</button>
+      <button class="header-btn hbtn" onclick="exportData()" title="Export data">↓</button>
+      <label style="margin:0;cursor:pointer;" title="Import data">
+        <button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑</button>
         <input type="file" accept=".json" style="display:none" onchange="importData(this)">
       </label>
-      <button class="header-btn" onclick="navigate('search')" title="Search">&#128269;</button>
+      <button class="header-btn hbtn" id="notif-btn" onclick="requestNotifPermission()" title="Notifications">🔔</button>
+      <button class="header-btn hbtn" onclick="navigate('search')" title="Search">🔍</button>
 
       <!-- Theme picker (color + mode) -->
       <div style="position:relative;display:inline-block;">
