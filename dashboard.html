@@ -5816,7 +5816,8 @@ function saveProfile() {
   DB.settings.githubPAT  = document.getElementById('cfg-github-pat').value.trim();
   DB.settings.gistId     = document.getElementById('cfg-gist-id').value.trim();
   saveData();
-  document.querySelector('#sidebar-logo span').textContent = DB.settings.userRole;
+  const _ls = document.querySelector('#sidebar-logo span');
+  if (_ls) _ls.textContent = DB.settings.userRole;
   document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
   _updateSyncButtons();
   alert('Profile saved!');
@@ -6385,7 +6386,8 @@ bootCustomModules();
 applyNavVisibility();
 refreshCategoryDropdowns();
 // apply saved profile
-if (DB.settings.userRole) document.querySelector('#sidebar-logo span').textContent = DB.settings.userRole;
+const _logoSpan = document.querySelector('#sidebar-logo span');
+if (DB.settings.userRole && _logoSpan) _logoSpan.textContent = DB.settings.userRole;
 if (DB.settings.appTitle) document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
 _updateSyncButtons();
 // restore active timer if one was running
