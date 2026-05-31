@@ -6475,17 +6475,22 @@ async function saveToCloud() {
   const btn = document.getElementById('hdr-save-btn');
   if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
 
-  // Try both auth schemes — fine-grained tokens prefer Bearer
-  const authHeaders = pat.startsWith('github_pat_')
-    ? { 'Authorization': `Bearer ${pat}`, 'Accept': 'application/vnd.github.v3+json' }
-    : { 'Authorization': `token ${pat}`,  'Accept': 'application/vnd.github.v3+json' };
+  const authHeaders = {
+    'Authorization': `Bearer ${pat}`,
+    'Accept': 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28'
+  };
 
   try {
-    // Get current file SHA (needed for update)
+    // Get current file SHA
     const getRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
-      headers: authHeaders
+      headers: authHeaders,
+      mode: 'cors'
     });
-    if (!getRes.ok) throw new Error('Cannot read file: ' + getRes.status + ' — check token has Contents:Read/Write permission on the brainmap repo');
+    if (!getRes.ok) {
+      const errBody = await getRes.text();
+      throw new Error('Read failed: HTTP ' + getRes.status + ' — ' + errBody.slice(0,100));
+    }
     const fileInfo = await getRes.json();
     const sha = fileInfo.sha;
 
