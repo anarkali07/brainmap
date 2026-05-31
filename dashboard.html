@@ -6404,8 +6404,8 @@ async function loadCloudData() {
 
   const indicator = document.createElement('div');
   indicator.id = 'cloud-sync-bar';
-  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;background:var(--accent);color:#fff;font-size:0.82rem;font-weight:600;text-align:center;padding:8px;';
-  indicator.textContent = '☁️ Loading your data…';
+  // Invisible — only shows on error
+  indicator.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99999;color:#fff;font-size:0.82rem;font-weight:600;text-align:center;padding:8px;display:none;';
   document.body.appendChild(indicator);
 
   try {
@@ -6432,13 +6432,10 @@ async function loadCloudData() {
     try { renderInbox(); } catch(e) { console.warn('renderInbox error:', e); }
     _updateSyncButtons();
 
-    indicator.style.background = '#16a34a';
-    indicator.textContent = `✅ ${(parsed.interviews||[]).length} candidates loaded — tap to dismiss`;
-    indicator.onclick = () => indicator.remove();
-    setTimeout(() => indicator.remove(), 5000);
+    indicator.remove(); // silent success
   } catch(e) {
-    indicator.style.background = '#dc2626';
-    indicator.textContent = '❌ ' + e.message + ' — tap to dismiss';
+    indicator.style.cssText += 'display:block;background:#dc2626;';
+    indicator.textContent = '❌ Sync error — tap to dismiss';
     indicator.onclick = () => indicator.remove();
     console.error('Cloud load failed:', e);
     // Don't auto-hide on error so user can read it
