@@ -6432,7 +6432,14 @@ async function loadCloudData() {
     try { renderInbox(); } catch(e) { console.warn('renderInbox error:', e); }
     _updateSyncButtons();
 
-    indicator.remove(); // silent success
+    indicator.remove();
+    // Briefly flash Load button green
+    const lb = document.getElementById('hdr-load-btn');
+    if (lb) {
+      const orig = lb.style.cssText;
+      lb.style.cssText += 'background:#16a34a;color:#fff;border-color:#16a34a;';
+      setTimeout(() => { if (lb) lb.style.cssText = orig; }, 2000);
+    }
   } catch(e) {
     indicator.style.cssText += 'display:block;background:#dc2626;';
     indicator.textContent = '❌ Sync error — tap to dismiss';
