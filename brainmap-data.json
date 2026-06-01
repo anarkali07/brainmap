@@ -1,16 +1,46 @@
 {
   "tasks": [
     {
+      "id": "mpupoay0vmp2b",
+      "title": "Dynamic Scanner",
+      "description": "Actual apk can and the request interception issues",
+      "category": "Projects",
+      "priority": "Critical",
+      "status": "New",
+      "dueDate": "2026-06-01",
+      "dueTime": "15:30",
+      "reminderMinutes": 30,
+      "notes": "",
+      "createdAt": "2026-06-01T04:31:18.120Z",
+      "archived": false
+    },
+    {
+      "id": "mpupl4v32o089",
+      "title": "Finding review",
+      "description": "Check the monthly findings",
+      "category": "Team Management",
+      "priority": "Medium",
+      "status": "New",
+      "dueDate": "2026-06-01",
+      "dueTime": "11:30",
+      "reminderMinutes": 5,
+      "notes": "Findings review",
+      "createdAt": "2026-06-01T04:28:50.271Z",
+      "archived": false
+    },
+    {
       "id": "mpr7qyth70cx3",
       "title": "Interview schedules Quess - L2",
       "description": "",
-      "category": "",
+      "category": "Interviews",
       "priority": "Medium",
       "status": "Completed",
       "dueDate": "",
       "notes": "Amol P and Sudhakar k  (L2) schedule interview",
       "createdAt": "2026-05-29T17:46:10.757Z",
-      "archived": false
+      "archived": false,
+      "dueTime": "",
+      "reminderMinutes": null
     },
     {
       "id": "mpr7q1bsekmkw",
@@ -19,10 +49,12 @@
       "category": "Interviews",
       "priority": "Medium",
       "status": "New",
-      "dueDate": "",
+      "dueDate": "2026-06-01",
       "notes": "June 2 - In person - Connect with Ruma Dutta",
       "createdAt": "2026-05-29T17:45:27.352Z",
-      "archived": false
+      "archived": false,
+      "dueTime": "11:00",
+      "reminderMinutes": null
     },
     {
       "id": "mpr7ptpfno77s",
@@ -31,10 +63,12 @@
       "category": "Interviews",
       "priority": "Medium",
       "status": "New",
-      "dueDate": "",
+      "dueDate": "2026-06-01",
       "notes": "Check with Sajan",
       "createdAt": "2026-05-29T17:45:17.475Z",
-      "archived": false
+      "archived": false,
+      "dueTime": "12:00",
+      "reminderMinutes": 5
     }
   ],
   "followUps": [],
@@ -1037,14 +1071,13 @@
     "groqKey": "",
     "openL1": 2,
     "openL2": 7,
-    "hiddenNav": [
-      "personal"
-    ],
+    "hiddenNav": [],
     "colorTheme": "ocean",
     "userName": "Saumya",
     "userRole": "AppSec Team Lead",
     "appTitle": "BrainMap",
     "apiKey": "",
-    "githubPAT": ""
+    "githubPAT": "",
+    "gistId": ""
   }
 }
