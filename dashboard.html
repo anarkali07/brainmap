@@ -4605,8 +4605,9 @@ function openQuestionsModal(interviewId) {
   }
   renderQuestionList();
   openModal('questions-modal');
-  // auto-generate if no questions yet and profile exists
-  if (!i.interviewQuestions.length && i.profileSummary) {
+  // auto-generate only if no questions, profile exists, AND API key is set
+  const _hasKey = (DB.settings.groqKey || DB.settings.apiKey);
+  if (!i.interviewQuestions.length && i.profileSummary && _hasKey) {
     setTimeout(() => aiGenerateQuestions(), 300);
   }
 }
@@ -4718,7 +4719,11 @@ async function aiGenerateQuestions() {
   const provider = DB.settings.aiProvider || 'groq';
   const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   const model    = provider === 'groq' ? 'llama-3.3-70b-versatile' : (DB.settings.aiModel || 'claude-3-5-haiku-20241022');
-  if (!apiKey) { alert('No AI API key set. Go to Settings → AI Settings.'); return; }
+  if (!apiKey) {
+    const btn = document.getElementById('iq-ai-btn');
+    if (btn) { btn.innerHTML = '🔑 Set Groq key in Settings → AI'; btn.disabled = false; }
+    return;
+  }
 
   const btn = document.getElementById('iq-ai-btn');
   btn.innerHTML = '<span class="spinner"></span> Generating…'; btn.disabled = true;
