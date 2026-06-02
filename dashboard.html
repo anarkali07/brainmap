@@ -3697,7 +3697,7 @@ function autoFillFromResume(input) {
   input.value = '';
 
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   if (!apiKey) {
     alert('No API key found. Click "🔑 API Key" in the header to save your Groq key first.');
     return;
@@ -3830,7 +3830,7 @@ function renderImgQueue() {
 async function processImageResume() {
   if (!_imgQueue.length) return;
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   if (!apiKey) { alert('No API key found. Set your key in Config → AI Settings.'); return; }
 
   const statusEl    = document.getElementById('img-paste-status');
@@ -4026,7 +4026,7 @@ function confirmPartnerUpload() {
 
 async function _processResumeUpload(files, partnerName) {
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   if (!apiKey) return;
 
   const statusEl = document.getElementById('resume-autofill-status');
@@ -4475,7 +4475,7 @@ async function generateProfileSilent(id) {
   if (!i) return;
   // Always regenerate with the proper AppSec prompt (overrides the crude upload-time profile_summary)
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   if (!apiKey) return;
   const resumeText = i.resumeText || '';
   if (!resumeText.trim()) return;
@@ -4491,7 +4491,7 @@ async function generateProfile(id) {
   if (!i) return;
 
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   if (!apiKey) { alert('No API key set. Configure it in Config → AI Settings.'); return; }
 
   const resumeText = i.resumeText || '';
@@ -4669,7 +4669,7 @@ async function aiGenerateQuestions() {
   const i = DB.interviews.find(x => x.id === _iqInterviewId);
   if (!i) return;
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   const model    = provider === 'groq' ? 'llama-3.3-70b-versatile' : (DB.settings.aiModel || 'claude-3-5-haiku-20241022');
   if (!apiKey) { alert('No AI API key set. Go to Settings → AI Settings.'); return; }
 
@@ -5280,7 +5280,7 @@ function moveRank(id, dir) {
 
 async function aiRankProfiles() {
   const provider = DB.settings.aiProvider || 'groq';
-  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  const apiKey = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
   const model    = provider === 'groq' ? 'llama-3.3-70b-versatile' : (DB.settings.aiModel || 'claude-3-5-haiku-20241022');
 
   if (!apiKey) { alert('No AI API key set. Go to Config → AI Settings.'); return; }
