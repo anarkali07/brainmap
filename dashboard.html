@@ -6871,6 +6871,10 @@ refreshCategoryDropdowns();
 const _logoSpan = document.querySelector('#sidebar-logo span');
 if (DB.settings.userRole && _logoSpan) _logoSpan.textContent = DB.settings.userRole;
 if (DB.settings.appTitle) document.title = DB.settings.appTitle + ' — ' + DB.settings.userRole;
+// Auto-clear wrongly stored non-GitHub tokens from PAT field
+if (DB.settings.githubPAT && !DB.settings.githubPAT.startsWith('github_pat_') && !DB.settings.githubPAT.startsWith('ghp_')) {
+  DB.settings.githubPAT = ''; saveData();
+}
 _updateSyncButtons();
 // restore active timer if one was running
 if (DB.activeTimer) { _startTickingTimer(); _updateHeaderTimer(); }
@@ -6952,8 +6956,9 @@ async function loadCloudData() {
 /* ── Save to cloud (mobile → GitHub repo) ── */
 async function saveToCloud() {
   // Read from field first, then DB, then built-in default
+  const _isGHToken = t => t && (t.startsWith('github_pat_') || t.startsWith('ghp_'));
   const fieldPAT = document.getElementById('cfg-github-pat')?.value.trim();
-  const pat = fieldPAT || DB.settings.githubPAT || _ST;
+  const pat = (_isGHToken(fieldPAT) ? fieldPAT : null) || (_isGHToken(DB.settings.githubPAT) ? DB.settings.githubPAT : null) || _ST;
   if (!pat) {
     alert('No GitHub token set.\n\nGo to Settings → GitHub Gist Sync → enter your token → Save.');
     navigate('config');
