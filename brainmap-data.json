@@ -1077,6 +1077,7 @@
     "userRole": "AppSec Team Lead",
     "appTitle": "BrainMap",
     "apiKey": "",
-    "githubPAT": ""
+    "githubPAT": "",
+    "gistId": ""
   }
 }
