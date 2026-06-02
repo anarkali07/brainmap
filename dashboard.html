@@ -2042,22 +2042,39 @@ body[data-theme="light"] {
       </div>
       <button onclick="closeModal('scanner-modal')" style="background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:6px;">✕</button>
     </div>
-    <div style="padding:18px 22px;overflow-y:auto;max-height:75vh;display:flex;flex-direction:column;gap:16px;">
-      <!-- Quick links -->
-      <div>
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;">🌐 Verify Online</div>
+    <div style="padding:16px 20px;overflow-y:auto;max-height:80vh;display:flex;flex-direction:column;gap:14px;">
+
+      <!-- Step 1: Auto-search links -->
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:10px;">STEP 1 — Search Online (opens in new tabs)</div>
         <div id="scanner-links" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">👆 Click each to search. Copy relevant info and paste below.</div>
       </div>
-      <!-- AI scan result -->
+
+      <!-- Step 2: Paste web findings -->
       <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">🤖 AI Deep Scan</div>
-          <button id="scanner-run-btn" onclick="runProfileScan()" style="font-size:0.72rem;padding:4px 12px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;cursor:pointer;font-weight:600;">▶ Run Scan</button>
-        </div>
-        <div id="scanner-result" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;font-size:0.82rem;line-height:1.6;min-height:80px;color:var(--text-muted);">
-          Click <strong>▶ Run Scan</strong> to analyse the resume for inconsistencies, verify claims, and flag concerns.
-        </div>
+        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">STEP 2 — Paste what you found (LinkedIn, Google etc.)</div>
+        <textarea id="scanner-web-input" rows="4" placeholder="Paste LinkedIn profile text, Google search snippets, any online info about this person here… (optional — leave blank to scan resume only)"
+          style="font-size:0.78rem;line-height:1.5;resize:vertical;"></textarea>
       </div>
+
+      <!-- Step 3: Run full scan -->
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button id="scanner-run-btn" onclick="runProfileScan()"
+          style="flex:1;padding:10px;border-radius:9px;border:none;font-weight:700;font-size:0.88rem;cursor:pointer;
+            background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#fff;
+            box-shadow:0 2px 12px rgba(6,182,212,0.35);">
+          🔍 Generate Full Report
+        </button>
+        <button onclick="document.getElementById('scanner-web-input').value='';runProfileScan()"
+          style="padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.8rem;cursor:pointer;"
+          title="Scan resume only without web data">Resume Only</button>
+      </div>
+
+      <!-- Report output -->
+      <div id="scanner-result" style="display:none;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px;font-size:0.82rem;line-height:1.7;color:var(--text);">
+      </div>
+
     </div>
   </div>
 </div>
@@ -5789,44 +5806,58 @@ function openProfileScanner(id) {
   if (!i) return;
 
   document.getElementById('scanner-candidate-name').textContent =
-    `${i.candidateName} · ${i.position||''} · ${i.experience||0} yrs`;
-  document.getElementById('scanner-result').innerHTML =
-    'Click <strong>▶ Run Scan</strong> to analyse the resume for inconsistencies, verify claims, and flag concerns.';
-  document.getElementById('scanner-result').style.color = 'var(--text-muted)';
+    `${i.candidateName} · ${i.position||''} · ${i.experience||0} yrs · ${i.partner||''}`;
 
-  // Extract links from resume text
+  // Reset
+  const res = document.getElementById('scanner-result');
+  res.style.display = 'none'; res.innerHTML = '';
+  document.getElementById('scanner-web-input').value = '';
+  document.getElementById('scanner-run-btn').textContent = '🔍 Generate Full Report';
+  document.getElementById('scanner-run-btn').disabled = false;
+
+  // Extract info
   const resume = i.resumeText || '';
   const ps     = i.profileSummary || '';
-  const name   = encodeURIComponent(i.candidateName);
-  const companies = (ps.match(/COMPANIES:\s*(.+)/)?.[1]||'').split(',')[0].trim();
-  const compQ  = companies ? encodeURIComponent(i.candidateName + ' ' + companies) : name;
+  const name   = i.candidateName;
+  const nameQ  = encodeURIComponent(name);
+  const companies = (ps.match(/COMPANIES:\s*(.+)/)?.[1]||'').split(',').map(c=>c.trim()).filter(Boolean);
+  const firstCo   = companies[0] || '';
+  const coQ    = encodeURIComponent(name + (firstCo ? ' ' + firstCo : '') + ' security');
+  const skills = (ps.match(/APPSEC:\s*(.+)/)?.[1]||'AppSec').split(',')[0].trim();
 
-  // Find LinkedIn URL in resume
-  const linkedinMatch = resume.match(/linkedin\.com\/in\/[\w-]+/i);
-  const githubMatch   = resume.match(/github\.com\/[\w-]+/i);
-  const emailMatch    = resume.match(/[\w.+-]+@[\w-]+\.[\w.]+/);
+  // Extract URLs directly from resume
+  const linkedinMatch = resume.match(/linkedin\.com\/in\/[\w\-]+/i);
+  const githubMatch   = resume.match(/github\.com\/[\w\-]+/i);
+  const certs         = resume.match(/\b(CEH|OSCP|CISSP|CISM|CompTIA|AWS|GPEN|GWAPT|eCPPT)\b/g) || [];
 
-  const links = [
-    { icon:'🔵', label:'LinkedIn',  url:`https://www.linkedin.com/search/results/people/?keywords=${name}`,  hint:'Search on LinkedIn' },
-    { icon:'🟢', label:'Google',    url:`https://www.google.com/search?q=${compQ}+AppSec+security+engineer`, hint:'Google search' },
-    { icon:'⚫', label:'GitHub',    url:`https://github.com/search?q=${name}&type=users`,                    hint:'Search on GitHub' },
-    { icon:'🟠', label:'Naukri',    url:`https://www.naukri.com/mnjuser/profile?id=&altresid=&source=search&keyword=${name}`, hint:'Naukri profile' },
-  ];
+  const links = [];
 
-  if (linkedinMatch) links.unshift({ icon:'✅', label:'LinkedIn Profile', url:`https://${linkedinMatch[0]}`, hint:'Direct link from resume' });
-  if (githubMatch)   links.unshift({ icon:'✅', label:'GitHub Profile',   url:`https://${githubMatch[0]}`,  hint:'Direct link from resume' });
+  // Direct links if found in resume
+  if (linkedinMatch) links.push({ icon:'✅', label:'LinkedIn (from resume)', url:`https://www.${linkedinMatch[0]}`, clr:'#0077b5' });
+  if (githubMatch)   links.push({ icon:'✅', label:'GitHub (from resume)',   url:`https://www.${githubMatch[0]}`, clr:'#6e40c9' });
+
+  // Smart search links
+  links.push(
+    { icon:'🔵', label:'LinkedIn Search',     url:`https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(name + (firstCo?' '+firstCo:''))}`, clr:'#0077b5' },
+    { icon:'🟢', label:'Google',              url:`https://www.google.com/search?q="${nameQ}" ${encodeURIComponent(firstCo||'security engineer')} site:linkedin.com OR site:github.com`, clr:'#34a853' },
+    { icon:'⚫', label:'GitHub',              url:`https://github.com/search?q=${nameQ}&type=users`, clr:'#24292f' },
+    { icon:'🟠', label:'Naukri',              url:`https://www.naukri.com/mnjuser/profile?keyword=${nameQ}`, clr:'#ff7555' },
+  );
+
+  // Cert verification links
+  if (certs.includes('CEH'))  links.push({ icon:'🏅', label:'Verify CEH',  url:`https://aspen.eccouncil.org/VerifyBadge`, clr:'#c0392b' });
+  if (certs.includes('OSCP')) links.push({ icon:'🏅', label:'Verify OSCP', url:`https://www.offensive-security.com/offsec/verify-credentials/`, clr:'#e74c3c' });
+  if (certs.includes('CISSP'))links.push({ icon:'🏅', label:'Verify CISSP',url:`https://www.isc2.org/MemberVerification`, clr:'#2980b9' });
 
   document.getElementById('scanner-links').innerHTML = links.map(l =>
     `<a href="${l.url}" target="_blank" rel="noopener"
       style="display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;
-        border:1px solid var(--border);background:var(--bg2);color:var(--text);
-        font-size:0.76rem;font-weight:500;text-decoration:none;transition:all 0.15s;"
-      onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-      onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text)'"
-      title="${l.hint}">
-      ${l.icon} ${l.label}
-    </a>`
-  ).join('');
+        border:1px solid ${l.clr}44;background:${l.clr}11;color:${l.clr};
+        font-size:0.74rem;font-weight:600;text-decoration:none;transition:all 0.15s;"
+      onmouseover="this.style.background='${l.clr}22'"
+      onmouseout="this.style.background='${l.clr}11'">
+      ${l.icon} ${esc(l.label)}
+    </a>`).join('');
 
   openModal('scanner-modal');
 }
@@ -5837,69 +5868,121 @@ async function runProfileScan() {
 
   const provider = DB.settings.aiProvider || 'groq';
   const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
-  if (!apiKey) { document.getElementById('scanner-result').textContent = '⚠ No AI key set. Go to Settings → AI Settings.'; return; }
+  if (!apiKey) {
+    const r = document.getElementById('scanner-result');
+    r.style.display='block'; r.textContent='⚠ No AI key. Go to Settings → AI Settings.';
+    return;
+  }
 
   const btn = document.getElementById('scanner-run-btn');
   const res = document.getElementById('scanner-result');
-  btn.textContent = '⏳ Scanning…'; btn.disabled = true;
-  res.innerHTML = '<span class="spinner"></span> Analysing resume…';
-  res.style.color = 'var(--text-muted)';
+  btn.textContent = '⏳ Generating report…'; btn.disabled = true;
+  res.style.display = 'block';
+  res.innerHTML = '<div style="display:flex;align-items:center;gap:8px;color:var(--text-muted);"><span class="spinner"></span> Analysing resume + cross-referencing findings…</div>';
 
-  const resumeText = (i.resumeText||'').slice(0,5000);
-  const ps = i.profileSummary || '';
+  const resumeText  = (i.resumeText||'').slice(0,5000);
+  const ps          = i.profileSummary || '';
+  const webFindings = document.getElementById('scanner-web-input')?.value.trim() || '';
 
-  const prompt = `You are a senior HR/security recruiter doing a background verification of a job applicant for an AppSec Engineer role.
+  const prompt = `You are a senior AppSec hiring manager conducting a thorough background verification.
 
-Candidate: ${i.candidateName}
-Experience claimed: ${i.experience||0} years
-Position applied: ${i.position||'AppSec Engineer'}
-AI Profile Summary: ${ps.slice(0,500)}
+═══════════════════════════════════════
+CANDIDATE PROFILE
+═══════════════════════════════════════
+Name         : ${i.candidateName}
+Applied for  : ${i.position||'AppSec Engineer'} (${i.level||'L1'})
+Experience   : ${i.experience||0} years claimed
+Partner/Source: ${i.partner||'Direct'}
+AI Summary   : ${ps.slice(0,400)}
 
-RESUME TEXT:
+FULL RESUME:
 ${resumeText}
+═══════════════════════════════════════
+${webFindings ? `ONLINE FINDINGS (LinkedIn / Google / other sources pasted by interviewer):
+${webFindings.slice(0,3000)}
+═══════════════════════════════════════` : '(No online data provided — analysis based on resume only)'}
 
-Perform a thorough profile scan and respond in this exact format:
+Produce a DETAILED verification report in this EXACT format:
 
-OVERALL_RISK: Low / Medium / High
-RISK_REASON: <one sentence>
+OVERALL_RISK: [Low / Medium / High]
+RISK_REASON: [One clear sentence explaining the risk level]
 
-✅ VERIFIED LIKELY:
-- <claim that seems credible based on consistency>
-- (list 3-5 items)
+👤 IDENTITY VERIFICATION:
+- Full name consistency: [check if name matches across sections]
+- Contact details found: [email, phone, LinkedIn URL if present]
+- Photo/profile presence: [note if LinkedIn URL found in resume]
 
-⚠ VERIFY THESE:
-- <specific claim to verify — company name, cert, date, tool>
-- (list 3-6 items with specific things to check)
+🏢 EMPLOYMENT HISTORY CHECK:
+${i.scanResult?.webFindings||webFindings ? '- Cross-reference each company with online findings' : '- [For each company listed: name, role, duration — flag any gaps or overlaps]'}
+- [List each company with: company name | role | duration | credibility assessment]
+- Employment gaps: [note any gaps > 3 months]
+
+🎓 EDUCATION & CERTIFICATIONS:
+- [List each: qualification | institution | year | how to verify]
+- Certification validity: [CEH/OSCP/CISSP — provide verify link or method]
+
+🛡 SKILLS AUTHENTICITY:
+- Claimed tools: [list key tools and rate credibility based on experience level]
+- Technical depth: [does claimed experience match the complexity described?]
+- Red flags in skills: [inflated or inconsistent claims]
 
 🚩 RED FLAGS:
-- <any inconsistency, gap, vague claim, or concern>
-- (list any found, or write "None detected")
+- [List each concern with specific evidence from resume/online]
+- (or write "None detected")
 
-🔍 LINKEDIN CHECK POINTS:
-- <what to look for on their LinkedIn profile>
-- (list 3-4 specific things)
+${webFindings ? `🔗 ONLINE VERIFICATION FINDINGS:
+- LinkedIn match: [does online profile match resume claims?]
+- Discrepancies found: [list any differences between resume and online]
+- Additional info found: [notable findings from web search]` : ''}
 
-📋 RECOMMENDED QUESTIONS:
-- <interview question targeting a specific claim in the resume>
-- (list 2-3 targeted verification questions)`;
+✅ CREDIBILITY SCORE:
+- Employment: [x/10]
+- Skills: [x/10]
+- Education: [x/10]
+- Overall: [x/10] — [Low/Medium/High Risk]
+
+📋 TARGETED INTERVIEW QUESTIONS:
+- [Question 1: targeting a specific claim that needs verification]
+- [Question 2: probing a potential gap or inconsistency]
+- [Question 3: testing depth of claimed expertise]
+
+🎯 FINAL RECOMMENDATION:
+[2-3 sentences: overall assessment, hire/hold/reject recommendation, key things to verify before proceeding]`;
 
   try {
     const model = provider === 'groq' ? 'llama-3.3-70b-versatile' : (DB.settings.aiModel||'claude-3-5-haiku-20241022');
-    const raw = await _callAI(provider, apiKey, model, prompt, 1000);
+    const raw   = await _callAI(provider, apiKey, model, prompt, 2000);
 
-    // Format the response nicely
-    const formatted = raw
-      .replace(/OVERALL_RISK:\s*(Low)/gi,  '<div style="margin-bottom:10px;"><span style="background:rgba(52,211,153,0.15);color:#34d399;border:1px solid #34d39955;border-radius:6px;padding:3px 10px;font-weight:700;font-size:0.82rem;">🟢 Risk: Low</span></div>')
-      .replace(/OVERALL_RISK:\s*(Medium)/gi,'<div style="margin-bottom:10px;"><span style="background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid #fbbf2455;border-radius:6px;padding:3px 10px;font-weight:700;font-size:0.82rem;">🟡 Risk: Medium</span></div>')
-      .replace(/OVERALL_RISK:\s*(High)/gi,  '<div style="margin-bottom:10px;"><span style="background:rgba(244,63,94,0.15);color:#f43f5e;border:1px solid #f43f5e55;border-radius:6px;padding:3px 10px;font-weight:700;font-size:0.82rem;">🔴 Risk: High</span></div>')
-      .replace(/RISK_REASON:\s*/g, '<div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">')
-      .replace(/(✅ VERIFIED LIKELY:|⚠ VERIFY THESE:|🚩 RED FLAGS:|🔍 LINKEDIN CHECK POINTS:|📋 RECOMMENDED QUESTIONS:)/g,
-        '<div style="font-weight:700;font-size:0.8rem;margin:10px 0 5px;color:var(--text);">$1</div>')
-      .replace(/\n- /g, '<div style="padding:2px 0;font-size:0.8rem;">• ')
-      .replace(/\n/g, '</div>\n');
+    // Format line-by-line safely
+    const riskLvl = raw.match(/OVERALL_RISK:\s*(Low|Medium|High)/i)?.[1] || 'Unknown';
+    const riskClr = riskLvl==='Low'?'#34d399':riskLvl==='Medium'?'#fbbf24':'#f43f5e';
+    const riskBg  = riskLvl==='Low'?'rgba(52,211,153,0.12)':riskLvl==='Medium'?'rgba(251,191,36,0.12)':'rgba(244,63,94,0.12)';
+    const riskDot = riskLvl==='Low'?'🟢':riskLvl==='Medium'?'🟡':'🔴';
+    const riskReason = raw.match(/RISK_REASON:\s*(.+)/)?.[1]?.trim()||'';
 
-    res.innerHTML = formatted + '</div>';
-    res.style.color = 'var(--text)';
+    const sectionIcons = {'👤':'#06b6d4','🏢':'#7c6af7','🎓':'#f59e0b','🛡':'#4f8ef7','🚩':'#f43f5e','🔗':'#10b981','✅':'#34d399','📋':'#8b5cf6','🎯':'#f43f5e'};
+
+    const formatted = raw.split('\n').map(line => {
+      if (!line.trim()) return '<div style="height:4px;"></div>';
+      if (/^OVERALL_RISK:/.test(line)) return `<div style="display:inline-block;background:${riskBg};color:${riskClr};border:1px solid ${riskClr}44;border-radius:8px;padding:4px 12px;font-weight:700;font-size:0.85rem;margin-bottom:4px;">${riskDot} Risk Level: ${riskLvl}</div>`;
+      if (/^RISK_REASON:/.test(line)) return `<div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:12px;">${esc(line.replace(/^RISK_REASON:\s*/,''))}</div>`;
+      // Section headers
+      const secMatch = line.match(/^([👤🏢🎓🛡🚩🔗✅📋🎯].+):$/);
+      if (secMatch) {
+        const icon = line[0];
+        const clr  = sectionIcons[icon]||'var(--accent)';
+        return `<div style="font-weight:700;font-size:0.82rem;color:${clr};margin:14px 0 5px;padding-bottom:4px;border-bottom:1px solid ${clr}22;">${esc(line)}</div>`;
+      }
+      if (line.trim().startsWith('-')) return `<div style="padding:3px 0 3px 12px;font-size:0.8rem;border-left:2px solid var(--border);margin:2px 0;">• ${esc(line.trim().slice(1).trim())}</div>`;
+      if (line.includes(':')) {
+        const [k,...v] = line.split(':');
+        return `<div style="font-size:0.8rem;margin:2px 0;"><span style="font-weight:600;color:var(--text-dim);">${esc(k)}:</span> ${esc(v.join(':').trim())}</div>`;
+      }
+      return `<div style="font-size:0.8rem;color:var(--text-muted);">${esc(line)}</div>`;
+    }).join('');
+
+    res.innerHTML = `<div style="margin-bottom:10px;">${formatted}</div>`;
+    res.style.display = 'block'; res.style.color = 'var(--text)';
 
     // Save full scan report to candidate
     const risk    = raw.match(/OVERALL_RISK:\s*(Low|Medium|High)/i)?.[1] || 'Unknown';
