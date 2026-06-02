@@ -5991,8 +5991,6 @@ function renderScanReports() {
           </div>
           <div style="font-size:0.74rem;color:var(--text-muted);margin-top:2px;">${esc(i.position||'')} · ${i.experience||0} yrs · ${esc(i.partner||'—')} · Scanned ${when}</div>
         </div>
-        <!-- summary preview when collapsed (shown by default) -->
-        <div id="sc-preview-${i.id}" style="font-size:0.74rem;color:var(--text-muted);max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(sr.summary||'')}</div>
         <div style="display:flex;gap:5px;flex-shrink:0;" onclick="event.stopPropagation()">
           <button onclick="openProfileScanner('${i.id}')" style="font-size:0.7rem;padding:3px 10px;border-radius:6px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">🔍 Scan</button>
           <button onclick="openQuestionsModal('${i.id}')" style="font-size:0.7rem;padding:3px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);cursor:pointer;">📋</button>
@@ -6037,15 +6035,12 @@ function renderScanReports() {
 }
 
 function toggleScanCard(id) {
-  const body    = document.getElementById(id);
-  const cid     = id.replace('sc-','');
-  const arrow   = document.getElementById('sc-arrow-'   + cid);
-  const preview = document.getElementById('sc-preview-' + cid);
+  const body  = document.getElementById(id);
+  const arrow = document.getElementById('sc-arrow-' + id.replace('sc-',''));
   if (!body) return;
   const isCollapsed = body.style.display === 'none';
-  body.style.display    = isCollapsed ? '' : 'none';
-  if (arrow)   arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
-  if (preview) preview.style.display = isCollapsed ? 'none' : 'block';
+  body.style.display = isCollapsed ? '' : 'none';
+  if (arrow) arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
 }
 
 function renderSchedulesPage() {
