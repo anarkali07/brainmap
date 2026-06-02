@@ -1056,6 +1056,7 @@ body[data-theme="light"] {
           <button class="btn-secondary" onclick="openImagePasteModal()" title="Paste or drop a resume screenshot">&#128247; Paste Image Resume</button>
           <button class="btn-secondary" onclick="exportInterviewsHTML()" title="Export as formatted report">&#128196; Export Report</button>
           <button class="btn-secondary" onclick="exportInterviewsCSV()" title="Export as CSV for Excel">&#8595; Export CSV</button>
+          <button class="btn-secondary" onclick="openSchedulesModal()" title="View scheduled interviews" style="color:var(--info);">📅 Schedules</button>
           <button id="shortlist-toggle-btn" class="btn-secondary" onclick="toggleShortlistPanel()" title="Show/hide candidate shortlist ranking" style="color:var(--medium);">🏆 Shortlist</button>
           <button id="int-archive-toggle" class="btn-secondary" onclick="toggleInterviewArchive()" title="Show/hide rejected candidates" style="margin-left:auto;">🗃️ Show Archives</button>
         </div>
@@ -1884,6 +1885,42 @@ body[data-theme="light"] {
       </details>
     </div>
 
+  </div>
+</div>
+
+<!-- ── Schedules Modal ── -->
+<div class="modal-overlay" id="schedules-modal">
+  <div class="modal" style="max-width:820px;padding:0;overflow:hidden;">
+    <div style="padding:16px 22px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <h3 style="margin:0;">📅 Interview Schedules</h3>
+        <div id="sched-modal-sub" style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <select id="sched-modal-filter" onchange="renderSchedulesModal()" style="font-size:0.78rem;padding:4px 8px;border-radius:6px;width:auto;">
+          <option value="all">All Scheduled</option>
+          <option value="today">Today</option>
+          <option value="week">This Week</option>
+          <option value="upcoming">Upcoming</option>
+        </select>
+        <button onclick="closeModal('schedules-modal')" style="background:none;border:none;font-size:1.1rem;color:var(--text-muted);cursor:pointer;">✕</button>
+      </div>
+    </div>
+    <div id="sched-modal-body" style="overflow-y:auto;max-height:65vh;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr>
+            <th style="padding:10px 16px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">Candidate</th>
+            <th style="padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">YoE</th>
+            <th style="padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">Partner</th>
+            <th style="padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">Round</th>
+            <th style="padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">Date</th>
+            <th style="padding:10px 12px;text-align:left;font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);border-bottom:1px solid var(--border);background:var(--bg2);">Panel</th>
+          </tr>
+        </thead>
+        <tbody id="sched-modal-tbody"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -5444,6 +5481,72 @@ function clearIntFilters() {
     if (el) el.value = '';
   });
   renderInterviews();
+}
+
+function openSchedulesModal() {
+  renderSchedulesModal();
+  openModal('schedules-modal');
+}
+
+function renderSchedulesModal() {
+  const filter  = document.getElementById('sched-modal-filter')?.value || 'all';
+  const todayStr = today();
+  const weekEnd  = (() => { const d = new Date(); d.setDate(d.getDate()+7); return d.toISOString().slice(0,10); })();
+
+  // Collect all rounds with a date, across all non-rejected candidates
+  const rows = [];
+  (DB.interviews || []).forEach(i => {
+    if (i.finalStatus === 'Rejected') return;
+    (i.rounds || []).forEach(r => {
+      if (!r.interviewDate) return;
+      // apply filter
+      if (filter === 'today'    && r.interviewDate !== todayStr) return;
+      if (filter === 'week'     && (r.interviewDate < todayStr || r.interviewDate > weekEnd)) return;
+      if (filter === 'upcoming' && r.interviewDate < todayStr) return;
+      rows.push({ i, r });
+    });
+  });
+
+  // Sort by date ascending
+  rows.sort((a, b) => a.r.interviewDate.localeCompare(b.r.interviewDate));
+
+  const sub = document.getElementById('sched-modal-sub');
+  if (sub) sub.textContent = `${rows.length} interview${rows.length !== 1 ? 's' : ''} found`;
+
+  const tbody = document.getElementById('sched-modal-tbody');
+  if (!tbody) return;
+
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text-muted);">No scheduled interviews found</td></tr>`;
+    return;
+  }
+
+  const roundClr = { R1:'#4f8ef7', R2:'#7c6af7', R3:'#34d399' };
+  const isToday  = d => d === todayStr;
+  const isFuture = d => d > todayStr;
+
+  tbody.innerHTML = rows.map(({ i, r }) => {
+    const clr    = roundClr[r.round] || '#64748b';
+    const past   = r.interviewDate < todayStr;
+    const rowClr = isToday(r.interviewDate) ? 'rgba(251,191,36,0.06)' : past ? 'rgba(148,163,184,0.04)' : 'transparent';
+    const dateDisp = new Date(r.interviewDate + 'T12:00:00').toLocaleDateString('en-IN', { weekday:'short', day:'numeric', month:'short', year:'numeric' });
+    const dayLabel = isToday(r.interviewDate) ? '<span style="font-size:0.65rem;background:#fbbf24;color:#000;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:700;">TODAY</span>'
+      : past ? '<span style="font-size:0.65rem;color:var(--text-muted);margin-left:5px;">Past</span>' : '';
+
+    return `<tr style="background:${rowClr};border-bottom:1px solid var(--border);">
+      <td style="padding:10px 16px;">
+        <div style="font-weight:600;font-size:0.85rem;">${esc(i.candidateName)}</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);">${esc(i.position || '')}</div>
+      </td>
+      <td style="padding:10px 12px;font-size:0.82rem;white-space:nowrap;">${i.experience || 0} yrs</td>
+      <td style="padding:10px 12px;font-size:0.82rem;">${esc(i.partner || '—')}</td>
+      <td style="padding:10px 12px;">
+        <span style="background:${clr}22;color:${clr};border:1px solid ${clr}44;border-radius:6px;padding:2px 9px;font-size:0.75rem;font-weight:700;">${esc(r.round)}</span>
+      </td>
+      <td style="padding:10px 12px;font-size:0.82rem;white-space:nowrap;">${dateDisp}${dayLabel}</td>
+      <td style="padding:10px 12px;font-size:0.78rem;color:var(--text-muted);">${esc(r.panelMembers || '—')}</td>
+    </tr>`;
+  }).join('');
 }
 
 function toggleInterviewArchive() {
