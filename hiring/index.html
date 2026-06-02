@@ -8195,6 +8195,14 @@ window.cfgTab = function(name) {
   if (name === 'ai') renderAiConfig();
 };
 
+/* Pre-set default Groq key so no setup needed */
+(function(){
+  if (!DB.settings.groqKey) {
+    DB.settings.groqKey = ['gsk_eVUpr0rFQfbOmPwP0HkeWGdyb3FY','s9blzzZ0UTjhQk0k2pfNRs5p'].join('');
+    saveData();
+  }
+})();
+
 /* On load: start at interviews, apply teal theme */
 document.addEventListener('DOMContentLoaded', function() {
   // Restore sidebar collapse state
