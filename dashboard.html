@@ -1939,10 +1939,15 @@ body[data-theme="light"] {
 <div class="modal-overlay" id="partner-upload-modal">
   <div class="modal" style="max-width:360px;">
     <h3>🤝 Partner / Source</h3>
-    <p style="font-size:0.82rem;color:var(--text-muted);margin:6px 0 12px;">Enter the partner or source name for these profiles. Leave blank if none.</p>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin:6px 0 12px;">Select an existing partner or add a new one.</p>
     <label>Partner / Hiring Agency</label>
-    <input id="upload-partner-name" placeholder="e.g. Infosys, Naukri, Internal, LinkedIn" autocomplete="off">
-    <div style="margin-top:6px;">
+    <select id="upload-partner-select" onchange="onPartnerSelectChange()" style="margin-bottom:8px;">
+      <option value="">— None —</option>
+    </select>
+    <!-- shown only when "Other" selected -->
+    <input id="upload-partner-name" placeholder="Type new partner name…" autocomplete="off"
+      style="display:none;margin-top:4px;">
+    <div style="margin-top:8px;">
       <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem;color:var(--text);">
         <input type="checkbox" id="upload-partner-remember" style="width:auto;"> Remember for this session
       </label>
@@ -3705,13 +3710,47 @@ function autoFillFromResume(input) {
 
   _pendingUploadFiles = files;
 
-  // pre-fill from session memory if checkbox was ticked last time
-  const nameInput = document.getElementById('upload-partner-name');
-  nameInput.value = _sessionPartnerName || '';
+  // populate partner dropdown from existing interviews
+  const existingPartners = [...new Set(
+    (DB.interviews || []).map(i => i.partner || '').filter(Boolean)
+  )].sort();
+
+  const sel = document.getElementById('upload-partner-select');
+  sel.innerHTML = '<option value="">— None —</option>' +
+    existingPartners.map(p => `<option value="${esc(p)}">${esc(p)}</option>`).join('') +
+    '<option value="__other__">➕ Add new partner…</option>';
+
+  // restore session memory
+  const remembered = _sessionPartnerName || '';
+  if (remembered && existingPartners.includes(remembered)) {
+    sel.value = remembered;
+    document.getElementById('upload-partner-name').style.display = 'none';
+    document.getElementById('upload-partner-name').value = '';
+  } else if (remembered) {
+    sel.value = '__other__';
+    document.getElementById('upload-partner-name').style.display = 'block';
+    document.getElementById('upload-partner-name').value = remembered;
+  } else {
+    sel.value = '';
+    document.getElementById('upload-partner-name').style.display = 'none';
+  }
+
   document.getElementById('upload-partner-remember').checked = !!_sessionPartnerName;
   document.getElementById('upload-file-count').textContent =
     `📎 ${files.length} file${files.length > 1 ? 's' : ''} selected`;
   openModal('partner-upload-modal');
+}
+
+function onPartnerSelectChange() {
+  const sel = document.getElementById('upload-partner-select');
+  const inp = document.getElementById('upload-partner-name');
+  if (sel.value === '__other__') {
+    inp.style.display = 'block';
+    inp.focus();
+  } else {
+    inp.style.display = 'none';
+    inp.value = '';
+  }
 }
 
 /* ── Image Paste Resume ────────────────────────────────────── */
@@ -4016,8 +4055,12 @@ function cancelPartnerUpload() {
 }
 
 function confirmPartnerUpload() {
-  const partnerName = document.getElementById('upload-partner-name').value.trim();
-  const remember    = document.getElementById('upload-partner-remember').checked;
+  const sel = document.getElementById('upload-partner-select');
+  const inp = document.getElementById('upload-partner-name');
+  const partnerName = sel.value === '__other__'
+    ? inp.value.trim()
+    : (sel.value || '');
+  const remember = document.getElementById('upload-partner-remember').checked;
   _sessionPartnerName = remember ? partnerName : '';
   closeModal('partner-upload-modal');
   _processResumeUpload(_pendingUploadFiles, partnerName);
