@@ -810,6 +810,7 @@ body[data-theme="light"] {
       <div class="nav-section-label">Hiring</div>
       <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Interviews</span></div>
       <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:16px;height:16px;"></i></span><span class="nav-label"> Schedules</span></div>
+      <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scan Reports</span></div>
       <div class="nav-section-label">Life</div>
       <div class="nav-item" data-section="personal"><span class="nav-icon"><i data-lucide="heart-pulse" style="width:16px;height:16px;"></i></span><span class="nav-label"> Personal</span></div>
       <div class="nav-item" data-section="timetracker"><span class="nav-icon"><i data-lucide="timer" style="width:16px;height:16px;"></i></span><span class="nav-label"> Time Tracker</span></div>
@@ -1320,6 +1321,28 @@ body[data-theme="light"] {
             <tbody id="sched-page-tbody"></tbody>
           </table>
         </div>
+      </section>
+
+      <!-- ======================================================
+           SECTION: SCAN REPORTS
+           ====================================================== -->
+      <section id="sec-scanreports" class="section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+          <h2 style="margin:0;">🔍 Scan Reports</h2>
+          <div style="display:flex;gap:8px;">
+            <select id="scan-report-filter" onchange="renderScanReports()" style="padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:0.82rem;width:auto;">
+              <option value="all">All Scanned</option>
+              <option value="High">🔴 High Risk</option>
+              <option value="Medium">🟡 Medium Risk</option>
+              <option value="Low">🟢 Low Risk</option>
+            </select>
+            <button onclick="openBulkScanner()" style="padding:5px 14px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;">+ New Scan</button>
+          </div>
+        </div>
+        <!-- Summary bar -->
+        <div id="scan-report-summary" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;"></div>
+        <!-- Reports -->
+        <div id="scan-report-list" style="display:flex;flex-direction:column;gap:10px;"></div>
       </section>
 
       <!-- ======================================================
@@ -2376,6 +2399,7 @@ function navigate(section) {
     timetracker:   renderTimeTracker,
     schedule:      renderSchedule,
     intschedules:  renderSchedulesPage,
+    scanreports:   renderScanReports,
     config:        renderConfig,
     search:     () => {}
   };
@@ -5881,6 +5905,104 @@ RISK_REASON: <one sentence>
   } finally {
     btn.textContent = '↺ Re-scan'; btn.disabled = false;
   }
+}
+
+/* ============================================================
+   SCAN REPORTS PAGE
+   ============================================================ */
+function renderScanReports() {
+  const filter  = document.getElementById('scan-report-filter')?.value || 'all';
+  const scanned = (DB.interviews||[]).filter(i => i.scanResult);
+
+  // Summary tiles
+  const sumEl = document.getElementById('scan-report-summary');
+  if (sumEl) {
+    const total  = scanned.length;
+    const high   = scanned.filter(i=>i.scanResult.risk==='High').length;
+    const medium = scanned.filter(i=>i.scanResult.risk==='Medium').length;
+    const low    = scanned.filter(i=>i.scanResult.risk==='Low').length;
+    sumEl.innerHTML = [
+      {label:'Total Scanned', val:total,  clr:'var(--accent)'},
+      {label:'🔴 High Risk',   val:high,   clr:'var(--critical)'},
+      {label:'🟡 Medium Risk', val:medium, clr:'var(--medium)'},
+      {label:'🟢 Low Risk',    val:low,    clr:'var(--low)'},
+    ].map(c=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 18px;min-width:90px;cursor:pointer;"
+        onclick="document.getElementById('scan-report-filter').value='${c.label.includes('High')?'High':c.label.includes('Medium')?'Medium':c.label.includes('Low')?'Low':'all'}';renderScanReports()">
+      <div style="font-size:1.4rem;font-weight:800;color:${c.clr};line-height:1;">${c.val}</div>
+      <div style="font-size:0.67rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:3px;">${c.label}</div>
+    </div>`).join('');
+  }
+
+  const filtered = filter==='all' ? scanned : scanned.filter(i=>i.scanResult.risk===filter);
+  const listEl   = document.getElementById('scan-report-list');
+  if (!listEl) return;
+
+  if (!filtered.length) {
+    listEl.innerHTML = `<div style="text-align:center;padding:50px;color:var(--text-muted);">
+      ${scanned.length===0
+        ? '<div style="font-size:0.9rem;">No candidates scanned yet.<br><br><button onclick="openBulkScanner()" style="padding:8px 20px;border-radius:8px;border:none;background:var(--accent);color:#fff;cursor:pointer;font-weight:600;">🔍 Start Bulk Scan</button></div>'
+        : 'No candidates with this risk level.'
+      }</div>`;
+    return;
+  }
+
+  // Sort: High first, then Medium, then Low; within group by scan date desc
+  const order = {High:0,Medium:1,Low:2};
+  filtered.sort((a,b) => (order[a.scanResult.risk]||3) - (order[b.scanResult.risk]||3) ||
+    new Date(b.scanResult.scannedAt) - new Date(a.scanResult.scannedAt));
+
+  listEl.innerHTML = filtered.map(i => {
+    const sr    = i.scanResult;
+    const rClr  = sr.risk==='Low'?'#34d399':sr.risk==='Medium'?'#fbbf24':'#f43f5e';
+    const rBg   = sr.risk==='Low'?'rgba(52,211,153,0.08)':sr.risk==='Medium'?'rgba(251,191,36,0.08)':'rgba(244,63,94,0.08)';
+    const dot   = sr.risk==='Low'?'🟢':sr.risk==='Medium'?'🟡':'🔴';
+    const when  = sr.scannedAt ? new Date(sr.scannedAt).toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}) : '—';
+    const verifyItems = (sr.verify||'').split(';').map(v=>v.trim()).filter(Boolean);
+    const ps    = i.profileSummary||'';
+    const verdict = ps.match(/VERDICT:\s*(.+)/)?.[1]?.trim()||'';
+    const vClr  = verdict.includes('✅')?'var(--low)':verdict.includes('⚠')?'var(--medium)':'var(--text-muted)';
+
+    return `<div style="background:var(--card);border:1px solid ${rClr}33;border-left:4px solid ${rClr};
+        border-radius:12px;padding:16px 18px;background:${rBg};">
+      <!-- Header row -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+            <span style="font-size:0.95rem;font-weight:700;">${esc(i.candidateName)}</span>
+            <span style="font-size:0.72rem;padding:2px 8px;border-radius:20px;font-weight:700;background:${rBg};color:${rClr};border:1px solid ${rClr}55;">${dot} ${sr.risk} Risk</span>
+            ${verdict ? `<span style="font-size:0.7rem;color:${vClr};">${esc(verdict.split(' ').slice(0,2).join(' '))}</span>` : ''}
+          </div>
+          <div style="font-size:0.76rem;color:var(--text-muted);margin-top:3px;">
+            ${esc(i.position||'')} · ${i.experience||0} yrs · ${esc(i.partner||'—')} · Scanned ${when}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0;">
+          <button onclick="openProfileScanner('${i.id}')" style="font-size:0.72rem;padding:4px 12px;border-radius:7px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);cursor:pointer;font-weight:600;">🔍 Full Scan</button>
+          <button onclick="openQuestionsModal('${i.id}')" style="font-size:0.72rem;padding:4px 12px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);cursor:pointer;">📋 Questions</button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div style="font-size:0.82rem;color:var(--text);margin-bottom:8px;line-height:1.5;">${esc(sr.summary||'')}</div>
+
+      <!-- Verify + Flags grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        ${verifyItems.length ? `
+        <div style="background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:8px;padding:8px 12px;">
+          <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--medium);margin-bottom:5px;">⚠ Verify</div>
+          ${verifyItems.map(v=>`<div style="font-size:0.74rem;color:var(--text);padding:1px 0;">• ${esc(v)}</div>`).join('')}
+        </div>` : '<div></div>'}
+        ${sr.flags && sr.flags!=='None' ? `
+        <div style="background:rgba(244,63,94,0.06);border:1px solid rgba(244,63,94,0.2);border-radius:8px;padding:8px 12px;">
+          <div style="font-size:0.67rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--critical);margin-bottom:5px;">🚩 Red Flags</div>
+          <div style="font-size:0.74rem;color:var(--text);">${esc(sr.flags)}</div>
+        </div>` : `
+        <div style="background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.2);border-radius:8px;padding:8px 12px;">
+          <div style="font-size:0.74rem;color:var(--low);font-weight:600;">✅ No red flags detected</div>
+        </div>`}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function renderSchedulesPage() {
