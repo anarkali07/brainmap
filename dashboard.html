@@ -6002,17 +6002,21 @@ function renderScanReports() {
       <!-- Summary -->
       <div style="font-size:0.82rem;color:var(--text);margin-bottom:10px;line-height:1.5;">${esc(sr.summary||'')}</div>
 
-      ${sr.fullReport ? `
-      <!-- Full report (always shown) -->
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-size:0.8rem;line-height:1.7;color:var(--text);">
-        ${sr.fullReport
+      ${sr.fullReport ? (() => {
+        // Format safely — no </div> replacement that breaks card structure
+        const lines = sr.fullReport
           .replace(/OVERALL_RISK:\s*(Low|Medium|High)/gi, '')
-          .replace(/RISK_REASON:\s*(.+)/g, '')
-          .replace(/(✅ VERIFIED LIKELY:|⚠ VERIFY THESE:|🚩 RED FLAGS:|🔍 LINKEDIN CHECK POINTS:|📋 RECOMMENDED QUESTIONS:)/g,
-            '<div style="font-weight:700;font-size:0.78rem;margin:10px 0 4px;color:var(--text);">$1</div>')
-          .replace(/\n- /g, '<div style="padding:1px 0;">• ')
-          .replace(/\n/g, '</div>')}
-      </div>` : `
+          .replace(/RISK_REASON:\s*.+/g, '')
+          .split('\n').map(l => {
+            if (!l.trim()) return '';
+            if (/^(✅ VERIFIED LIKELY:|⚠ VERIFY THESE:|🚩 RED FLAGS:|🔍 LINKEDIN CHECK POINTS:|📋 RECOMMENDED QUESTIONS:)/.test(l.trim()))
+              return `<div style="font-weight:700;font-size:0.78rem;margin:10px 0 4px;color:var(--text);">${esc(l.trim())}</div>`;
+            if (l.trim().startsWith('- '))
+              return `<div style="padding:2px 0;font-size:0.79rem;">• ${esc(l.trim().slice(2))}</div>`;
+            return `<div style="font-size:0.79rem;color:var(--text-muted);">${esc(l.trim())}</div>`;
+          }).join('');
+        return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;line-height:1.7;">${lines}</div>`;
+      })() : `
       <!-- Brief report fallback -->
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         ${verifyItems.length ? `
