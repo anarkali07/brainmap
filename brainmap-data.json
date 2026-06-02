@@ -110,7 +110,7 @@
       "candidateName": "Vivek Gupta",
       "position": "Senior Cyber Security Analyst",
       "experience": 2,
-      "finalStatus": "Under Review",
+      "finalStatus": "Scheduled",
       "level": "L1",
       "partner": "Outworxs",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2\nAPPSEC: SAST, Penetration Testing, OWASP, Burp Suite, Threat Modelling\nBACKGROUND: Dedicated security analyst with experience in application and API security assessment\nFIT: Strong AppSec skills, meets experience threshold, and has hands-on experience with security tools and methodologies like Burp Suite and OWASP\nCOMPANIES: NETWORK INTELLIGENCE, QSEAP INFOTECH PVT LTD, BINARY GLOBAL LIMITED",
@@ -119,10 +119,10 @@
         {
           "id": "mpw98rls31tqq",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, Cyber Security Lead, HR",
+          "interviewDate": "2026-06-05",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
+          "roundStatus": "Scheduled",
           "notes": "Vivek Gupta is a seasoned Cyber Security professional with over 2 years of experience in Information Security. He has a strong background in web, mobile, and API security assessment, and is familiar with a range of security tools. His experience includes conducting vulnerability assessments, creating proof of concepts, and executing application-level vulnerability attacks.\n\nKey Skills: Application Security Testing, Security Concepts, CEH, OWASP, Burp Suite, Wireshark, Postman, Kali Linux, Nessus"
         }
       ],
@@ -133,7 +133,7 @@
       "candidateName": "Prajakta Atul Kamble",
       "position": "Penetration Tester & Application Security Specialist",
       "experience": 3,
-      "finalStatus": "Under Review",
+      "finalStatus": "Scheduled",
       "level": "L1",
       "partner": "Outworxs",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3\nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling\nBACKGROUND: Dedicated security professional with a strong background in application security testing and vulnerability assessment.\nFIT: The candidate has a strong application security skill set, meets the experience threshold, and has relevant certifications, making them a suitable fit for the role.\nCOMPANIES: SecurEyes Technoservices Pvt. Ltd., Anzen Technologies Pvt. Ltd.",
@@ -142,10 +142,10 @@
         {
           "id": "mpw98qeomv6kv",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "interviewDate": "2026-06-05",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
+          "roundStatus": "Scheduled",
           "notes": "Prajakta is a results-driven Information Security professional with 3+ years of experience in Application Penetration Testing and Network Security Testing. She is proficient in conducting end-to-end VAPT engagements and has demonstrated expertise in identifying and exploiting business-logic vulnerabilities. Prajakta holds CEH certification and is adept in Secure Code Review, Red Team methodologies, and Static/Dynamic Analysis. She has worked with government Banking clients and has experience in leading comprehensive Application Penetration Testing and VAPT engagements.\n\nKey Skills: OWASP Top 10, Burp Suite Pro, OWASP ZAP, Wireshark, Metasploit, Exploit DB, SQLmap, Nmap, Postman, Java Secure Code Review"
         }
       ],
@@ -156,7 +156,7 @@
       "candidateName": "Prabhat Kumar",
       "position": "Cybersecurity Analyst",
       "experience": 3,
-      "finalStatus": "Under Review",
+      "finalStatus": "Scheduled",
       "level": "L1",
       "partner": "Outworxs",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 3 \nAPPSEC: SAST, DAST, Burp Suite, Pentest, OWASP, Threat Modelling is not explicitly mentioned but skills like vulnerability assessment, source code review and Secure CI/CD Pipeline are mentioned\nBACKGROUND: Dedicated security analyst with experience in application security testing and vulnerability assessment\nFIT: Strong AppSec skills with experience in SAST, DAST, and pentesting using mainstream tools like Burp Suite and OWASP, meeting the experience threshold\nCOMPANIES: Network Intelligence, Citiustech",
@@ -165,10 +165,10 @@
         {
           "id": "mpr90r248k9o6",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "interviewDate": "2026-06-05",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
+          "roundStatus": "Scheduled",
           "notes": ""
         }
       ],
@@ -328,7 +328,7 @@
       "candidateName": "Omkar Dodal",
       "position": "Application Security Consultant",
       "experience": 2,
-      "finalStatus": "Under Review",
+      "finalStatus": "Scheduled",
       "level": "L1",
       "partner": "Outworxs",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 2 \nAPPSEC: Mobile Security, SAST, DAST, Reverse Engineering, OWASP, Burp Suite\nBACKGROUND: Dedicated application security professional with mobile security expertise\nFIT: Strong AppSec skills, relevant experience, and certifications make Omkar a suitable candidate for the role\nCOMPANIES: CyRAACS Services Pvt Ltd, DCDIUM Technologies Pvt Ltd, SevenMentor",
@@ -337,10 +337,10 @@
         {
           "id": "mpr90puecyvnu",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "interviewDate": "2026-06-05",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
+          "roundStatus": "Scheduled",
           "notes": ""
         }
       ],
@@ -413,8 +413,8 @@
         {
           "id": "mpr6xvyb9ejzj",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "interviewDate": "2026-06-05",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
