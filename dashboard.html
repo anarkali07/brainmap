@@ -6964,6 +6964,7 @@ async function saveToCloud() {
     navigate('config');
     return;
   }
+  console.log('saveToCloud using token:', pat ? pat.slice(0,20)+'...' : 'NONE');
   // persist it
   DB.settings.githubPAT = pat; saveData();
 
@@ -7009,7 +7010,7 @@ async function saveToCloud() {
     setTimeout(() => { if (btn) { btn.textContent = '☁️ Save'; btn.style.background = ''; btn.disabled = false; } }, 3000);
 
   } catch(e) {
-    alert('Save failed: ' + e.message + '\n\nMake sure your token has "repo" scope.');
+    alert('Save failed: ' + e.message);
     if (btn) { btn.textContent = '☁️ Save'; btn.disabled = false; }
   }
 }
