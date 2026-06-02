@@ -1065,7 +1065,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "dark",
+    "theme": "light",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
