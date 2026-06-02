@@ -1058,6 +1058,7 @@ body[data-theme="light"] {
           <button class="btn-secondary" onclick="exportInterviewsHTML()" title="Export as formatted report">&#128196; Export Report</button>
           <button class="btn-secondary" onclick="exportInterviewsCSV()" title="Export as CSV for Excel">&#8595; Export CSV</button>
           <button class="btn-secondary" onclick="navigate('intschedules')" title="View scheduled interviews" style="color:var(--info);">📅 Schedules</button>
+          <button class="btn-secondary" onclick="openBulkScanner()" title="Scan multiple candidates" style="color:#06b6d4;">🔍 Bulk Scan</button>
           <button id="shortlist-toggle-btn" class="btn-secondary" onclick="toggleShortlistPanel()" title="Show/hide candidate shortlist ranking" style="color:var(--medium);">🏆 Shortlist</button>
           <button id="int-archive-toggle" class="btn-secondary" onclick="toggleInterviewArchive()" title="Show/hide rejected candidates" style="margin-left:auto;">🗃️ Show Archives</button>
         </div>
@@ -1957,6 +1958,50 @@ body[data-theme="light"] {
         </thead>
         <tbody id="sched-modal-tbody"></tbody>
       </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── Bulk Scanner Modal ── -->
+<div class="modal-overlay" id="bulk-scanner-modal">
+  <div class="modal" style="max-width:780px;padding:0;overflow:hidden;">
+    <!-- Header -->
+    <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:linear-gradient(135deg,var(--card),var(--bg2));">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:0.95rem;">🔍</div>
+        <div>
+          <div style="font-size:0.95rem;font-weight:700;">Bulk Profile Scanner</div>
+          <div id="bulk-sel-count" style="font-size:0.72rem;color:var(--text-muted);">Select candidates to scan</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="selectAllBulk(true)"  style="font-size:0.72rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);cursor:pointer;">✓ All</button>
+        <button onclick="selectAllBulk(false)" style="font-size:0.72rem;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);cursor:pointer;">✕ None</button>
+        <button id="bulk-run-btn" onclick="runBulkScan()"
+          style="padding:6px 16px;border-radius:8px;border:none;font-weight:700;font-size:0.82rem;cursor:pointer;
+            background:linear-gradient(135deg,#06b6d4,#0ea5e9);color:#fff;box-shadow:0 2px 8px rgba(6,182,212,0.3);">
+          ▶ Scan Selected
+        </button>
+        <button onclick="closeModal('bulk-scanner-modal')" style="background:none;border:none;color:var(--text-muted);font-size:1.1rem;cursor:pointer;">✕</button>
+      </div>
+    </div>
+
+    <!-- Candidate list -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;max-height:70vh;overflow-y:auto;">
+      <!-- Left: candidate selector -->
+      <div style="border-right:1px solid var(--border);overflow-y:auto;max-height:70vh;">
+        <div style="padding:8px 14px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);background:var(--bg2);border-bottom:1px solid var(--border);">Candidates</div>
+        <div id="bulk-candidate-list" style="display:flex;flex-direction:column;"></div>
+      </div>
+      <!-- Right: scan results -->
+      <div style="overflow-y:auto;max-height:70vh;">
+        <div style="padding:8px 14px;font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);background:var(--bg2);border-bottom:1px solid var(--border);">Scan Results</div>
+        <div id="bulk-results" style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+          <div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:30px;">
+            Select candidates on the left and click <strong>▶ Scan Selected</strong>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -5555,6 +5600,140 @@ function clearIntFilters() {
     if (el) el.value = '';
   });
   renderInterviews();
+}
+
+/* ============================================================
+   BULK SCANNER
+   ============================================================ */
+function openBulkScanner() {
+  const candidates = (DB.interviews||[]).filter(i => i.finalStatus !== 'Rejected' && i.resumeText);
+  const listEl = document.getElementById('bulk-candidate-list');
+  const resultsEl = document.getElementById('bulk-results');
+  if (resultsEl) resultsEl.innerHTML = `<div style="text-align:center;color:var(--text-muted);font-size:0.82rem;padding:30px;">Select candidates on the left and click <strong>▶ Scan Selected</strong></div>`;
+
+  if (!listEl) return;
+  if (!candidates.length) {
+    listEl.innerHTML = '<div style="padding:20px;color:var(--text-muted);font-size:0.82rem;text-align:center;">No candidates with resume data</div>';
+    openModal('bulk-scanner-modal');
+    return;
+  }
+
+  listEl.innerHTML = candidates.map(i => {
+    const ps = i.profileSummary || '';
+    const verdict = ps.match(/VERDICT:\s*(.+)/)?.[1]?.trim() || '';
+    const vClr = verdict.includes('✅')?'var(--low)':verdict.includes('⚠')?'var(--medium)':'var(--text-muted)';
+    return `<label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.12s;"
+      onmouseover="this.style.background='var(--accent-glass)'" onmouseout="this.style.background=''">
+      <input type="checkbox" class="bulk-chk" data-id="${i.id}" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent);" onchange="updateBulkCount()">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.83rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(i.candidateName)}</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">${i.experience||0}y · ${esc(i.partner||'—')}</div>
+      </div>
+      ${verdict ? `<span style="font-size:0.7rem;color:${vClr};flex-shrink:0;">${verdict.split(' ')[0]}</span>` : ''}
+      <div class="bulk-status-${i.id}" style="font-size:0.65rem;color:var(--text-muted);flex-shrink:0;"></div>
+    </label>`;
+  }).join('');
+
+  updateBulkCount();
+  openModal('bulk-scanner-modal');
+}
+
+function updateBulkCount() {
+  const checked = document.querySelectorAll('.bulk-chk:checked').length;
+  const el = document.getElementById('bulk-sel-count');
+  if (el) el.textContent = checked ? `${checked} candidate${checked>1?'s':''} selected` : 'Select candidates to scan';
+}
+
+function selectAllBulk(val) {
+  document.querySelectorAll('.bulk-chk').forEach(c => { c.checked = val; });
+  updateBulkCount();
+}
+
+async function runBulkScan() {
+  const provider = DB.settings.aiProvider || 'groq';
+  const apiKey   = provider === 'groq' ? DB.settings.groqKey : DB.settings.apiKey;
+  if (!apiKey) { alert('No AI key set. Go to Settings → AI Settings.'); return; }
+
+  const selected = [...document.querySelectorAll('.bulk-chk:checked')].map(c => c.dataset.id);
+  if (!selected.length) { alert('Select at least one candidate.'); return; }
+
+  const btn = document.getElementById('bulk-run-btn');
+  btn.textContent = '⏳ Scanning…'; btn.disabled = true;
+
+  const resultsEl = document.getElementById('bulk-results');
+  resultsEl.innerHTML = '';
+
+  const model = provider === 'groq' ? 'llama-3.3-70b-versatile' : (DB.settings.aiModel||'claude-3-5-haiku-20241022');
+
+  for (const id of selected) {
+    const i = DB.interviews.find(x => x.id === id);
+    if (!i) continue;
+
+    // Show loading card
+    const card = document.createElement('div');
+    card.id = `bulk-card-${id}`;
+    card.style.cssText = 'background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;';
+    card.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span class="spinner"></span>
+      <strong style="font-size:0.84rem;">${esc(i.candidateName)}</strong>
+      <span style="font-size:0.72rem;color:var(--text-muted);">${i.experience||0}y · ${esc(i.partner||'')}</span>
+    </div>
+    <div style="font-size:0.75rem;color:var(--text-muted);">Scanning…</div>`;
+    resultsEl.appendChild(card);
+
+    // Update sidebar status
+    const statusEl = document.querySelector(`.bulk-status-${id}`);
+    if (statusEl) statusEl.textContent = '⏳';
+
+    try {
+      const ps = i.profileSummary || '';
+      const resumeText = (i.resumeText||'').slice(0,3000);
+      const prompt = `You are a senior AppSec recruiter doing background verification.
+Candidate: ${i.candidateName}, ${i.experience||0} yrs, ${i.position||'AppSec Engineer'}
+Profile: ${ps.slice(0,300)}
+Resume excerpt: ${resumeText}
+
+Give a BRIEF scan in this EXACT format (be concise):
+RISK: Low/Medium/High
+SUMMARY: <one sentence overall assessment>
+VERIFY: <3 specific things to verify, semicolon separated>
+FLAGS: <any red flags or "None">`;
+
+      const raw = await _callAI(provider, apiKey, model, prompt, 400);
+
+      const risk      = raw.match(/RISK:\s*(Low|Medium|High)/i)?.[1] || 'Unknown';
+      const summary   = raw.match(/SUMMARY:\s*(.+)/)?.[1]?.trim() || '';
+      const verify    = raw.match(/VERIFY:\s*(.+)/)?.[1]?.trim() || '';
+      const flags     = raw.match(/FLAGS:\s*(.+)/)?.[1]?.trim() || 'None';
+      const riskClr   = risk==='Low'?'#34d399':risk==='Medium'?'#fbbf24':'#f43f5e';
+      const riskBg    = risk==='Low'?'rgba(52,211,153,0.12)':risk==='Medium'?'rgba(251,191,36,0.12)':'rgba(244,63,94,0.12)';
+
+      // Store result on candidate
+      i.scanResult = { risk, summary, verify, flags, scannedAt: new Date().toISOString() };
+      saveData();
+
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="padding:2px 8px;border-radius:20px;font-size:0.7rem;font-weight:700;background:${riskBg};color:${riskClr};">● ${risk}</span>
+          <strong style="font-size:0.84rem;">${esc(i.candidateName)}</strong>
+          <span style="font-size:0.72rem;color:var(--text-muted);">${i.experience||0}y · ${esc(i.partner||'')}</span>
+          <button onclick="openProfileScanner('${id}')" style="margin-left:auto;font-size:0.68rem;padding:2px 8px;border-radius:5px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);cursor:pointer;">Full Scan</button>
+        </div>
+        <div style="font-size:0.78rem;margin-bottom:5px;">${esc(summary)}</div>
+        ${verify!=='None'?`<div style="font-size:0.72rem;color:var(--medium);margin-bottom:3px;">⚠ Verify: ${esc(verify)}</div>`:''}
+        ${flags!=='None'?`<div style="font-size:0.72rem;color:var(--critical);">🚩 ${esc(flags)}</div>`:'<div style="font-size:0.72rem;color:var(--low);">✅ No red flags</div>'}`;
+
+      if (statusEl) statusEl.textContent = risk==='Low'?'🟢':risk==='Medium'?'🟡':'🔴';
+    } catch(e) {
+      card.innerHTML = `<div style="color:var(--critical);font-size:0.8rem;">❌ ${esc(i.candidateName)}: ${e.message.slice(0,60)}</div>`;
+      if (statusEl) statusEl.textContent = '❌';
+    }
+
+    // Small delay between API calls
+    await new Promise(r => setTimeout(r, 600));
+  }
+
+  btn.textContent = '↺ Re-scan'; btn.disabled = false;
 }
 
 /* ============================================================
