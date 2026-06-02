@@ -7052,7 +7052,7 @@ async function saveToCloud() {
     setTimeout(() => { if (btn) { btn.textContent = '☁️ Save'; btn.style.background = ''; btn.disabled = false; } }, 3000);
 
   } catch(e) {
-    alert('Save failed: ' + e.message);
+    alert('Save failed: ' + e.message + '\nToken used: ' + (pat ? pat.slice(0,25)+'...' : 'NONE'));
     if (btn) { btn.textContent = '☁️ Save'; btn.disabled = false; }
   }
 }
