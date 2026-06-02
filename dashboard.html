@@ -1863,15 +1863,8 @@ body[data-theme="light"] {
           🤖 Generate
         </button>
       </div>
-      <!-- Quick topic chips -->
-      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;">
-        <span style="font-size:0.67rem;color:var(--text-muted);align-self:center;margin-right:2px;">Quick:</span>
-        ${['OWASP Top 10','Burp Suite & DAST','SAST / Code Review','Cloud Security','API Security','Threat Modelling','Incident Response','Behavioural'].map(t =>
-          `<button onclick="setQuickPrompt('${t}')" style="font-size:0.68rem;padding:2px 8px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;transition:all 0.15s;"
-            onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-            onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">${t}</button>`
-        ).join('')}
-      </div>
+      <!-- Quick topic chips — rendered by JS -->
+      <div id="iq-quick-chips" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;"></div>
     </div>
 
     <!-- Question list -->
@@ -4599,6 +4592,17 @@ function openQuestionsModal(interviewId) {
   document.getElementById('iq-candidate-name').textContent = i.candidateName + (i.partner ? ` · ${i.partner}` : '');
   document.getElementById('iq-q-text').value    = '';
   document.getElementById('iq-q-answer').value  = '';
+  // Render quick chips
+  const chipsEl = document.getElementById('iq-quick-chips');
+  if (chipsEl) {
+    const topics = ['OWASP Top 10','Burp Suite & DAST','SAST / Code Review','Cloud Security','API Security','Threat Modelling','Incident Response','Behavioural'];
+    chipsEl.innerHTML = '<span style="font-size:0.67rem;color:var(--text-muted);align-self:center;margin-right:2px;">Quick:</span>' +
+      topics.map(t => `<button onclick="setQuickPrompt('${t}')"
+        style="font-size:0.68rem;padding:2px 8px;border-radius:20px;border:1px solid var(--border);
+          background:transparent;color:var(--text-muted);cursor:pointer;"
+        onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">${t}</button>`).join('');
+  }
   renderQuestionList();
   openModal('questions-modal');
   // auto-generate if no questions yet and profile exists
