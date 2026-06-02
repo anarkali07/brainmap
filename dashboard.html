@@ -7057,12 +7057,16 @@ async function pullFromGist() {
     if (!content) throw new Error('brainmap-data.json not found in Gist');
 
     const parsed = JSON.parse(content);
-    // preserve current device's PAT + gistId so they don't get overwritten
+    // preserve device-specific secrets
     const localPAT    = DB.settings.githubPAT;
     const localGistId = DB.settings.gistId;
+    const localGroq   = DB.settings.groqKey;
+    const localApiKey = DB.settings.apiKey;
     DB = parsed;
     DB.settings.githubPAT = localPAT;
     DB.settings.gistId    = localGistId;
+    DB.settings.groqKey   = localGroq   || '';
+    DB.settings.apiKey    = localApiKey || '';
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
@@ -7543,11 +7547,18 @@ async function loadCloudData() {
     const parsed = JSON.parse(text);
     if (!parsed || typeof parsed !== 'object') throw new Error('Invalid data format');
 
+    // Preserve device-specific secrets — never overwrite with cloud version
     const keepPAT    = DB.settings.githubPAT;
     const keepGistId = DB.settings.gistId;
+    const keepGroq   = DB.settings.groqKey;
+    const keepApiKey = DB.settings.apiKey;
+    const keepColor  = DB.settings.colorTheme;
     DB = parsed;
-    DB.settings.githubPAT = keepPAT;
-    DB.settings.gistId    = keepGistId;
+    DB.settings.githubPAT  = keepPAT;
+    DB.settings.gistId     = keepGistId;
+    DB.settings.groqKey    = keepGroq    || parsed.settings.groqKey    || '';
+    DB.settings.apiKey     = keepApiKey  || parsed.settings.apiKey     || '';
+    DB.settings.colorTheme = keepColor   || parsed.settings.colorTheme || 'ocean';
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
