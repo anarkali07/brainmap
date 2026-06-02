@@ -6972,15 +6972,9 @@ async function saveToCloud() {
   };
 
   try {
-    // Get current file SHA
-    const getRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json', {
-      headers: authHeaders,
-      mode: 'cors'
-    });
-    if (!getRes.ok) {
-      const errBody = await getRes.text();
-      throw new Error('Read failed: HTTP ' + getRes.status + ' — ' + errBody.slice(0,100));
-    }
+    // Get current file SHA — no auth needed for public repo (avoids CORS preflight issues)
+    const getRes = await fetch('https://api.github.com/repos/anarkali07/brainmap/contents/brainmap-data.json');
+    if (!getRes.ok) throw new Error('Cannot read file: ' + getRes.status);
     const fileInfo = await getRes.json();
     const sha = fileInfo.sha;
 
