@@ -5269,6 +5269,23 @@ function renderInterviews() {
 
     // questions button + score — goes inside profile cell
     const qCount = (i.interviewQuestions||[]).length;
+    // Scan result badge
+    const sr = i.scanResult;
+    const scanBadge = sr ? (() => {
+      const rClr = sr.risk==='Low'?'#34d399':sr.risk==='Medium'?'#fbbf24':'#f43f5e';
+      const rBg  = sr.risk==='Low'?'rgba(52,211,153,0.1)':sr.risk==='Medium'?'rgba(251,191,36,0.1)':'rgba(244,63,94,0.1)';
+      const dot  = sr.risk==='Low'?'🟢':sr.risk==='Medium'?'🟡':'🔴';
+      const when = new Date(sr.scannedAt).toLocaleDateString('en-IN',{day:'numeric',month:'short'});
+      return `<div style="margin-top:7px;padding:7px 10px;border-radius:8px;background:${rBg};border:1px solid ${rClr}33;cursor:pointer;" onclick="openProfileScanner('${i.id}')">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;">
+          <span style="font-size:0.7rem;font-weight:700;color:${rClr};">${dot} Scan: ${sr.risk} Risk</span>
+          <span style="font-size:0.62rem;color:var(--text-muted);">${when}</span>
+        </div>
+        <div style="font-size:0.72rem;color:var(--text-dim);line-height:1.4;">${esc(sr.summary||'')}</div>
+        ${sr.flags && sr.flags!=='None' ? `<div style="font-size:0.68rem;color:var(--critical);margin-top:3px;">🚩 ${esc(sr.flags.slice(0,80))}${sr.flags.length>80?'…':''}</div>` : ''}
+      </div>`;
+    })() : '';
+
     const qBtn = `
       <div style="display:flex;align-items:center;gap:6px;margin-top:8px;padding-top:7px;border-top:1px solid var(--border);">
         <button onclick="openQuestionsModal('${i.id}')"
@@ -5278,7 +5295,8 @@ function renderInterviews() {
           📋 ${qCount ? `${qCount} Questions` : 'Add Questions'}
         </button>
         ${_qScore(i)}
-      </div>`;
+      </div>
+      ${scanBadge}`;
 
     return `<tr class="int-row">
       <td style="vertical-align:top;">
