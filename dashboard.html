@@ -1793,7 +1793,7 @@ body[data-theme="light"] {
     <input id="int-partner" placeholder="e.g. Infosys, TCS, Internal">
     <label>Overall Status</label>
     <select id="int-final">
-      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option>
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
     </select>
     <p id="int-add-round-note" style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;">💡 After saving, use <strong>+ Round</strong> to add interview round details (date, panel, feedback).</p>
     <div class="modal-footer">
@@ -2193,7 +2193,7 @@ body[data-theme="light"] {
     </select>
     <label>Round Status</label>
     <select id="rnd-status">
-      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option>
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
     </select>
     <label>Interview Feedback <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(exported to CSV)</span></label>
     <textarea id="rnd-notes" rows="3" placeholder="Post-interview remarks, strengths, concerns…"></textarea>
@@ -5353,7 +5353,7 @@ function renderInterviews() {
     const roundsHtml = rounds.map((r, rIdx) => {
       const rClr    = ROUND_COLORS[r.round] || '#64748b';
       const fCls    = r.feedbackStatus === 'Submitted' ? 'badge-low' : 'badge-gray';
-      const sCls    = { Scheduled:'badge-blue', 'Under Review':'badge-gray', Screening:'badge-gray', Selected:'badge-low', Rejected:'badge-critical', 'On Hold':'badge-medium' }[r.roundStatus] || 'badge-gray';
+      const sCls    = { Scheduled:'badge-blue', 'Under Review':'badge-gray', Screening:'badge-gray', Selected:'badge-low', Rejected:'badge-critical', 'On Hold':'badge-medium', 'Screened Out':'badge-high' }[r.roundStatus] || 'badge-gray';
       const upcoming = inNext7Days(r.interviewDate);
       const dateStyle = `background:transparent;border:none;border-bottom:1px dashed var(--border);color:${upcoming ? 'var(--medium)' : 'var(--text)'};font-size:0.75rem;font-weight:${upcoming ? '600' : '400'};padding:0;width:108px;cursor:pointer;`;
       return `
@@ -5480,7 +5480,7 @@ function renderInterviews() {
             </div>
             <div style="margin-top:8px;">
               <select style="font-size:0.78rem;padding:4px 8px;border-radius:7px;width:100%;" onchange="updateFinalStatus('${i.id}',this.value)">
-                ${['Scheduled','Under Review','Screening','Selected','Rejected','On Hold'].map(s =>
+                ${['Scheduled','Under Review','Screening','Selected','Rejected','On Hold','Screened Out'].map(s =>
                   `<option${s===i.finalStatus?' selected':''}>${s}</option>`).join('')}
               </select>
             </div>
@@ -6984,7 +6984,7 @@ function exportInterviewsHTML() {
   const totalScheduled = candidates.filter(i => i.finalStatus === 'Scheduled').length;
   const l1cnt = allRounds.filter(r => r.round === 'L1').length;
   const l2cnt = allRounds.filter(r => r.round === 'L2').length;
-  const statusColor = { Scheduled:'#3b82f6', 'Under Review':'#06b6d4', Screening:'#8b5cf6', Selected:'#22c55e', Rejected:'#ef4444', 'On Hold':'#eab308' };
+  const statusColor = { Scheduled:'#3b82f6', 'Under Review':'#06b6d4', Screening:'#8b5cf6', Selected:'#22c55e', Rejected:'#ef4444', 'On Hold':'#eab308', 'Screened Out':'#fb923c' };
   const feedColor   = { Submitted:'#22c55e', Pending:'#f97316' };
   const roundColor  = { R1:'#3b82f6', R2:'#7c3aed', R3:'#059669' };
 
