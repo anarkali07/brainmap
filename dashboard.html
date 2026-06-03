@@ -6938,6 +6938,13 @@ function removePanelMember(pid) {
   renderPanelBoard();
 }
 
+function removePanelFromBoard(pid) {
+  _psPanel = _psPanel.filter(p => p.id !== pid);
+  renderPanelMemberList();
+  renderPanelBoard();
+  renderPanelScheduler(); // refresh pending list
+}
+
 function renderPanelMemberList() {
   const el = document.getElementById('ps-panel-list');
   if (!el) return;
@@ -7024,6 +7031,10 @@ function renderPanelBoard() {
           border:1px solid ${isFull?'rgba(52,211,153,0.3)':'var(--border)'};">
           ${filled}/${slotTimes.length} ${isFull?'✅ Full':'slots'}
         </span>
+        <button onclick="removePanelFromBoard('${p.id}')" title="Remove from board"
+          style="margin-left:4px;width:22px;height:22px;border-radius:5px;border:1px solid rgba(244,63,94,0.3);
+            background:rgba(244,63,94,0.08);color:var(--critical);cursor:pointer;font-size:0.75rem;
+            display:flex;align-items:center;justify-content:center;">✕</button>
       </div>
       <div style="padding:10px 12px;">${slotsHtml}</div>
     </div>`;
