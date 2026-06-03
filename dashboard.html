@@ -6685,37 +6685,10 @@ function renderPanelScheduler() {
 
   const schedDate = (document.getElementById('ps-date')?.value) || today();
 
-  // ── Pre-populate board with existing assignments for this date ──
+  // Pre-fill if panel already loaded (e.g. date changed)
   if (_psPanel.length) {
-    _psPanel.forEach(panel => {
-      const slotTimes = panel.slotTimes || [];
-      slotTimes.forEach((t, idx) => {
-        // Check if already manually assigned (keep it)
-        if (panel.slots[idx]?.candidateId) return;
-        // Look for existing interview with this panel + date + time
-        const existing = (DB.interviews||[]).find(i =>
-          (i.rounds||[]).some(r =>
-            r.interviewDate === schedDate &&
-            r.panelMembers === panel.name &&
-            (!r.interviewTime || r.interviewTime === t)
-          )
-        );
-        if (existing) {
-          const r = (existing.rounds||[]).find(x =>
-            x.interviewDate === schedDate && x.panelMembers === panel.name
-          );
-          panel.slots[idx] = {
-            time: t,
-            candidateId: existing.id,
-            candidateName: existing.candidateName,
-            round: r?.round || 'R1',
-            roundId: r?.id,
-            partner: existing.partner || '',
-            preExisting: true
-          };
-        }
-      });
-    });
+    _psPanel.forEach(p => { p.slots = p.slots.map(s => s?.preExisting ? null : s); });
+    _preFillExistingAssignments();
     renderPanelBoard();
     renderPanelMemberList();
   }
@@ -6794,8 +6767,47 @@ function loadAllSavedMembers() {
     if (!_psPanel.find(p=>p.name===s.name))
       _psPanel.push({ id: uid(), name:s.name, slotTimes:s.slotTimes||[s.defaultTime||'09:00'], from:(s.slotTimes||[s.defaultTime||'09:00'])[0], dur:s.dur||30, slots:[] });
   });
+  _preFillExistingAssignments();
   renderPanelMemberList();
   renderPanelBoard();
+  renderPanelScheduler(); // refresh pending list
+}
+
+function _preFillExistingAssignments() {
+  const schedDate = document.getElementById('ps-date')?.value || today();
+  _psPanel.forEach(panel => {
+    const slotTimes = panel.slotTimes || [];
+    slotTimes.forEach((t, idx) => {
+      if (panel.slots[idx]?.candidateId) return; // already set
+      // Find any interview with this panel member on this date
+      const existing = (DB.interviews||[]).find(i =>
+        !['Rejected','Screened Out'].includes(i.finalStatus) &&
+        (i.rounds||[]).some(r =>
+          r.interviewDate === schedDate &&
+          r.panelMembers && r.panelMembers.trim().toLowerCase() === panel.name.toLowerCase()
+        )
+      );
+      if (existing) {
+        const r = (existing.rounds||[]).find(x =>
+          x.interviewDate === schedDate &&
+          x.panelMembers && x.panelMembers.trim().toLowerCase() === panel.name.toLowerCase()
+        );
+        // Only assign if not already placed in another slot
+        const alreadyPlaced = _psPanel.some(p => p.slots.some(s => s?.candidateId === existing.id));
+        if (!alreadyPlaced) {
+          panel.slots[idx] = {
+            time: r?.interviewTime || t,
+            candidateId: existing.id,
+            candidateName: existing.candidateName,
+            round: r?.round || 'R1',
+            roundId: r?.id,
+            partner: existing.partner || '',
+            preExisting: true
+          };
+        }
+      }
+    });
+  });
 }
 
 function editSavedMember(id) {
