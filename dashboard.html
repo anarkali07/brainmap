@@ -2459,15 +2459,28 @@ function loadData() {
       if (isAiGenerated) r.notes = '';
     });
   });
-  // ── migrate: add default savedPanelMembers if missing ──
+  // ── migrate: fix savedPanelMembers to use slotTimes + 30min ──
+  const _defaultPanel = [
+    { id:'sp1', name:'Saumya',   slotTimes:['11:30','16:30'], dur:30 },
+    { id:'sp2', name:'Mangesh',  slotTimes:['12:00','16:30'], dur:30 },
+    { id:'sp3', name:'Pritam',   slotTimes:['12:30','15:30'], dur:30 },
+    { id:'sp4', name:'Lalit',    slotTimes:['16:00','19:00'], dur:30 },
+    { id:'sp5', name:'Seijan',   slotTimes:['14:30','15:30'], dur:30 },
+  ];
   if (!DB.settings.savedPanelMembers || !DB.settings.savedPanelMembers.length) {
-    DB.settings.savedPanelMembers = [
-      { id:'sp1', name:'Saumya',   slotTimes:['11:30','16:30'], dur:30 },
-      { id:'sp2', name:'Mangesh',  slotTimes:['12:00','16:30'], dur:30 },
-      { id:'sp3', name:'Pritam',   slotTimes:['12:30','15:30'], dur:30 },
-      { id:'sp4', name:'Lalit',    slotTimes:['16:00','19:00'], dur:30 },
-      { id:'sp5', name:'Seijan',   slotTimes:['14:30','15:30'], dur:30 },
-    ];
+    DB.settings.savedPanelMembers = _defaultPanel;
+  } else {
+    // Fix any existing entries missing slotTimes or with wrong duration
+    DB.settings.savedPanelMembers = DB.settings.savedPanelMembers.map(s => {
+      const def = _defaultPanel.find(d => d.name.toLowerCase() === s.name.toLowerCase());
+      return {
+        id: s.id || def?.id || uid(),
+        name: s.name,
+        slotTimes: s.slotTimes && s.slotTimes.length >= 2 ? s.slotTimes : (def?.slotTimes || [s.defaultTime||'09:00']),
+        dur: 30, // always 30 min
+        defaultTime: s.slotTimes?.[0] || s.defaultTime
+      };
+    });
   }
   applyTheme();
 }
