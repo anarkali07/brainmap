@@ -808,6 +808,7 @@ body[data-theme="light"] {
       <div class="nav-item" data-section="tasks"><span class="nav-icon"><i data-lucide="list-checks" style="width:16px;height:16px;"></i></span><span class="nav-label"> Tasks</span></div>
       <div class="nav-item" data-section="work"><span class="nav-icon"><i data-lucide="folder-kanban" style="width:16px;height:16px;"></i></span><span class="nav-label"> Projects</span></div>
       <div class="nav-section-label">Hiring</div>
+      <div class="nav-item" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:16px;height:16px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
       <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Interviews</span></div>
       <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:16px;height:16px;"></i></span><span class="nav-label"> Schedules</span></div>
       <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scan Reports</span></div>
@@ -1038,6 +1039,14 @@ body[data-theme="light"] {
             <button class="btn-secondary" onclick="openTaskModalWithCategory('Team Management')">&#43; Add Team Task</button>
           </div>
         </div>
+      </section>
+
+      <!-- ======================================================
+           SECTION: HIRING DASHBOARD
+           ====================================================== -->
+      <section id="sec-intdashboard" class="section">
+        <h2>📊 Hiring Dashboard</h2>
+        <div id="intdash-inner"></div>
       </section>
 
       <!-- ======================================================
@@ -2442,6 +2451,7 @@ function navigate(section) {
     personal:   () => { renderGoals(); renderHealth(); renderPlanner(); },
     timetracker:   renderTimeTracker,
     schedule:      renderSchedule,
+    intdashboard:  renderIntDashboard,
     intschedules:  renderSchedulesPage,
     scanreports:   renderScanReports,
     config:        renderConfig,
@@ -6193,6 +6203,213 @@ ${webFindings ? `🔗 ONLINE VERIFICATION FINDINGS:
 /* ============================================================
    SCAN REPORTS PAGE
    ============================================================ */
+/* ============================================================
+   HIRING DASHBOARD
+   ============================================================ */
+function renderIntDashboard() {
+  const el = document.getElementById('intdash-inner');
+  if (!el) return;
+  const all       = DB.interviews || [];
+  const todayStr  = today();
+  const allRounds = all.flatMap(i => i.rounds||[]);
+  const weekEnd   = (() => { const d=new Date(); d.setDate(d.getDate()+7); return d.toISOString().slice(0,10); })();
+
+  // ── Key metrics ──
+  const total      = all.length;
+  const inProgress = all.filter(i=>['Scheduled','Under Review','Screening'].includes(i.finalStatus)).length;
+  const filled     = all.filter(i=>i.finalStatus==='Selected').length;
+  const rejected   = all.filter(i=>i.finalStatus==='Rejected').length;
+  const onHold     = all.filter(i=>i.finalStatus==='On Hold').length;
+  const screenedOut= all.filter(i=>i.finalStatus==='Screened Out'||(i.finalStatus==='Rejected'&&!(i.rounds||[]).some(r=>r.interviewDate&&r.interviewDate<=todayStr))).length;
+  const thisWeek   = all.filter(i=>(i.rounds||[]).some(r=>r.interviewDate>=todayStr&&r.interviewDate<=weekEnd)).length;
+  const feedbackDue= allRounds.filter(r=>r.feedbackStatus==='Pending'&&r.interviewDate&&r.interviewDate<todayStr).length;
+  const scheduled  = all.filter(i=>i.finalStatus==='Scheduled').length;
+  const openL1     = parseInt(DB.settings.openL1)||0;
+  const openL2     = parseInt(DB.settings.openL2)||0;
+  const filledL1   = all.filter(i=>i.finalStatus==='Selected'&&(i.level||'L1')==='L1').length;
+  const filledL2   = all.filter(i=>i.finalStatus==='Selected'&&i.level==='L2').length;
+
+  // ── Pipeline funnel ──
+  const funnel = [
+    { label:'Total Profiles',   val:total,      clr:'var(--accent)',    pct:100 },
+    { label:'Under Review',     val:all.filter(i=>i.finalStatus==='Under Review').length, clr:'#06b6d4', pct:total?Math.round(all.filter(i=>i.finalStatus==='Under Review').length/total*100):0 },
+    { label:'Screening',        val:all.filter(i=>i.finalStatus==='Screening').length,    clr:'#8b5cf6', pct:total?Math.round(all.filter(i=>i.finalStatus==='Screening').length/total*100):0 },
+    { label:'Scheduled',        val:scheduled,  clr:'#3b82f6',          pct:total?Math.round(scheduled/total*100):0 },
+    { label:'Selected',         val:filled,     clr:'var(--low)',        pct:total?Math.round(filled/total*100):0 },
+    { label:'Rejected',         val:rejected,   clr:'var(--critical)',   pct:total?Math.round(rejected/total*100):0 },
+    { label:'Screened Out',     val:screenedOut,clr:'#fb923c',           pct:total?Math.round(screenedOut/total*100):0 },
+  ];
+
+  // ── Partner breakdown ──
+  const partnerMap = {};
+  all.forEach(i => {
+    const k = i.partner||'(None)';
+    if (!partnerMap[k]) partnerMap[k]={total:0,selected:0,rejected:0,inProgress:0,interviews:0};
+    partnerMap[k].total++;
+    if (i.finalStatus==='Selected') partnerMap[k].selected++;
+    else if (i.finalStatus==='Rejected') partnerMap[k].rejected++;
+    else partnerMap[k].inProgress++;
+    partnerMap[k].interviews += (i.rounds||[]).filter(r=>r.interviewDate&&r.interviewDate<=todayStr).length;
+  });
+  const partners = Object.entries(partnerMap).sort((a,b)=>b[1].total-a[1].total);
+
+  // ── Level split ──
+  const l1Total = all.filter(i=>(i.level||'L1')==='L1').length;
+  const l2Total = all.filter(i=>i.level==='L2').length;
+
+  // ── Upcoming interviews ──
+  const upcoming = allRounds.filter(r=>r.interviewDate>=todayStr&&r.interviewDate<=weekEnd)
+    .map(r=>{ const c=all.find(i=>(i.rounds||[]).some(x=>x.id===r.id)); return c?{c,r}:null; })
+    .filter(Boolean).sort((a,b)=>a.r.interviewDate.localeCompare(b.r.interviewDate)).slice(0,8);
+
+  // ── Recent decisions ──
+  const recentDecisions = all.filter(i=>['Selected','Rejected','Screened Out'].includes(i.finalStatus))
+    .sort((a,b)=>new Date(b.createdAt||0)-new Date(a.createdAt||0)).slice(0,6);
+
+  const card = (title,body,action='') => `
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);">
+      <div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);">${title}</span>
+        ${action}
+      </div>
+      ${body}
+    </div>`;
+
+  const nb = (s,t) => `<button onclick="navigate('${s}')" style="font-size:0.7rem;padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--text-muted);cursor:pointer;">${t} →</button>`;
+
+  // Metric tiles
+  const tiles = [
+    {label:'Total Profiles',  val:total,       clr:'var(--accent)',    sub:`L1: ${l1Total} · L2: ${l2Total}`},
+    {label:'This Week',       val:thisWeek,     clr:'var(--medium)',    sub:'interviews coming'},
+    {label:'In Progress',     val:inProgress,  clr:'#06b6d4',          sub:`${scheduled} scheduled`},
+    {label:'Selected',        val:filled,       clr:'var(--low)',       sub:`L1: ${filledL1} · L2: ${filledL2}`},
+    {label:'Rejected',        val:rejected,     clr:'var(--critical)',  sub:`${screenedOut} screened out`},
+    {label:'On Hold',         val:onHold,       clr:'var(--medium)',    sub:'awaiting decision'},
+    {label:'Feedback Due',    val:feedbackDue,  clr:feedbackDue?'var(--high)':'var(--text-muted)', sub:'pending submission'},
+    {label:'Open Positions',  val:`L1:${openL1-filledL1>0?openL1-filledL1:0} L2:${openL2-filledL2>0?openL2-filledL2:0}`, clr:'var(--accent2)', sub:`${openL1} L1 · ${openL2} L2 open`},
+  ];
+
+  const tilesHtml = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px;">
+    ${tiles.map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow);">
+      <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">${t.label}</div>
+      <div style="font-size:1.8rem;font-weight:800;color:${t.clr};line-height:1;">${t.val}</div>
+      <div style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">${t.sub}</div>
+    </div>`).join('')}
+  </div>`;
+
+  // Funnel
+  const funnelHtml = `<div style="padding:12px 16px;display:flex;flex-direction:column;gap:6px;">
+    ${funnel.map(f=>`<div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:110px;font-size:0.74rem;color:var(--text-muted);text-align:right;flex-shrink:0;">${f.label}</div>
+      <div style="flex:1;background:var(--border);border-radius:20px;height:18px;overflow:hidden;">
+        <div style="width:${f.pct}%;height:100%;background:${f.clr};border-radius:20px;transition:width 0.4s;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;">
+          ${f.pct>8?`<span style="font-size:0.62rem;color:#fff;font-weight:700;">${f.val}</span>`:''}
+        </div>
+      </div>
+      <div style="width:28px;font-size:0.74rem;font-weight:700;color:${f.clr};text-align:right;">${f.pct>8?'':f.val}</div>
+    </div>`).join('')}
+  </div>`;
+
+  // Partner table
+  const partnerHtml = `<div style="overflow-x:auto;padding:0 16px 12px;">
+    <table style="width:100%;font-size:0.78rem;border-collapse:collapse;">
+      <thead><tr>
+        ${['Partner','Total','In Progress','Selected','Rejected','Interviews Done','Conv. Rate'].map(h=>
+          `<th style="padding:8px 8px 6px;text-align:${h==='Partner'?'left':'center'};color:var(--text-muted);font-size:0.68rem;text-transform:uppercase;letter-spacing:0.06em;border-bottom:1px solid var(--border);">${h}</th>`
+        ).join('')}
+      </tr></thead>
+      <tbody>
+        ${partners.map(([name,s])=>{
+          const conv = s.total>0 ? Math.round(s.selected/s.total*100) : 0;
+          return `<tr style="border-bottom:1px solid var(--border);">
+            <td style="padding:8px 8px;font-weight:600;">${esc(name)}</td>
+            <td style="text-align:center;padding:8px;font-weight:700;color:var(--accent);">${s.total}</td>
+            <td style="text-align:center;padding:8px;color:#06b6d4;">${s.inProgress||'—'}</td>
+            <td style="text-align:center;padding:8px;color:var(--low);font-weight:700;">${s.selected||'—'}</td>
+            <td style="text-align:center;padding:8px;color:var(--critical);">${s.rejected||'—'}</td>
+            <td style="text-align:center;padding:8px;color:var(--accent2);">${s.interviews||'—'}</td>
+            <td style="text-align:center;padding:8px;">
+              <div style="display:flex;align-items:center;gap:5px;justify-content:center;">
+                <div style="width:40px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;">
+                  <div style="width:${conv}%;height:100%;background:${conv>=30?'var(--low)':conv>=15?'var(--medium)':'var(--critical)'};border-radius:3px;"></div>
+                </div>
+                <span style="font-size:0.72rem;font-weight:700;color:${conv>=30?'var(--low)':conv>=15?'var(--medium)':'var(--critical)'};">${conv}%</span>
+              </div>
+            </td>
+          </tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+  // Upcoming
+  const upcomingHtml = upcoming.length
+    ? upcoming.map(({c,r})=>`
+      <div style="padding:9px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;">
+        <div style="min-width:0;">
+          <div style="font-size:0.83rem;font-weight:600;">${esc(c.candidateName)}</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);">${esc(c.partner||'')} · ${esc(r.panelMembers||'—')}</div>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:0.78rem;font-weight:700;color:${r.interviewDate===todayStr?'var(--medium)':'var(--accent)'};">${fmtDate(r.interviewDate)}</div>
+          <div style="font-size:0.7rem;"><span style="background:#3b82f622;color:#3b82f6;padding:1px 6px;border-radius:10px;font-weight:700;">${esc(r.round)}</span></div>
+        </div>
+      </div>`).join('')
+    : `<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.82rem;">No interviews this week</div>`;
+
+  // Recent decisions
+  const decisionsHtml = recentDecisions.length
+    ? recentDecisions.map(i=>{
+        const clr = i.finalStatus==='Selected'?'var(--low)':i.finalStatus==='Screened Out'?'#fb923c':'var(--critical)';
+        const icon= i.finalStatus==='Selected'?'✅':i.finalStatus==='Screened Out'?'🚫':'❌';
+        return `<div style="padding:9px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1rem;">${icon}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.82rem;font-weight:600;">${esc(i.candidateName)}</div>
+            <div style="font-size:0.7rem;color:var(--text-muted);">${esc(i.position||'')} · ${esc(i.partner||'')}</div>
+          </div>
+          <span style="font-size:0.72rem;font-weight:700;color:${clr};">${i.finalStatus}</span>
+        </div>`;
+      }).join('')
+    : `<div style="padding:20px;text-align:center;color:var(--text-muted);">No decisions yet</div>`;
+
+  el.innerHTML = `
+    ${tilesHtml}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+      ${card('📊 Pipeline Funnel', funnelHtml, nb('interviews','View all'))}
+      ${card('📅 Interviews This Week', upcomingHtml, nb('intschedules','Full schedule'))}
+    </div>
+    <div style="margin-bottom:14px;">
+      ${card('🤝 Partner Performance', partnerHtml, nb('interviews','View interviews'))}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+      ${card('🏁 Recent Decisions', decisionsHtml, nb('interviews','All candidates'))}
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;box-shadow:var(--shadow);">
+        <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:12px;">🎯 Hiring Targets</div>
+        ${[{lvl:'L1',open:openL1,filled:filledL1},{lvl:'L2',open:openL2,filled:filledL2}].map(t=>{
+          const pct = t.open ? Math.min(100,Math.round(t.filled/t.open*100)) : 0;
+          const clr = pct>=100?'var(--low)':pct>=50?'var(--medium)':'var(--accent)';
+          return `<div style="margin-bottom:14px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-weight:700;color:${t.lvl==='L1'?'#3b82f6':'#7c3aed'}">${t.lvl}</span>
+              <span style="font-size:0.78rem;color:var(--text-muted);">${t.filled} / ${t.open||'—'} filled</span>
+            </div>
+            ${t.open?`<div style="background:var(--border);border-radius:10px;height:10px;overflow:hidden;">
+              <div style="width:${pct}%;height:100%;background:linear-gradient(90deg,${clr},${clr});border-radius:10px;transition:width 0.5s;"></div>
+            </div>
+            <div style="font-size:0.7rem;color:${clr};margin-top:3px;font-weight:600;">${pct}% · ${Math.max(0,t.open-t.filled)} remaining</div>`
+            :'<div style="font-size:0.72rem;color:var(--text-muted);">No target set</div>'}
+          </div>`;
+        }).join('')}
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+          <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;">Overall conversion rate</div>
+          <div style="font-size:1.4rem;font-weight:800;color:var(--low);">${total?Math.round(filled/total*100):0}%</div>
+          <div style="font-size:0.7rem;color:var(--text-muted);">${filled} selected from ${total} profiles</div>
+        </div>
+      </div>
+    </div>`;
+}
+
 function renderScanReports() {
   const filter  = document.getElementById('scan-report-filter')?.value || 'all';
   const scanned = (DB.interviews||[]).filter(i => i.scanResult);
