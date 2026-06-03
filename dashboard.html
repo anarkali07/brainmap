@@ -1096,6 +1096,9 @@ body[data-theme="light"] {
           <select id="int-f-round" onchange="renderInterviews()" style="width:auto;padding:4px 6px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);font-size:0.78rem;">
             <option value="">Round</option><option>R1</option><option>R2</option><option>R3</option>
           </select>
+          <select id="int-f-panel" onchange="renderInterviews()" style="width:auto;min-width:100px;padding:4px 6px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text);font-size:0.78rem;">
+            <option value="">Panel</option>
+          </select>
           <button onclick="clearIntFilters()" style="width:auto;padding:4px 10px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card);color:var(--text-muted);font-size:0.75rem;cursor:pointer;white-space:nowrap;">✕ Clear</button>
           <span id="int-filter-count" style="font-size:0.75rem;color:var(--text-muted);"></span>
         </div>
@@ -5276,6 +5279,19 @@ function renderInterviews() {
   const fLevel   =  document.getElementById('int-f-level')?.value   || '';
   const fPartner =  document.getElementById('int-f-partner')?.value || '';
   const fRound   =  document.getElementById('int-f-round')?.value   || '';
+  const fPanel   =  document.getElementById('int-f-panel')?.value   || '';
+
+  // Populate panel dropdown dynamically
+  const panelSel = document.getElementById('int-f-panel');
+  if (panelSel) {
+    const allPanelMembers = new Set();
+    all.forEach(i => (i.rounds||[]).forEach(r => {
+      (r.panelMembers||'').split(',').map(p=>p.trim()).filter(Boolean).forEach(p => allPanelMembers.add(p));
+    }));
+    const cur = panelSel.value;
+    panelSel.innerHTML = '<option value="">Panel</option>' +
+      [...allPanelMembers].sort().map(p => `<option value="${esc(p)}"${cur===p?' selected':''}>${esc(p)}</option>`).join('');
+  }
 
   function applyFilters(list) {
     return list.filter(i => {
@@ -5284,6 +5300,8 @@ function renderInterviews() {
       if (fLevel   && (i.level||'L1') !== fLevel) return false;
       if (fPartner && (i.partner||'').trim() !== fPartner) return false;
       if (fRound   && !(i.rounds||[]).some(r => r.round === fRound)) return false;
+      if (fPanel   && !(i.rounds||[]).some(r =>
+        (r.panelMembers||'').split(',').map(p=>p.trim()).includes(fPanel))) return false;
       return true;
     });
   }
@@ -5297,7 +5315,7 @@ function renderInterviews() {
 
   // ── filter result count label ─────────────────────────────
   const countEl = document.getElementById('int-filter-count');
-  const hasFilter = fSearch || fStatus || fLevel || fPartner || fRound;
+  const hasFilter = fSearch || fStatus || fLevel || fPartner || fRound || fPanel;
   const totalActive = all.filter(i => i.finalStatus !== 'Rejected').length;
   if (countEl) countEl.textContent = hasFilter ? `${active.length} of ${totalActive} shown` : '';
 
@@ -5761,7 +5779,7 @@ function clearShortlist() {
 }
 
 function clearIntFilters() {
-  ['int-search','int-f-status','int-f-level','int-f-partner','int-f-round'].forEach(id => {
+  ['int-search','int-f-status','int-f-level','int-f-partner','int-f-round','int-f-panel'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
