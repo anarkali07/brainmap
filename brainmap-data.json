@@ -1416,41 +1416,53 @@
     "savedPanelMembers": [
       {
         "id": "sp1",
-        "name": "Saumya",
-        "defaultTime": "11:30",
-        "until": "16:30",
-        "dur": 45
+        "name": "Vaishali, Viraj",
+        "slotTimes": [
+          "11:30",
+          "16:30"
+        ],
+        "dur": 30,
+        "defaultTime": "11:30"
       },
       {
         "id": "sp2",
         "name": "Mangesh",
-        "defaultTime": "12:00",
-        "until": "16:30",
-        "dur": 45
+        "slotTimes": [
+          "12:00",
+          "16:30"
+        ],
+        "dur": 30,
+        "defaultTime": "12:00"
       },
       {
         "id": "sp3",
-        "name": "Pritam",
-        "defaultTime": "12:30",
-        "until": "15:30",
-        "dur": 45
+        "name": "Aman Sahu",
+        "slotTimes": [
+          "12:30",
+          "15:30"
+        ],
+        "dur": 30,
+        "defaultTime": "12:30"
       },
       {
         "id": "sp4",
-        "name": "Lalit",
-        "defaultTime": "16:00",
-        "until": "19:00",
-        "dur": 45
+        "name": "Nishant",
+        "slotTimes": [
+          "16:00",
+          "19:00"
+        ],
+        "dur": 30,
+        "defaultTime": "16:00"
       },
       {
         "id": "sp5",
-        "name": "Sajan",
-        "defaultTime": "16:30",
-        "until": "15:30",
-        "dur": 45,
+        "name": "Shamika",
         "slotTimes": [
-          "16:30"
-        ]
+          "16:30",
+          "15:30"
+        ],
+        "dur": 30,
+        "defaultTime": "16:30"
       }
     ]
   }
