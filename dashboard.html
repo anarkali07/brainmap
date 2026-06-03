@@ -5180,8 +5180,8 @@ function renderInterviews() {
       if (r.round === 'R1') partnerMap[key].r1++;
       else if (r.round === 'R2') partnerMap[key].r2++;
       else if (r.round === 'R3') partnerMap[key].r3++;
-      // Completed = interview date is in the past AND feedback submitted (or round not pending)
-      if (r.interviewDate && r.interviewDate <= today() && r.feedbackStatus === 'Submitted') partnerMap[key].totalInterviews++;
+      // Completed = interview date is in the past (all rounds, regardless of feedback)
+      if (r.interviewDate && r.interviewDate <= today()) partnerMap[key].totalInterviews++;
     });
   });
   const partners = Object.entries(partnerMap).sort((a,b) => b[1].total - a[1].total);
