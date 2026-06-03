@@ -1400,7 +1400,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "light",
+    "theme": "dark",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
@@ -1413,6 +1413,45 @@
     "appTitle": "BrainMap",
     "apiKey": "",
     "githubPAT": "",
-    "gistId": ""
+    "savedPanelMembers": [
+      {
+        "id": "sp1",
+        "name": "Saumya",
+        "defaultTime": "11:30",
+        "until": "16:30",
+        "dur": 45
+      },
+      {
+        "id": "sp2",
+        "name": "Mangesh",
+        "defaultTime": "12:00",
+        "until": "16:30",
+        "dur": 45
+      },
+      {
+        "id": "sp3",
+        "name": "Pritam",
+        "defaultTime": "12:30",
+        "until": "15:30",
+        "dur": 45
+      },
+      {
+        "id": "sp4",
+        "name": "Lalit",
+        "defaultTime": "16:00",
+        "until": "19:00",
+        "dur": 45
+      },
+      {
+        "id": "sp5",
+        "name": "Sajan",
+        "defaultTime": "14:30",
+        "until": "15:30",
+        "dur": 45,
+        "slotTimes": [
+          "14:30"
+        ]
+      }
+    ]
   }
 }
