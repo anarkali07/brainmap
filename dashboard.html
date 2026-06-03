@@ -5176,12 +5176,27 @@ function renderInterviews() {
     else if (i.finalStatus === 'Screening')    partnerMap[key].screening++;
     else if (i.finalStatus === 'Scheduled')    partnerMap[key].scheduled++;
     else                                       partnerMap[key].underReview++;
+    // Determine completed rounds:
+    // R1 completed = rejected OR has R2
+    // R2 completed = rejected OR has R3
+    // R3 completed = rejected OR selected
+    const roundTypes = (i.rounds||[]).map(r=>r.round);
+    const hasR2 = roundTypes.includes('R2');
+    const hasR3 = roundTypes.includes('R3');
+    const isRejected  = i.finalStatus === 'Rejected';
+    const isSelected  = i.finalStatus === 'Selected';
+
     (i.rounds || []).forEach(r => {
-      if (r.round === 'R1') partnerMap[key].r1++;
-      else if (r.round === 'R2') partnerMap[key].r2++;
-      else if (r.round === 'R3') partnerMap[key].r3++;
-      // Completed = interview date is in the past (all rounds, regardless of feedback)
-      if (r.interviewDate && r.interviewDate <= today()) partnerMap[key].totalInterviews++;
+      const completed =
+        (r.round === 'R1' && (isRejected || hasR2)) ||
+        (r.round === 'R2' && (isRejected || hasR3)) ||
+        (r.round === 'R3' && (isRejected || isSelected));
+
+      if (r.round === 'R1' && completed) partnerMap[key].r1++;
+      else if (r.round === 'R2' && completed) partnerMap[key].r2++;
+      else if (r.round === 'R3' && completed) partnerMap[key].r3++;
+
+      if (completed) partnerMap[key].totalInterviews++;
     });
   });
   const partners = Object.entries(partnerMap).sort((a,b) => b[1].total - a[1].total);
