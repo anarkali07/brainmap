@@ -5400,7 +5400,16 @@ function renderInterviews() {
               <input type="date" value="${r.interviewDate||''}" style="${dateStyle}" onchange="updateRoundDate('${i.id}','${r.id}',this.value)">
               ${upcoming ? `<span style="font-size:0.65rem;color:var(--medium);font-weight:600;">Soon</span>` : ''}
             </div>
-            ${r.panelMembers ? `<div style="font-size:0.72rem;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;" title="${esc(r.panelMembers)}">👤 ${esc(r.panelMembers)}</div>` : ''}
+            <div style="display:flex;align-items:center;gap:4px;">
+              <span style="font-size:0.7rem;color:var(--text-muted);">👤</span>
+              <input value="${esc(r.panelMembers||'')}" placeholder="+ Add panel"
+                data-iid="${i.id}" data-rid="${r.id}"
+                style="background:transparent;border:none;border-bottom:1px dashed transparent;
+                  color:var(--text-muted);font-size:0.72rem;padding:1px 0;width:130px;outline:none;"
+                onfocus="this.style.borderBottomColor='var(--accent)';this.style.color='var(--text)'"
+                onblur="this.style.borderBottomColor='transparent';this.style.color='var(--text-muted)';updateSchedPanel(this.dataset.iid,this.dataset.rid,this.value)"
+                onkeydown="if(event.key==='Enter'){this.blur()}">
+            </div>
             <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;">
               <span class="badge ${sCls}" style="font-size:0.67rem;padding:2px 7px;">${esc(r.roundStatus||'Scheduled')}</span>
               <span class="badge ${fCls}" style="font-size:0.67rem;padding:2px 7px;">FB: ${esc(r.feedbackStatus)}</span>
@@ -6530,6 +6539,17 @@ function toggleScanCard(id) {
   if (arrow) arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
 }
 
+function updateSchedPanel(interviewId, roundId, value) {
+  const i = DB.interviews.find(x => x.id === interviewId);
+  if (!i) return;
+  const r = (i.rounds||[]).find(x => x.id === roundId);
+  if (!r) return;
+  r.panelMembers = value.trim();
+  saveData();
+  // Refresh panel filter dropdown if open
+  renderInterviews();
+}
+
 function renderSchedulesPage() {
   const filter   = document.getElementById('sched-modal-filter')?.value || 'all';
   const todayStr = today();
@@ -6604,7 +6624,17 @@ function renderSchedulesPage() {
         <span style="background:${clr}22;color:${clr};border:1px solid ${clr}55;border-radius:6px;padding:2px 9px;font-size:0.74rem;font-weight:700;">${esc(r.round)}</span>
       </td>
       <td style="padding:10px 12px;white-space:nowrap;color:${isToday?'var(--medium)':isPast?'var(--text-muted)':'var(--text)'};">${dateFmt}</td>
-      <td style="padding:10px 12px;font-size:0.78rem;color:var(--text-muted);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${esc(r.panelMembers||'—')}</td>
+      <td style="padding:6px 12px;max-width:200px;" title="Click to edit panel">
+        <input value="${esc(r.panelMembers||'')}" placeholder="+ Add panel members"
+          data-iid="${i.id}" data-rid="${r.id}"
+          style="background:transparent;border:none;border-bottom:1px dashed transparent;
+            color:var(--text);font-size:0.78rem;padding:2px 0;width:100%;cursor:text;
+            outline:none;transition:border-color 0.15s;"
+          onfocus="this.style.borderBottomColor='var(--accent)'"
+          onblur="this.style.borderBottomColor='transparent';updateSchedPanel(this.dataset.iid,this.dataset.rid,this.value)"
+          onkeydown="if(event.key==='Enter'){this.blur()}"
+          title="Type panel members, press Enter to save">
+      </td>
       <td style="padding:10px 12px;">
         <span style="font-size:0.72rem;font-weight:600;color:${sClr};">${esc(r.roundStatus||'')}</span>
         <div style="font-size:0.68rem;color:var(--text-muted);">${r.feedbackStatus||''}</div>
