@@ -8157,11 +8157,13 @@ async function pullFromGist() {
     const localGistId = DB.settings.gistId;
     const localGroq   = DB.settings.groqKey;
     const localApiKey = DB.settings.apiKey;
+    const localPanel  = DB.settings.savedPanelMembers;
     DB = parsed;
     DB.settings.githubPAT = localPAT;
     DB.settings.gistId    = localGistId;
     DB.settings.groqKey   = localGroq   || '';
     DB.settings.apiKey    = localApiKey || '';
+    if (localPanel && localPanel.length) DB.settings.savedPanelMembers = localPanel;
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
@@ -8651,12 +8653,14 @@ async function loadCloudData() {
     const keepGroq   = DB.settings.groqKey;
     const keepApiKey = DB.settings.apiKey;
     const keepColor  = DB.settings.colorTheme;
+    const keepPanel  = DB.settings.savedPanelMembers;
     DB = parsed;
     DB.settings.githubPAT  = keepPAT;
     DB.settings.gistId     = keepGistId;
     DB.settings.groqKey    = keepGroq    || parsed.settings.groqKey    || '';
     DB.settings.apiKey     = keepApiKey  || parsed.settings.apiKey     || '';
     DB.settings.colorTheme = keepColor   || parsed.settings.colorTheme || 'ocean';
+    if (keepPanel && keepPanel.length) DB.settings.savedPanelMembers = keepPanel;
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
