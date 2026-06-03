@@ -6677,7 +6677,7 @@ function renderSavedPanelList() {
   if (!saved.length) { el.innerHTML = '<div style="font-size:0.75rem;color:var(--text-muted);">No saved members yet.</div>'; return; }
 
   el.innerHTML = saved.map(s => `
-    <div style="display:flex;align-items:center;gap:7px;padding:6px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;">
+    <div id="ps-saved-item-'+s.id+'" style="display:flex;align-items:center;gap:7px;padding:6px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;">
       <div style="flex:1;min-width:0;">
         <div style="font-size:0.79rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(s.name)}</div>
         <div style="font-size:0.67rem;color:var(--text-muted);">${s.defaultTime}${s.until?' – '+s.until:''} · ${s.dur||30}min each · ${(s.slotTimes||[s.defaultTime]).length} slots</div>
@@ -6713,8 +6713,43 @@ function loadAllSavedMembers() {
 function editSavedMember(id) {
   const s = (DB.settings.savedPanelMembers||[]).find(x=>x.id===id);
   if (!s) return;
-  const newTime = prompt(`Default time for ${s.name}:`, s.defaultTime);
-  if (newTime) { s.defaultTime = newTime; saveData(); renderSavedPanelList(); }
+  const el = document.getElementById('ps-saved-list');
+  if (!el) return;
+
+  // Replace the card with an inline edit form
+  const item = document.getElementById('ps-saved-item-'+id);
+  if (!item) return;
+
+  const curTimes = (s.slotTimes||[s.defaultTime||'']).join(', ');
+  item.innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:6px;padding:8px;background:var(--accent-glass);border:1px solid var(--accent);border-radius:7px;">
+      <div>
+        <div style="font-size:0.67rem;color:var(--text-muted);margin-bottom:2px;">Name</div>
+        <input id="edit-name-${id}" value="${esc(s.name)}" style="font-size:0.82rem;padding:4px 8px;">
+      </div>
+      <div>
+        <div style="font-size:0.67rem;color:var(--text-muted);margin-bottom:2px;">Slot times (comma-separated)</div>
+        <input id="edit-times-${id}" value="${esc(curTimes)}" placeholder="e.g. 12:00, 16:30" style="font-size:0.82rem;padding:4px 8px;">
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button onclick="saveSavedMember('${id}')" style="flex:1;padding:5px;border-radius:6px;border:none;background:var(--accent);color:#fff;font-size:0.78rem;font-weight:600;cursor:pointer;">Save</button>
+        <button onclick="renderSavedPanelList()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;">Cancel</button>
+      </div>
+    </div>`;
+}
+
+function saveSavedMember(id) {
+  const s = (DB.settings.savedPanelMembers||[]).find(x=>x.id===id);
+  if (!s) return;
+  const newName  = document.getElementById('edit-name-'+id)?.value.trim();
+  const newTimes = document.getElementById('edit-times-'+id)?.value;
+  if (newName)  s.name = newName;
+  if (newTimes) {
+    s.slotTimes  = newTimes.split(',').map(t=>t.trim()).filter(Boolean);
+    s.defaultTime = s.slotTimes[0];
+  }
+  saveData();
+  renderSavedPanelList();
 }
 
 function deleteSavedMember(id) {
