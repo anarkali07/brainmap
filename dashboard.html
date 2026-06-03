@@ -6698,6 +6698,7 @@ if (pendingEl) {
 }
 
 const toMinsStr = t => { if(!t)return 0; const[h,m]=t.split(':').map(Number); return h*60+m; };
+const addMinsToTime = (t,m) => { const tot=toMinsStr(t)+m; return String(Math.floor(tot/60)).padStart(2,'0')+':'+String(tot%60).padStart(2,'0'); };
 
 function renderSavedPanelList() {
   const el = document.getElementById('ps-saved-list');
