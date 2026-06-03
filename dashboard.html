@@ -811,6 +811,7 @@ body[data-theme="light"] {
       <div class="nav-item" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:16px;height:16px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
       <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Interviews</span></div>
       <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:16px;height:16px;"></i></span><span class="nav-label"> Schedules</span></div>
+      <div class="nav-item" data-section="panelscheduler"><span class="nav-icon"><i data-lucide="calendar-clock" style="width:16px;height:16px;"></i></span><span class="nav-label"> Panel Scheduler</span></div>
       <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scan Reports</span></div>
       <div class="nav-section-label">Life</div>
       <div class="nav-item" data-section="personal"><span class="nav-icon"><i data-lucide="heart-pulse" style="width:16px;height:16px;"></i></span><span class="nav-label"> Personal</span></div>
@@ -1302,6 +1303,66 @@ body[data-theme="light"] {
 
         <!-- Entries -->
         <div id="tt-entries"></div>
+      </section>
+
+      <!-- ======================================================
+           SECTION: PANEL SCHEDULER
+           ====================================================== -->
+      <section id="sec-panelscheduler" class="section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+          <h2 style="margin:0;">🗓 Panel Scheduler</h2>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="date" id="ps-date" onchange="renderPanelScheduler()" style="padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-size:0.82rem;">
+            <button onclick="renderPanelScheduler()" style="padding:5px 14px;border-radius:7px;border:1px solid var(--accent);background:var(--accent-glass);color:var(--accent);font-size:0.8rem;font-weight:600;cursor:pointer;">Refresh</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:320px 1fr;gap:16px;">
+
+          <!-- Left: Panel availability input -->
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div class="card">
+              <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:10px;">👥 Panel Availability</div>
+              <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;">
+                <input id="ps-panel-name" placeholder="Panel member name" autocomplete="off" style="font-size:0.82rem;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+                  <div>
+                    <label style="font-size:0.68rem;margin-bottom:2px;">Available From</label>
+                    <input type="time" id="ps-panel-from" style="font-size:0.82rem;">
+                  </div>
+                  <div>
+                    <label style="font-size:0.68rem;margin-bottom:2px;">Slot Duration</label>
+                    <select id="ps-slot-dur" style="font-size:0.82rem;">
+                      <option value="30">30 min</option>
+                      <option value="45" selected>45 min</option>
+                      <option value="60">60 min</option>
+                      <option value="90">1.5 hrs</option>
+                    </select>
+                  </div>
+                </div>
+                <button onclick="addPanelMember()" class="btn-primary" style="font-size:0.82rem;padding:8px;">+ Add Panel Member</button>
+              </div>
+              <div id="ps-panel-list" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+
+            <!-- Unscheduled candidates -->
+            <div class="card" style="flex:1;">
+              <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:10px;">📋 Pending Assignment</div>
+              <div id="ps-pending-list" style="display:flex;flex-direction:column;gap:5px;max-height:360px;overflow-y:auto;"></div>
+            </div>
+          </div>
+
+          <!-- Right: Schedule grid -->
+          <div class="card" style="padding:0;overflow:hidden;">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);">📅 Schedule Board</span>
+              <button onclick="savePanelSchedule()" style="font-size:0.78rem;padding:5px 14px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:600;cursor:pointer;box-shadow:0 2px 8px var(--accent-glow);">
+                💾 Save All Assignments
+              </button>
+            </div>
+            <div id="ps-board" style="padding:16px;overflow-y:auto;max-height:600px;"></div>
+          </div>
+        </div>
       </section>
 
       <!-- ======================================================
@@ -2451,7 +2512,8 @@ function navigate(section) {
     personal:   () => { renderGoals(); renderHealth(); renderPlanner(); },
     timetracker:   renderTimeTracker,
     schedule:      renderSchedule,
-    intdashboard:  renderIntDashboard,
+    intdashboard:   renderIntDashboard,
+    panelscheduler: renderPanelScheduler,
     intschedules:  renderSchedulesPage,
     scanreports:   renderScanReports,
     config:        renderConfig,
@@ -6537,6 +6599,260 @@ function toggleScanCard(id) {
   const isCollapsed = body.style.display === 'none';
   body.style.display = isCollapsed ? '' : 'none';
   if (arrow) arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+/* ============================================================
+   PANEL SCHEDULER
+   ============================================================ */
+let _psPanel = []; // [{ name, from, dur, slots:[{time, candidateId, candidateName}] }]
+
+function renderPanelScheduler() {
+  const dateEl = document.getElementById('ps-date');
+  if (dateEl && !dateEl.value) dateEl.value = today();
+
+  // Populate pending candidates (rounds with no date on selected date)
+  const pendingEl = document.getElementById('ps-pending-list');
+  const pending = (DB.interviews||[]).filter(i =>
+    !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
+    (i.rounds||[]).some(r => !r.interviewDate)
+  );
+
+  if (pendingEl) {
+    if (!pending.length) {
+      pendingEl.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);text-align:center;padding:12px;">All candidates have dates assigned ✅</div>';
+    } else {
+      pendingEl.innerHTML = pending.map(i => {
+        const nextRound = (i.rounds||[]).find(r => !r.interviewDate);
+        return `<div id="pend-${i.id}" style="padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:grab;"
+          draggable="true" ondragstart="psDragStart(event,'${i.id}')">
+          <div style="font-size:0.82rem;font-weight:600;">${esc(i.candidateName)}</div>
+          <div style="display:flex;gap:6px;margin-top:2px;flex-wrap:wrap;">
+            <span style="font-size:0.68rem;color:var(--text-muted);">${i.experience||0}y · ${esc(i.partner||'')}</span>
+            <span style="font-size:0.68rem;padding:1px 6px;background:rgba(79,142,247,0.15);color:var(--accent);border-radius:10px;font-weight:700;">${esc(nextRound?.round||'R1')}</span>
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+
+  renderPanelBoard();
+}
+
+function addPanelMember() {
+  const name = document.getElementById('ps-panel-name').value.trim();
+  const from = document.getElementById('ps-panel-from').value;
+  const dur  = parseInt(document.getElementById('ps-slot-dur').value) || 45;
+  if (!name) { document.getElementById('ps-panel-name').focus(); return; }
+  if (!from) { document.getElementById('ps-panel-from').focus(); return; }
+
+  // Check if already added
+  if (_psPanel.find(p => p.name === name)) {
+    alert(`${name} is already in the panel list.`); return;
+  }
+
+  _psPanel.push({ id: uid(), name, from, dur, slots: [] });
+  document.getElementById('ps-panel-name').value = '';
+  document.getElementById('ps-panel-from').value = '';
+  renderPanelMemberList();
+  renderPanelBoard();
+}
+
+function removePanelMember(pid) {
+  _psPanel = _psPanel.filter(p => p.id !== pid);
+  renderPanelMemberList();
+  renderPanelBoard();
+}
+
+function renderPanelMemberList() {
+  const el = document.getElementById('ps-panel-list');
+  if (!el) return;
+  if (!_psPanel.length) { el.innerHTML = '<div style="font-size:0.78rem;color:var(--text-muted);">No panel members added yet.</div>'; return; }
+  el.innerHTML = _psPanel.map(p => `
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:0.82rem;font-weight:600;">${esc(p.name)}</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">From ${p.from} · ${p.dur} min/slot · ${p.slots.length} assigned</div>
+      </div>
+      <button onclick="removePanelMember('${p.id}')" style="background:none;border:none;color:var(--critical);cursor:pointer;font-size:0.85rem;padding:2px;">✕</button>
+    </div>`).join('');
+}
+
+function renderPanelBoard() {
+  const board = document.getElementById('ps-board');
+  if (!board) return;
+  if (!_psPanel.length) {
+    board.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;font-size:0.85rem;">Add panel members on the left to build the schedule board.</div>';
+    return;
+  }
+
+  const addMins = (time, mins) => {
+    const [h,m] = time.split(':').map(Number);
+    const total = h*60+m+mins;
+    return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
+  };
+
+  board.innerHTML = _psPanel.map(p => {
+    const slotsHtml = p.slots.map((s,idx) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:6px;
+        background:var(--accent-glass);border:1px solid var(--accent);border-radius:8px;position:relative;">
+        <div style="font-size:0.7rem;font-weight:700;color:var(--accent);white-space:nowrap;min-width:80px;">
+          ${s.time} – ${addMins(s.time,p.dur)}
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.82rem;font-weight:600;">${esc(s.candidateName)}</div>
+          <div style="font-size:0.68rem;color:var(--text-muted);">${esc(s.round||'')} · ${esc(s.partner||'')}</div>
+        </div>
+        <button onclick="psRemoveSlot('${p.id}',${idx})"
+          style="background:none;border:none;color:var(--critical);cursor:pointer;font-size:0.8rem;">✕</button>
+      </div>`).join('');
+
+    // Next available slot time
+    const nextTime = p.slots.length
+      ? addMins(p.slots[p.slots.length-1].time, p.dur)
+      : p.from;
+
+    return `<div style="margin-bottom:20px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></div>
+        <span style="font-size:0.85rem;font-weight:700;">${esc(p.name)}</span>
+        <span style="font-size:0.72rem;color:var(--text-muted);">available from ${p.from} · ${p.dur} min slots</span>
+        <span style="font-size:0.7rem;padding:2px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);">Next: ${nextTime}</span>
+      </div>
+      ${slotsHtml}
+      <div id="drop-${p.id}"
+        ondragover="event.preventDefault()"
+        ondrop="psDrop(event,'${p.id}')"
+        style="border:2px dashed var(--border);border-radius:8px;padding:12px;text-align:center;
+          font-size:0.78rem;color:var(--text-muted);cursor:pointer;transition:all 0.15s;"
+        onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'"
+        onclick="psAssignNext('${p.id}')">
+        + Drag candidate here or click to assign next pending
+      </div>
+    </div>`;
+  }).join('');
+}
+
+let _psDragId = null;
+function psDragStart(e, candidateId) {
+  _psDragId = candidateId;
+  e.dataTransfer.effectAllowed = 'move';
+}
+
+function psDrop(e, panelId) {
+  e.preventDefault();
+  if (_psDragId) { psAssignToPanel(panelId, _psDragId); _psDragId = null; }
+}
+
+function psAssignNext(panelId) {
+  // Find first unassigned pending candidate
+  const assignedIds = _psPanel.flatMap(p => p.slots.map(s => s.candidateId));
+  const pending = (DB.interviews||[]).filter(i =>
+    !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
+    (i.rounds||[]).some(r => !r.interviewDate) &&
+    !assignedIds.includes(i.id)
+  );
+  if (!pending.length) { alert('No more pending candidates.'); return; }
+  psAssignToPanel(panelId, pending[0].id);
+}
+
+function psAssignToPanel(panelId, candidateId) {
+  const panel = _psPanel.find(p => p.id === panelId);
+  if (!panel) return;
+  if (panel.slots.find(s => s.candidateId === candidateId)) return; // already assigned
+
+  const i = DB.interviews.find(x => x.id === candidateId);
+  if (!i) return;
+  const nextRound = (i.rounds||[]).find(r => !r.interviewDate);
+
+  const addMins = (time, mins) => {
+    const [h,m] = time.split(':').map(Number);
+    const total = h*60+m+mins;
+    return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
+  };
+
+  const slotTime = panel.slots.length
+    ? addMins(panel.slots[panel.slots.length-1].time, panel.dur)
+    : panel.from;
+
+  panel.slots.push({
+    time: slotTime,
+    candidateId,
+    candidateName: i.candidateName,
+    round: nextRound?.round || 'R1',
+    roundId: nextRound?.id,
+    partner: i.partner || ''
+  });
+
+  // Remove from pending list visually
+  const pendEl = document.getElementById('pend-' + candidateId);
+  if (pendEl) pendEl.remove();
+
+  renderPanelMemberList();
+  renderPanelBoard();
+}
+
+function psRemoveSlot(panelId, idx) {
+  const panel = _psPanel.find(p => p.id === panelId);
+  if (!panel) return;
+  // Re-add candidate to pending
+  const slot = panel.slots[idx];
+  panel.slots.splice(idx, 1);
+  // Recalculate subsequent slot times
+  const addMins = (time, mins) => {
+    const [h,m] = time.split(':').map(Number);
+    const total = h*60+m+mins;
+    return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
+  };
+  panel.slots.forEach((s,i) => {
+    s.time = i===0 ? panel.from : addMins(panel.slots[i-1].time, panel.dur);
+  });
+  renderPanelScheduler();
+  renderPanelMemberList();
+  renderPanelBoard();
+}
+
+function savePanelSchedule() {
+  const dateEl = document.getElementById('ps-date');
+  const date   = dateEl?.value || today();
+  if (!_psPanel.length) { alert('No panel members added.'); return; }
+
+  let saved = 0;
+  _psPanel.forEach(panel => {
+    panel.slots.forEach(slot => {
+      const i = DB.interviews.find(x => x.id === slot.candidateId);
+      if (!i) return;
+      const r = slot.roundId
+        ? (i.rounds||[]).find(x => x.id === slot.roundId)
+        : (i.rounds||[]).find(x => !x.interviewDate);
+      if (!r) return;
+      r.interviewDate  = date;
+      r.panelMembers   = panel.name;
+      r.roundStatus    = 'Scheduled';
+      if (!i.finalStatus || i.finalStatus === 'Under Review') i.finalStatus = 'Scheduled';
+      saved++;
+    });
+  });
+
+  saveData();
+  renderInterviews();
+
+  // Show summary
+  const btn = document.querySelector('[onclick="savePanelSchedule()"]');
+  if (btn) {
+    btn.textContent = `✅ Saved ${saved} assignments!`;
+    btn.style.background = '#16a34a';
+    setTimeout(() => {
+      btn.textContent = '💾 Save All Assignments';
+      btn.style.background = '';
+    }, 3000);
+  }
+
+  // Clear board for next day
+  _psPanel.forEach(p => p.slots = []);
+  renderPanelMemberList();
+  renderPanelBoard();
+  renderPanelScheduler();
 }
 
 function updateSchedPanel(interviewId, roundId, value) {
