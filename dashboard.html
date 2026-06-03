@@ -1343,6 +1343,17 @@ body[data-theme="light"] {
               <div id="ps-saved-list" style="display:flex;flex-direction:column;gap:5px;"></div>
             </div>
 
+            <!-- Paste schedule text -->
+            <div class="card" style="padding:12px;">
+              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">📋 Paste Schedule</div>
+              <textarea id="ps-paste-input" rows="5"
+                placeholder="Paste availability:&#10;Utkarsh Pratap Singh: 7 pm&#10;Yash Shahani: 4.30 pm&#10;Varsha Pal: 12.30 pm"
+                style="font-size:0.78rem;resize:vertical;margin-bottom:6px;"></textarea>
+              <button onclick="parsePastedSchedule()"
+                style="width:100%;padding:7px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer;">⚡ Parse & Load</button>
+              <div id="ps-paste-status" style="font-size:0.72rem;margin-top:5px;min-height:14px;"></div>
+            </div>
+
             <!-- Quick add custom member -->
             <div class="card" style="padding:12px;">
               <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">+ Add Custom</div>
@@ -6768,6 +6779,79 @@ function saveCurrentPanelMembers() {
   });
   saveData(); renderSavedPanelList();
   alert('Panel members saved!');
+}
+
+function parseTimeStr(raw) {
+  // Handle formats: "7 pm", "4.30 pm", "12:30", "7:00 pm", "4.30pm", "19:00"
+  if (!raw) return null;
+  raw = raw.trim().toLowerCase();
+  const isPM = raw.includes('pm');
+  const isAM = raw.includes('am');
+  raw = raw.replace(/[ap]m/g,'').trim();
+  // replace dot with colon
+  raw = raw.replace('.', ':');
+  const parts = raw.split(':');
+  let h = parseInt(parts[0]) || 0;
+  let m = parseInt(parts[1]) || 0;
+  if (isPM && h < 12) h += 12;
+  if (isAM && h === 12) h = 0;
+  if (!isPM && !isAM && h < 8) h += 12; // assume PM for times < 8 (e.g. "7" = 7pm)
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function parsePastedSchedule() {
+  const input = document.getElementById('ps-paste-input')?.value.trim();
+  const statusEl = document.getElementById('ps-paste-status');
+  if (!input) { if(statusEl) statusEl.textContent='⚠ Nothing to parse.'; return; }
+
+  const lines = input.split('\n').map(l=>l.trim()).filter(Boolean);
+  const parsed = [];
+  const failed = [];
+
+  lines.forEach(line => {
+    // Format: "Name: time" or "Name - time"
+    const match = line.match(/^(.+?)[\:\-]\s*(.+)$/);
+    if (!match) { failed.push(line); return; }
+    const name = match[1].trim();
+    const timeRaw = match[2].trim();
+    const time = parseTimeStr(timeRaw);
+    if (!time) { failed.push(line); return; }
+    parsed.push({ name, time });
+  });
+
+  if (!parsed.length) {
+    if(statusEl) statusEl.innerHTML = `<span style="color:var(--critical);">❌ Could not parse any lines.</span>`;
+    return;
+  }
+
+  // Load parsed members into the scheduler
+  let added = 0;
+  parsed.forEach(p => {
+    // Check if this person is in savedPanelMembers
+    const saved = (DB.settings.savedPanelMembers||[]).find(s=>s.name.toLowerCase()===p.name.toLowerCase());
+    if (saved) {
+      // Override the first slot time with the pasted time
+      if (!_psPanel.find(x=>x.name===saved.name)) {
+        const slots = [...(saved.slotTimes||[saved.defaultTime||p.time])];
+        slots[0] = p.time; // use pasted time as first slot
+        _psPanel.push({ id:uid(), name:saved.name, slotTimes:slots, from:p.time, dur:saved.dur||30, slots:[] });
+        added++;
+      }
+    } else {
+      // New person not in saved list — create with single slot
+      if (!_psPanel.find(x=>x.name.toLowerCase()===p.name.toLowerCase())) {
+        _psPanel.push({ id:uid(), name:p.name, slotTimes:[p.time], from:p.time, dur:30, slots:[] });
+        added++;
+      }
+    }
+  });
+
+  renderPanelMemberList();
+  renderPanelBoard();
+
+  const msg = `✅ Loaded ${added} panel member${added!==1?'s':''}` + (failed.length?` · ⚠ ${failed.length} line${failed.length!==1?'s':''} skipped`:'');
+  if(statusEl) statusEl.innerHTML = `<span style="color:${added?'var(--low)':'var(--medium)'};">${msg}</span>`;
+  if(added>0) document.getElementById('ps-paste-input').value = '';
 }
 
 function addPanelMember() {
