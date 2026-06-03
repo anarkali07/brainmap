@@ -1445,11 +1445,11 @@
       {
         "id": "sp5",
         "name": "Sajan",
-        "defaultTime": "14:30",
+        "defaultTime": "16:30",
         "until": "15:30",
         "dur": 45,
         "slotTimes": [
-          "14:30"
+          "16:30"
         ]
       }
     ]
