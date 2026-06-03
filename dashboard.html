@@ -1103,13 +1103,18 @@ body[data-theme="light"] {
         <div class="card" style="padding:0;overflow:auto;">
           <table id="int-table">
             <thead><tr>
-              <th onclick="sortInterviews('name')" class="sortable-th" data-col="name">Candidate <span class="sort-icon" id="si-name"></span></th>
+              <th onclick="sortInterviews('name')" class="sortable-th" data-col="name">
+                <span style="display:flex;align-items:center;gap:6px;">
+                  <button onclick="event.stopPropagation();toggleAllIntRows()" title="Expand/collapse all"
+                    style="width:20px;height:20px;border-radius:4px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.6rem;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;padding:0;" id="int-expand-all-btn">▶</button>
+                  Candidate <span class="sort-icon" id="si-name"></span>
+                </span>
+              </th>
               <th style="width:60px;text-align:center;" onclick="sortInterviews('level')" class="sortable-th" data-col="level">Level <span class="sort-icon" id="si-level"></span></th>
-              <th style="width:110px;" onclick="sortInterviews('partner')" class="sortable-th" data-col="partner">Partner <span class="sort-icon" id="si-partner"></span></th>
-              <th style="min-width:260px;">Interview Rounds</th>
-              <th style="min-width:240px;" onclick="sortInterviews('rank')" class="sortable-th" data-col="rank">Profile <span class="sort-icon" id="si-rank"></span></th>
+              <th style="width:100px;" onclick="sortInterviews('partner')" class="sortable-th" data-col="partner">Partner <span class="sort-icon" id="si-partner"></span></th>
+              <th style="width:90px;">Next Round</th>
               <th onclick="sortInterviews('status')" class="sortable-th" data-col="status">Status <span class="sort-icon" id="si-status"></span></th>
-              <th style="width:60px;text-align:center;">Actions</th>
+              <th style="width:70px;text-align:center;">Actions</th>
             </tr></thead>
             <tbody id="int-tbody"></tbody>
           </table>
@@ -1511,6 +1516,16 @@ body[data-theme="light"] {
             <div id="cfg-ai-status" style="font-size:0.8rem;margin-top:6px;"></div>
             <label style="margin-top:12px;">Model</label>
             <select id="cfg-ai-model"></select>
+
+            <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);">
+              <div style="font-size:0.78rem;font-weight:700;color:var(--text);margin-bottom:4px;">🔍 Web Search (for Profile Scanner)</div>
+              <div style="font-size:0.74rem;color:var(--text-muted);margin-bottom:8px;">
+                Enables <strong>automatic LinkedIn/web search</strong> inside the Profile Scanner.<br>
+                Free: 2000 searches/month — <a href="https://api.search.brave.com/register" target="_blank" style="color:var(--accent);">Get free Brave Search API key →</a>
+              </div>
+              <label>Brave Search API Key</label>
+              <input type="password" id="cfg-brave-key" placeholder="BSA..." autocomplete="off" autocorrect="off" autocapitalize="off">
+            </div>
           </div>
         </div>
 
@@ -2048,14 +2063,23 @@ body[data-theme="light"] {
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;">
         <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:10px;">STEP 1 — Search Online (opens in new tabs)</div>
         <div id="scanner-links" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">👆 Click each to search. Copy relevant info and paste below.</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);margin-top:8px;">👆 Click each to search. Copy relevant info and paste below. <strong>OR</strong> use Auto-Search if Brave API key is set.</div>
       </div>
 
-      <!-- Step 2: Paste web findings -->
+      <!-- Step 2: Auto-search OR paste -->
       <div>
-        <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:6px;">STEP 2 — Paste what you found (LinkedIn, Google etc.)</div>
-        <textarea id="scanner-web-input" rows="4" placeholder="Paste LinkedIn profile text, Google search snippets, any online info about this person here… (optional — leave blank to scan resume only)"
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);">STEP 2 — Web Findings</div>
+          <button id="auto-search-btn" onclick="autoSearchCandidate()"
+            style="font-size:0.72rem;padding:4px 12px;border-radius:7px;border:1px solid #34d399;
+              background:rgba(52,211,153,0.1);color:#34d399;cursor:pointer;font-weight:600;display:flex;align-items:center;gap:5px;">
+            🌐 Auto-Search
+          </button>
+        </div>
+        <textarea id="scanner-web-input" rows="5"
+          placeholder="Auto-search will populate this automatically (requires Brave Search API key in Settings → AI).&#10;&#10;OR paste LinkedIn profile text, Google snippets, any online info manually…"
           style="font-size:0.78rem;line-height:1.5;resize:vertical;"></textarea>
+        <div id="auto-search-status" style="font-size:0.7rem;color:var(--text-muted);margin-top:4px;"></div>
       </div>
 
       <!-- Step 3: Run full scan -->
@@ -2280,7 +2304,7 @@ function emptyData() {
       categories: ['Team Management','Projects','Partner Onboarding','Interviews','Learning','Personal','Health'],
       hiddenNav: [],
       dashCards: { openTasks:true, overdue:true, dueToday:true, followUps:true, projects:true, interviews:true, goals:true, scratchPad:true },
-      aiProvider: 'groq', groqKey: '', apiKey: '', aiModel: 'llama-3.3-70b-versatile',
+      aiProvider: 'groq', groqKey: '', apiKey: '', aiModel: 'llama-3.3-70b-versatile', braveKey: '',
       openL1: 0, openL2: 0, colorTheme: 'ocean'
     }
   };
@@ -4996,6 +5020,32 @@ Return ONLY a valid JSON array. No markdown fences, no extra text:
   }
 }
 
+/* ── Interview row collapse/expand ── */
+let _intAllExpanded = false;
+
+function toggleIntRow(id) {
+  const detail = document.getElementById('int-detail-' + id);
+  const arrow  = document.getElementById('int-arrow-'  + id);
+  if (!detail) return;
+  const open = detail.style.display === 'none' || detail.style.display === '';
+  // When closed display is '' initially but we set it to none in HTML — check computed
+  const isHidden = detail.style.display === 'none' || detail.style.display === '';
+  detail.style.display = isHidden ? 'table-row' : 'none';
+  if (arrow) arrow.style.transform = isHidden ? 'rotate(90deg)' : '';
+}
+
+function toggleAllIntRows() {
+  _intAllExpanded = !_intAllExpanded;
+  const btn = document.getElementById('int-expand-all-btn');
+  if (btn) btn.textContent = _intAllExpanded ? '▼' : '▶';
+  document.querySelectorAll('[id^="int-detail-"]').forEach(el => {
+    el.style.display = _intAllExpanded ? 'table-row' : 'none';
+  });
+  document.querySelectorAll('[id^="int-arrow-"]').forEach(el => {
+    el.style.transform = _intAllExpanded ? 'rotate(90deg)' : '';
+  });
+}
+
 // ── Interview sort state ──
 let _intSort = { col: null, dir: 1 }; // dir: 1=asc, -1=desc
 
@@ -5339,47 +5389,76 @@ function renderInterviews() {
       </div>
       ${scanBadge}`;
 
-    return `<tr class="int-row">
-      <td style="vertical-align:top;">
-        <strong style="font-size:0.88rem;">${esc(i.candidateName)}</strong>
-        <div class="text-sm text-muted">${esc(i.position||'')}</div>
-        ${i.experience ? `<div class="text-sm text-muted">${i.experience} yrs exp</div>` : ''}
+    const verdictClr = (() => {
+      const v = (i.profileSummary||'').match(/VERDICT:\s*(.+)/)?.[1]||'';
+      return v.includes('✅')?'var(--low)':v.includes('⚠')?'var(--medium)':v.includes('❌')?'var(--critical)':'var(--text-muted)';
+    })();
+    const nextRound  = (i.rounds||[]).find(r=>r.interviewDate && r.interviewDate >= today());
+    const nextDate   = nextRound ? fmtDate(nextRound.interviewDate) : '—';
+    const statusClrs = {Scheduled:'#3b82f6','Under Review':'#06b6d4',Screening:'#8b5cf6',Selected:'var(--low)','On Hold':'var(--medium)',Rejected:'var(--critical)'};
+    const sClr       = statusClrs[i.finalStatus]||'var(--text-muted)';
+    const scanBadgeSm = i.scanResult ? `<span style="font-size:0.65rem;padding:1px 6px;border-radius:10px;font-weight:700;
+      background:${i.scanResult.risk==='Low'?'rgba(52,211,153,0.12)':i.scanResult.risk==='Medium'?'rgba(251,191,36,0.12)':'rgba(244,63,94,0.12)'};
+      color:${i.scanResult.risk==='Low'?'#34d399':i.scanResult.risk==='Medium'?'#fbbf24':'#f43f5e'};">
+      ${i.scanResult.risk==='Low'?'🟢':i.scanResult.risk==='Medium'?'🟡':'🔴'} ${i.scanResult.risk}</span>` : '';
+
+    return `
+    <!-- Collapsed header row -->
+    <tr class="int-row" id="int-hdr-${i.id}" style="cursor:pointer;" onclick="toggleIntRow('${i.id}')">
+      <td style="vertical-align:middle;padding:10px 12px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span id="int-arrow-${i.id}" style="font-size:0.65rem;color:var(--text-muted);transition:transform 0.18s;flex-shrink:0;">▶</span>
+          <div>
+            <div style="font-weight:600;font-size:0.88rem;">${esc(i.candidateName)}</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">${esc(i.position||'')} · ${i.experience||0}y</div>
+          </div>
+        </div>
       </td>
-      <td style="text-align:center;vertical-align:top;">${positionToggle}</td>
-      <td style="vertical-align:top;">
+      <td style="text-align:center;vertical-align:middle;" onclick="event.stopPropagation()">${positionToggle}</td>
+      <td style="vertical-align:middle;font-size:0.8rem;" onclick="event.stopPropagation()">
         <input value="${esc(i.partner||'')}" placeholder="—"
-          style="background:transparent;border:none;border-bottom:1px dashed var(--border);
-            color:var(--text);font-size:0.8rem;padding:2px 0;width:100%;cursor:text;"
-          onchange="updatePartner('${i.id}',this.value)" title="Partner / Hiring Manager">
+          style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text);font-size:0.8rem;padding:2px 0;width:100%;"
+          onchange="updatePartner('${i.id}',this.value)">
       </td>
-      <td style="vertical-align:top;">
-        ${roundsHtml}
-        <button class="btn-secondary btn-sm" style="margin-top:6px;font-size:0.75rem;" onclick="openRoundModal('${i.id}')">+ Add Round</button>
+      <td style="vertical-align:middle;font-size:0.78rem;color:var(--text-muted);">${nextDate}</td>
+      <td style="vertical-align:middle;" onclick="event.stopPropagation()">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <span style="font-size:0.75rem;font-weight:600;color:${sClr};">${i.finalStatus||''}</span>
+          ${scanBadgeSm}
+        </div>
       </td>
-      <td style="vertical-align:top;">${profile}${qBtn}</td>
-      <td style="vertical-align:top;">
-        <select style="font-size:0.78rem;padding:4px 8px;border-radius:7px;" onchange="updateFinalStatus('${i.id}',this.value)">
-          ${['Scheduled','Under Review','Screening','Selected','Rejected','On Hold'].map(s =>
-            `<option${s===i.finalStatus?' selected':''}>${s}</option>`
-          ).join('')}
-        </select>
-      </td>
-      <td style="vertical-align:top;text-align:center;">
-        <div style="display:flex;gap:5px;justify-content:center;">
+      <td style="vertical-align:middle;text-align:center;" onclick="event.stopPropagation()">
+        <div style="display:flex;gap:4px;justify-content:center;">
           <button onclick="openInterviewModal('${i.id}')" title="Edit"
-            style="width:30px;height:30px;border-radius:8px;border:1px solid var(--border);
-              background:var(--bg2);color:var(--text-muted);font-size:0.85rem;
-              display:flex;align-items:center;justify-content:center;cursor:pointer;
-              transition:all 0.15s;"
-            onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-            onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">✏️</button>
+            style="width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.8rem;display:flex;align-items:center;justify-content:center;cursor:pointer;">✏️</button>
           <button onclick="deleteInterview('${i.id}')" title="Delete"
-            style="width:30px;height:30px;border-radius:8px;border:1px solid rgba(244,63,94,0.2);
-              background:rgba(244,63,94,0.07);color:var(--critical);font-size:0.85rem;
-              display:flex;align-items:center;justify-content:center;cursor:pointer;
-              transition:all 0.15s;"
-            onmouseover="this.style.background='rgba(244,63,94,0.18)'"
-            onmouseout="this.style.background='rgba(244,63,94,0.07)'">🗑</button>
+            style="width:28px;height:28px;border-radius:7px;border:1px solid rgba(244,63,94,0.2);background:rgba(244,63,94,0.07);color:var(--critical);font-size:0.8rem;display:flex;align-items:center;justify-content:center;cursor:pointer;">🗑</button>
+        </div>
+      </td>
+    </tr>
+    <!-- Expanded detail row (hidden by default) -->
+    <tr id="int-detail-${i.id}" style="display:none;">
+      <td colspan="6" style="padding:0 0 8px 32px;background:var(--bg2);">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px 12px 8px;">
+          <!-- Left: Rounds -->
+          <div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">Interview Rounds</div>
+            ${roundsHtml}
+            <button class="btn-secondary btn-sm" style="margin-top:6px;font-size:0.75rem;" onclick="openRoundModal('${i.id}')">+ Add Round</button>
+          </div>
+          <!-- Right: Profile + Questions -->
+          <div>
+            <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">Profile & Assessment</div>
+            <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;">
+              ${profile}${qBtn}
+            </div>
+            <div style="margin-top:8px;">
+              <select style="font-size:0.78rem;padding:4px 8px;border-radius:7px;width:100%;" onchange="updateFinalStatus('${i.id}',this.value)">
+                ${['Scheduled','Under Review','Screening','Selected','Rejected','On Hold'].map(s =>
+                  `<option${s===i.finalStatus?' selected':''}>${s}</option>`).join('')}
+              </select>
+            </div>
+          </div>
         </div>
       </td>
     </tr>`;
@@ -5860,6 +5939,64 @@ function openProfileScanner(id) {
     </a>`).join('');
 
   openModal('scanner-modal');
+}
+
+async function autoSearchCandidate() {
+  const braveKey = DB.settings.braveKey;
+  if (!braveKey) {
+    document.getElementById('auto-search-status').innerHTML =
+      '⚠ No Brave API key. <a href="#" onclick="navigate(\'config\');closeModal(\'scanner-modal\')" style="color:var(--accent);">Add it in Settings → AI →</a>';
+    return;
+  }
+
+  const i = DB.interviews.find(x => x.id === _scanCandidateId);
+  if (!i) return;
+
+  const btn = document.getElementById('auto-search-btn');
+  const statusEl = document.getElementById('auto-search-status');
+  const inputEl  = document.getElementById('scanner-web-input');
+  btn.innerHTML = '<span class="spinner"></span> Searching…'; btn.disabled = true;
+  statusEl.textContent = '';
+
+  const name     = i.candidateName;
+  const ps       = i.profileSummary || '';
+  const companies = (ps.match(/COMPANIES:\s*(.+)/)?.[1]||'').split(',').map(c=>c.trim()).filter(Boolean);
+  const firstCo  = companies[0] || '';
+
+  // Search queries to run
+  const queries = [
+    `"${name}" ${firstCo} site:linkedin.com`,
+    `"${name}" ${firstCo} AppSec security engineer`,
+    `"${name}" ${firstCo} recommendations certifications`,
+  ];
+
+  const braveSearch = async (q) => {
+    const res = await fetch(`https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(q)}&count=5&text_decorations=0`, {
+      headers: { 'Accept': 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey }
+    });
+    if (!res.ok) throw new Error('Brave API: ' + res.status);
+    const data = await res.json();
+    return (data.web?.results || []).map(r => `[${r.title}]\n${r.description || ''}\nURL: ${r.url}`).join('\n\n');
+  };
+
+  try {
+    const results = [];
+    for (const q of queries) {
+      statusEl.textContent = `Searching: "${q.slice(0,50)}…"`;
+      try { results.push(`--- Query: ${q} ---\n` + await braveSearch(q)); }
+      catch(e) { results.push(`--- Query: ${q} --- (failed: ${e.message})`); }
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    const combined = results.join('\n\n');
+    inputEl.value = combined;
+    statusEl.innerHTML = `✅ Found ${queries.length} search results. Review above then click <strong>🔍 Generate Full Report</strong>.`;
+    btn.style.background = 'rgba(52,211,153,0.2)';
+  } catch(e) {
+    statusEl.textContent = '❌ Search failed: ' + e.message;
+  } finally {
+    btn.innerHTML = '🌐 Auto-Search'; btn.disabled = false;
+  }
 }
 
 async function runProfileScan() {
@@ -7450,10 +7587,13 @@ function saveAiConfig() {
     if (provider==='groq') DB.settings.groqKey = val;
     else DB.settings.apiKey = val;
   }
+  const bk = document.getElementById('cfg-brave-key')?.value.trim();
+  if (bk && bk !== '••••••••••••••••') DB.settings.braveKey = bk;
   saveData();
   const st = document.getElementById('cfg-ai-status');
   st.textContent = '✓ Saved!'; st.style.color = 'var(--low)';
   document.getElementById('cfg-ai-key').value = '••••••••••••••••';
+  if (document.getElementById('cfg-brave-key')) document.getElementById('cfg-brave-key').value = DB.settings.braveKey ? '••••••••••••••••' : '';
 }
 
 /* --- Data --- */
