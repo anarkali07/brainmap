@@ -110,7 +110,7 @@
       "candidateName": "Utkarsh Pratap Singh",
       "position": "Software Security Engineer",
       "experience": 6,
-      "finalStatus": "Scheduled",
+      "finalStatus": "Under Review",
       "level": "L2",
       "partner": "Quess",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 6\nAPPSEC: VAPT, SAST, DAST, Burp Suite, OWASP, Threat Modelling\nBACKGROUND: Dedicated security specialist with experience in cloud security and compliance\nFIT: Meets experience threshold with strong AppSec skills, including VAPT, SAST, DAST, and threat modeling, making them a suitable candidate\nCOMPANIES: CDAC, SRM Institute of Technology, Sunbeam Institute of Technology",
@@ -119,8 +119,8 @@
         {
           "id": "mpxmmg6t9ytr4",
           "round": "R1",
-          "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "interviewDate": "2026-06-04",
+          "panelMembers": "Nishant P",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Utkarsh is a seasoned software security engineer with hands-on experience in cloud security, compliance, and application security. He has a strong background in AWS infrastructure security, vulnerability assessment, and penetration testing. Utkarsh is proficient in implementing encryption, integrating security tools, and automating compliance for regulated environments. He has a proven track record of identifying and remediating critical vulnerabilities and improving pipeline security.\n\nKey Skills: AWS Security, AppSec, IAM, OWASP, VAPT, Cloud Security, CI/CD, Qualys, Nessus, SonarQube, Checkov"
@@ -150,7 +150,7 @@
         {
           "id": "mpxmlvxux6kdf",
           "round": "R1",
-          "interviewDate": "",
+          "interviewDate": "2026-06-04",
           "panelMembers": "Hiring Manager, AppSec Lead, HR",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
@@ -173,7 +173,7 @@
         {
           "id": "mpxmlv8fsh575",
           "round": "R1",
-          "interviewDate": "",
+          "interviewDate": "2026-06-04",
           "panelMembers": "Hiring Manager, AppSec Lead, HR",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
@@ -1031,7 +1031,7 @@
       "candidateName": "Sudhakar K",
       "position": "Senior Application Security Consultant",
       "experience": 7,
-      "finalStatus": "Scheduled",
+      "finalStatus": "Rejected",
       "level": "L2",
       "partner": "Quess",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 7.2 \nAPPSEC: SAST, DAST, Burp Suite, Threat Modelling, OWASP, Vulnerability Assessment and Penetration Testing\nBACKGROUND: Dedicated application security consultant with experience in security assessments and penetration testing\nFIT: Strong AppSec skills, including SAST, DAST, and threat modelling, with over 5 years of experience in application security, meeting the experience threshold\nCOMPANIES: Hover Graphics Pvt. Ltd., ANB Solution Pvt. Ltd., QSEAP INFOTECH PVT LTD, Sutherland Healthcare Solution PVT. Ltd., Conizo.org Pvt.Ltd",
@@ -1043,7 +1043,7 @@
           "interviewDate": "2026-06-03",
           "panelMembers": "Shamika , Viraj",
           "feedbackStatus": "Pending",
-          "roundStatus": "Scheduled",
+          "roundStatus": "Rejected",
           "notes": ""
         }
       ],
