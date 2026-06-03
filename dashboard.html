@@ -6683,8 +6683,44 @@ function renderPanelScheduler() {
   if (dateEl && !dateEl.value) dateEl.value = today();
   renderSavedPanelList();
 
-  // Pending = candidates scheduled on selected date but no panel member assigned yet
   const schedDate = (document.getElementById('ps-date')?.value) || today();
+
+  // ── Pre-populate board with existing assignments for this date ──
+  if (_psPanel.length) {
+    _psPanel.forEach(panel => {
+      const slotTimes = panel.slotTimes || [];
+      slotTimes.forEach((t, idx) => {
+        // Check if already manually assigned (keep it)
+        if (panel.slots[idx]?.candidateId) return;
+        // Look for existing interview with this panel + date + time
+        const existing = (DB.interviews||[]).find(i =>
+          (i.rounds||[]).some(r =>
+            r.interviewDate === schedDate &&
+            r.panelMembers === panel.name &&
+            (!r.interviewTime || r.interviewTime === t)
+          )
+        );
+        if (existing) {
+          const r = (existing.rounds||[]).find(x =>
+            x.interviewDate === schedDate && x.panelMembers === panel.name
+          );
+          panel.slots[idx] = {
+            time: t,
+            candidateId: existing.id,
+            candidateName: existing.candidateName,
+            round: r?.round || 'R1',
+            roundId: r?.id,
+            partner: existing.partner || '',
+            preExisting: true
+          };
+        }
+      });
+    });
+    renderPanelBoard();
+    renderPanelMemberList();
+  }
+
+  // Pending = candidates scheduled on selected date but no panel member assigned yet
   const pendingEl = document.getElementById('ps-pending-list');
   const pending = (DB.interviews||[]).filter(i =>
     !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
@@ -7025,7 +7061,7 @@ function renderPanelBoard() {
             <div style="font-size:0.62rem;color:var(--text-muted);">– ${endTime}</div>
           </div>
           <div style="flex:1;min-width:0;">
-            <div style="font-size:0.85rem;font-weight:700;">${esc(s.candidateName)}</div>
+            <div style="font-size:0.85rem;font-weight:700;">${esc(s.candidateName)}${s.preExisting?" <span style=\"font-size:0.62rem;padding:1px 5px;background:rgba(6,182,212,0.15);color:#06b6d4;border-radius:4px;\">existing</span>":""}</div>
             <div style="display:flex;gap:6px;margin-top:2px;">
               <span style="font-size:0.68rem;padding:1px 7px;background:rgba(79,142,247,0.15);color:var(--accent);border-radius:10px;font-weight:700;">${esc(s.round||'R1')}</span>
               <span style="font-size:0.68rem;color:var(--text-muted);">${esc(s.partner||'')}</span>
