@@ -1123,6 +1123,7 @@ body[data-theme="light"] {
                   Candidate <span class="sort-icon" id="si-name"></span>
                 </span>
               </th>
+              <th style="width:90px;" onclick="sortInterviews('sourced')" class="sortable-th" data-col="sourced">Sourced On <span class="sort-icon" id="si-sourced"></span></th>
               <th style="width:60px;text-align:center;" onclick="sortInterviews('level')" class="sortable-th" data-col="level">Level <span class="sort-icon" id="si-level"></span></th>
               <th style="width:100px;" onclick="sortInterviews('partner')" class="sortable-th" data-col="partner">Partner <span class="sort-icon" id="si-partner"></span></th>
               <th style="width:90px;">Next Round</th>
@@ -4803,6 +4804,11 @@ function updatePartner(id, val) {
   if (i) { i.partner = val.trim(); saveData(); }
 }
 
+function updateSourcedDate(id, val) {
+  const i = DB.interviews.find(x => x.id === id);
+  if (i) { i.sourcedDate = val; saveData(); }
+}
+
 function toggleCandidateLevel(id) {
   const i = DB.interviews.find(x => x.id === id);
   if (!i) return;
@@ -5204,6 +5210,7 @@ function _applyIntSort(arr) {
       case 'partner': va = (a.partner||'').toLowerCase(); vb = (b.partner||'').toLowerCase(); break;
       case 'status':  va = statusOrder[a.finalStatus]??99; vb = statusOrder[b.finalStatus]??99; break;
       case 'exp':     va = a.experience||0; vb = b.experience||0; break;
+      case 'sourced': va = a.sourcedDate||a.createdAt||''; vb = b.sourcedDate||b.createdAt||''; break;
       case 'rank':
         // ranked first (by rank asc), unranked last
         if (a.rank != null && b.rank != null) return (a.rank - b.rank) * dir;
@@ -5597,6 +5604,14 @@ function renderInterviews() {
             <div style="font-size:0.72rem;color:var(--text-muted);">${esc(i.position||'')} · ${i.experience||0}y</div>
           </div>
         </div>
+      </td>
+      <td style="vertical-align:middle;padding:10px 8px;" onclick="event.stopPropagation()">
+        <input type="date" value="${esc(i.sourcedDate || (i.createdAt?i.createdAt.slice(0,10):''))}"
+          title="Sourced On — date resume was received"
+          style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:var(--text-muted);font-size:0.74rem;padding:1px 0;width:100%;cursor:pointer;"
+          onfocus="this.style.borderBottomColor='var(--accent)'"
+          onblur="this.style.borderBottomColor='var(--border)'"
+          onchange="updateSourcedDate('${i.id}',this.value)">
       </td>
       <td style="text-align:center;vertical-align:middle;" onclick="event.stopPropagation()">${positionToggle}</td>
       <td style="vertical-align:middle;font-size:0.8rem;" onclick="event.stopPropagation()">
