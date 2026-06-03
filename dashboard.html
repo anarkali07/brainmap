@@ -6775,37 +6775,50 @@ function loadAllSavedMembers() {
 
 function _preFillExistingAssignments() {
   const schedDate = document.getElementById('ps-date')?.value || today();
+  // Collect all candidates already assigned to THIS date+panel across all rounds
+  const globalPlaced = new Set(
+    _psPanel.flatMap(p => p.slots.filter(Boolean).map(s => s.candidateId))
+  );
+
   _psPanel.forEach(panel => {
     const slotTimes = panel.slotTimes || [];
+    const panelName = panel.name.toLowerCase();
+    const localPlaced = new Set(); // track within this panel's loop
+
+    // Get ALL candidates assigned to this panel on this date (one per round)
+    const assigned = (DB.interviews||[]).filter(i =>
+      !['Rejected','Screened Out'].includes(i.finalStatus) &&
+      (i.rounds||[]).some(r =>
+        r.interviewDate === schedDate &&
+        r.panelMembers && r.panelMembers.trim().toLowerCase() === panelName
+      )
+    );
+
     slotTimes.forEach((t, idx) => {
-      if (panel.slots[idx]?.candidateId) return; // already set
-      // Find any interview with this panel member on this date
-      const existing = (DB.interviews||[]).find(i =>
-        !['Rejected','Screened Out'].includes(i.finalStatus) &&
-        (i.rounds||[]).some(r =>
-          r.interviewDate === schedDate &&
-          r.panelMembers && r.panelMembers.trim().toLowerCase() === panel.name.toLowerCase()
-        )
+      if (panel.slots[idx]?.candidateId) return; // already manually set
+
+      // Find a candidate not yet placed in this panel's slots
+      const existing = assigned.find(i =>
+        !globalPlaced.has(i.id) && !localPlaced.has(i.id)
       );
-      if (existing) {
-        const r = (existing.rounds||[]).find(x =>
-          x.interviewDate === schedDate &&
-          x.panelMembers && x.panelMembers.trim().toLowerCase() === panel.name.toLowerCase()
-        );
-        // Only assign if not already placed in another slot
-        const alreadyPlaced = _psPanel.some(p => p.slots.some(s => s?.candidateId === existing.id));
-        if (!alreadyPlaced) {
-          panel.slots[idx] = {
-            time: r?.interviewTime || t,
-            candidateId: existing.id,
-            candidateName: existing.candidateName,
-            round: r?.round || 'R1',
-            roundId: r?.id,
-            partner: existing.partner || '',
-            preExisting: true
-          };
-        }
-      }
+      if (!existing) return;
+
+      const r = (existing.rounds||[]).find(x =>
+        x.interviewDate === schedDate &&
+        x.panelMembers && x.panelMembers.trim().toLowerCase() === panelName
+      );
+
+      panel.slots[idx] = {
+        time: r?.interviewTime || t,
+        candidateId: existing.id,
+        candidateName: existing.candidateName,
+        round: r?.round || 'R1',
+        roundId: r?.id,
+        partner: existing.partner || '',
+        preExisting: true
+      };
+      localPlaced.add(existing.id);
+      globalPlaced.add(existing.id);
     });
   });
 }
@@ -7237,9 +7250,24 @@ function psAssignToPanel(panelId, candidateId) {
 function psRemoveSlot(panelId, idx) {
   const panel = _psPanel.find(p => p.id === panelId);
   if (!panel) return;
-  // Re-add candidate to pending
   const slot = panel.slots[idx];
-  panel.slots.splice(idx, 1);
+
+  // If pre-existing, offer to also clear from interview data
+  if (slot?.preExisting && slot.candidateId) {
+    const cand = DB.interviews.find(x => x.id === slot.candidateId);
+    const schedDate = document.getElementById('ps-date')?.value || today();
+    if (cand && confirm(`Remove "${cand.candidateName}" from ${panel.name}'s slot?\n(This will clear their panel assignment for ${schedDate})`)) {
+      const r = (cand.rounds||[]).find(x => x.id === slot.roundId);
+      if (r) { r.panelMembers = ''; r.interviewTime = ''; }
+      saveData();
+    } else if (slot?.preExisting) {
+      return; // cancelled
+    }
+  }
+
+  panel.slots[idx] = null; // clear specific slot, keep other slots
+  renderPanelScheduler();
+  renderPanelMemberList();
   // Recalculate subsequent slot times
   const addMins = (time, mins) => {
     const [h,m] = time.split(':').map(Number);
