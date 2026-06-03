@@ -5176,25 +5176,24 @@ function renderInterviews() {
     else if (i.finalStatus === 'Screening')    partnerMap[key].screening++;
     else if (i.finalStatus === 'Scheduled')    partnerMap[key].scheduled++;
     else                                       partnerMap[key].underReview++;
-    // Screened out = rejected with no completed interview round
-    if (i.finalStatus === 'Rejected') {
-      const hasCompletedRound = (i.rounds||[]).some(r => r.interviewDate && r.interviewDate <= today());
-      if (!hasCompletedRound) partnerMap[key].screenedOut++;
-    }
-    // Determine completed rounds:
-    // R1 completed = rejected OR has R2
-    // R2 completed = rejected OR has R3
-    // R3 completed = rejected OR selected
+    // A round is "completed" only if it actually had an interview (date exists + date is past)
+    // AND the outcome is known: rejected, selected, or moved to next round
+    const todayStr   = today();
     const roundTypes = (i.rounds||[]).map(r=>r.round);
     const hasR2 = roundTypes.includes('R2');
     const hasR3 = roundTypes.includes('R3');
     const isRejected  = i.finalStatus === 'Rejected';
+    const isScreenedOut = i.finalStatus === 'Screened Out';
     const isSelected  = i.finalStatus === 'Selected';
 
     (i.rounds || []).forEach(r => {
+      // Round must have a past interview date to be counted
+      const hadInterview = r.interviewDate && r.interviewDate <= todayStr;
+      if (!hadInterview) return; // never happened — skip
+
       const completed =
-        (r.round === 'R1' && (isRejected || hasR2)) ||
-        (r.round === 'R2' && (isRejected || hasR3)) ||
+        (r.round === 'R1' && (isRejected || isSelected || hasR2)) ||
+        (r.round === 'R2' && (isRejected || isSelected || hasR3)) ||
         (r.round === 'R3' && (isRejected || isSelected));
 
       if (r.round === 'R1' && completed) partnerMap[key].r1++;
@@ -5203,6 +5202,12 @@ function renderInterviews() {
 
       if (completed) partnerMap[key].totalInterviews++;
     });
+
+    // Screened out = rejected/screened-out with NO past interview date at all
+    if (isRejected || isScreenedOut) {
+      const anyInterviewDone = (i.rounds||[]).some(r => r.interviewDate && r.interviewDate <= todayStr);
+      if (!anyInterviewDone) partnerMap[key].screenedOut++;
+    }
   });
   const partners = Object.entries(partnerMap).sort((a,b) => b[1].total - a[1].total);
   const psEl = document.getElementById('int-partner-summary');
