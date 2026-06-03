@@ -1343,17 +1343,6 @@ body[data-theme="light"] {
               <div id="ps-saved-list" style="display:flex;flex-direction:column;gap:5px;"></div>
             </div>
 
-            <!-- Paste schedule text -->
-            <div class="card" style="padding:12px;">
-              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">📋 Paste Schedule</div>
-              <textarea id="ps-paste-input" rows="5"
-                placeholder="Paste availability:&#10;Utkarsh Pratap Singh: 7 pm&#10;Yash Shahani: 4.30 pm&#10;Varsha Pal: 12.30 pm"
-                style="font-size:0.78rem;resize:vertical;margin-bottom:6px;"></textarea>
-              <button onclick="parsePastedSchedule()"
-                style="width:100%;padding:7px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer;">⚡ Parse & Load</button>
-              <div id="ps-paste-status" style="font-size:0.72rem;margin-top:5px;min-height:14px;"></div>
-            </div>
-
             <!-- Quick add custom member -->
             <div class="card" style="padding:12px;">
               <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:8px;">+ Add Custom</div>
@@ -1377,13 +1366,27 @@ body[data-theme="light"] {
             <div id="ps-board" style="padding:14px;overflow-y:auto;max-height:580px;"></div>
           </div>
 
-          <!-- COL 3: Pending Assignment -->
-          <div class="card" style="padding:12px;">
-            <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:10px;">
-              📋 Pending
-              <span id="ps-pending-count" style="font-weight:400;font-size:0.65rem;"></span>
+          <!-- COL 3: Pending + Paste Candidates -->
+          <div style="display:flex;flex-direction:column;gap:10px;">
+            <div class="card" style="padding:12px;">
+              <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-muted);margin-bottom:10px;">
+                📋 Pending
+                <span id="ps-pending-count" style="font-weight:400;font-size:0.65rem;"></span>
+              </div>
+              <div id="ps-pending-list" style="display:flex;flex-direction:column;gap:5px;max-height:300px;overflow-y:auto;"></div>
             </div>
-            <div id="ps-pending-list" style="display:flex;flex-direction:column;gap:5px;max-height:560px;overflow-y:auto;"></div>
+
+            <!-- Paste scheduled candidates -->
+            <div class="card" style="padding:12px;">
+              <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--accent);margin-bottom:6px;">📝 Paste Candidate Schedule</div>
+              <div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:8px;line-height:1.5;">Paste the list of candidates with their assigned time slots:</div>
+              <textarea id="ps-paste-input" rows="5"
+                placeholder="Candidate Name: time&#10;e.g.&#10;Prashanth Vattela: 11:30 am&#10;Veenit Birje: 12:30 pm&#10;Shivani Saini: 4:30 pm"
+                style="font-size:0.78rem;resize:vertical;margin-bottom:6px;"></textarea>
+              <button onclick="parsePastedCandidates()"
+                style="width:100%;padding:7px;border-radius:7px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.8rem;font-weight:700;cursor:pointer;">⚡ Assign to Slots</button>
+              <div id="ps-paste-status" style="font-size:0.72rem;margin-top:5px;min-height:14px;"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -6798,6 +6801,61 @@ function parseTimeStr(raw) {
   if (isAM && h === 12) h = 0;
   if (!isPM && !isAM && h < 8) h += 12; // assume PM for times < 8 (e.g. "7" = 7pm)
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function parsePastedCandidates() {
+  const input = document.getElementById('ps-paste-input')?.value.trim();
+  const statusEl = document.getElementById('ps-paste-status');
+  if (!input) { if(statusEl) statusEl.textContent='⚠ Nothing to parse.'; return; }
+  if (!_psPanel.length) { if(statusEl) statusEl.innerHTML='<span style="color:var(--critical);">⚠ Load panel members first.</span>'; return; }
+
+  const lines = input.split('\n').map(l=>l.trim()).filter(Boolean);
+  let assigned=0, notFound=[], skipped=[];
+
+  lines.forEach(line => {
+    const match = line.match(/^(.+?)[\:\-]\s*(.+)$/);
+    if (!match) { skipped.push(line); return; }
+    const candidateName = match[1].trim();
+    const timeStr = match[2].trim();
+    const time = parseTimeStr(timeStr);
+    if (!time) { skipped.push(line); return; }
+
+    // Find candidate in DB by name (fuzzy)
+    const candidate = (DB.interviews||[]).find(i =>
+      i.candidateName.toLowerCase().includes(candidateName.toLowerCase()) ||
+      candidateName.toLowerCase().includes(i.candidateName.toLowerCase().split(' ')[0])
+    );
+    if (!candidate) { notFound.push(candidateName); return; }
+
+    // Find the panel member whose slot matches this time (within 30 min)
+    let bestPanel = null, bestSlotIdx = -1, bestDiff = 999;
+    _psPanel.forEach(p => {
+      (p.slotTimes||[]).forEach((t, idx) => {
+        if (p.slots[idx]?.candidateId) return; // already taken
+        const diff = Math.abs(toMinsStr(t) - toMinsStr(time));
+        if (diff < bestDiff && diff <= 30) { bestDiff=diff; bestPanel=p; bestSlotIdx=idx; }
+      });
+    });
+
+    if (bestPanel && bestSlotIdx >= 0) {
+      psAssignToSlot(bestPanel.id, bestSlotIdx, candidate.id);
+      assigned++;
+    } else {
+      // No matching slot — find any empty slot and assign
+      let placed = false;
+      for (const p of _psPanel) {
+        const emptyIdx = (p.slotTimes||[]).findIndex((t,i)=>!p.slots[i]?.candidateId);
+        if (emptyIdx >= 0) { psAssignToSlot(p.id, emptyIdx, candidate.id); assigned++; placed=true; break; }
+      }
+      if (!placed) notFound.push(candidateName + ' (no empty slot)');
+    }
+  });
+
+  const parts = [`✅ ${assigned} assigned`];
+  if (notFound.length) parts.push(`⚠ Not found: ${notFound.slice(0,3).join(', ')}`);
+  if (skipped.length)  parts.push(`⚠ ${skipped.length} skipped`);
+  if(statusEl) statusEl.innerHTML = `<span style="color:${assigned?'var(--low)':'var(--medium)'};">${parts.join(' · ')}</span>`;
+  if(assigned>0) document.getElementById('ps-paste-input').value = '';
 }
 
 function parsePastedSchedule() {
