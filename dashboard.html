@@ -2445,6 +2445,16 @@ function loadData() {
       if (isAiGenerated) r.notes = '';
     });
   });
+  // ── migrate: add default savedPanelMembers if missing ──
+  if (!DB.settings.savedPanelMembers || !DB.settings.savedPanelMembers.length) {
+    DB.settings.savedPanelMembers = [
+      { id:'sp1', name:'Saumya',   slotTimes:['11:30','16:30'], dur:30 },
+      { id:'sp2', name:'Mangesh',  slotTimes:['12:00','16:30'], dur:30 },
+      { id:'sp3', name:'Pritam',   slotTimes:['12:30','15:30'], dur:30 },
+      { id:'sp4', name:'Lalit',    slotTimes:['16:00','19:00'], dur:30 },
+      { id:'sp5', name:'Seijan',   slotTimes:['14:30','15:30'], dur:30 },
+    ];
+  }
   applyTheme();
 }
 
