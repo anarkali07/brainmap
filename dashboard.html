@@ -5500,9 +5500,10 @@ function renderInterviews() {
           </div>
           <!-- middle: date, panel, status badges -->
           <div style="display:flex;flex-direction:column;gap:4px;">
-            <div style="display:flex;align-items:center;gap:6px;">
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span style="font-size:0.7rem;color:var(--text-muted);">📅</span>
               <input type="date" value="${r.interviewDate||''}" style="${dateStyle}" onchange="updateRoundDate('${i.id}','${r.id}',this.value)">
+              ${r.interviewTime ? `<span style="font-size:0.72rem;font-weight:700;color:var(--accent);">🕐 ${r.interviewTime}</span>` : ''}
               ${upcoming ? `<span style="font-size:0.65rem;color:var(--medium);font-weight:600;">Soon</span>` : ''}
             </div>
             <div style="display:flex;align-items:center;gap:4px;">
@@ -5564,7 +5565,7 @@ function renderInterviews() {
       return v.includes('✅')?'var(--low)':v.includes('⚠')?'var(--medium)':v.includes('❌')?'var(--critical)':'var(--text-muted)';
     })();
     const nextRound  = (i.rounds||[]).find(r=>r.interviewDate && r.interviewDate >= today());
-    const nextDate   = nextRound ? fmtDate(nextRound.interviewDate) : '—';
+    const nextDate   = nextRound ? fmtDate(nextRound.interviewDate) + (nextRound.interviewTime ? ' ' + nextRound.interviewTime : '') : '—';
     const statusClrs = {Scheduled:'#3b82f6','Under Review':'#06b6d4',Screening:'#8b5cf6',Selected:'var(--low)','On Hold':'var(--medium)',Rejected:'var(--critical)'};
     const sClr       = statusClrs[i.finalStatus]||'var(--text-muted)';
     const scanBadgeSm = i.scanResult ? `<span style="font-size:0.65rem;padding:1px 6px;border-radius:10px;font-weight:700;
@@ -7192,15 +7193,22 @@ function savePanelSchedule() {
         : (i.rounds||[]).find(x => !x.interviewDate);
       if (!r) return;
       r.interviewDate  = date;
+      r.interviewTime  = slot.time || '';        // save the exact time slot
       r.panelMembers   = panel.name;
       r.roundStatus    = 'Scheduled';
-      if (!i.finalStatus || i.finalStatus === 'Under Review') i.finalStatus = 'Scheduled';
+      r.feedbackStatus = r.feedbackStatus || 'Pending';
+      // update overall status
+      if (['Under Review','Screening',''].includes(i.finalStatus||'')) i.finalStatus = 'Scheduled';
       saved++;
     });
   });
 
   saveData();
-  renderInterviews();
+  // Refresh all views
+  try { renderInterviews(); }     catch(e){}
+  try { renderSchedulesPage(); }  catch(e){}
+  try { renderIntDashboard(); }   catch(e){}
+  try { renderDashboard(); }      catch(e){}
 
   // Show summary
   const btn = document.querySelector('[onclick="savePanelSchedule()"]');
@@ -7212,8 +7220,9 @@ function savePanelSchedule() {
       btn.style.background = '';
     }, 3000);
   }
+  alert(`✅ ${saved} candidates assigned!\nDate: ${date}\nPanel & time saved to interview rounds.`);
 
-  // Clear board for next day
+  // Clear board for next session
   _psPanel.forEach(p => p.slots = []);
   renderPanelMemberList();
   renderPanelBoard();
@@ -7384,8 +7393,14 @@ function renderSchedulesModal() {
       <td style="padding:10px 12px;">
         <span style="background:${clr}22;color:${clr};border:1px solid ${clr}44;border-radius:6px;padding:2px 9px;font-size:0.75rem;font-weight:700;">${esc(r.round)}</span>
       </td>
-      <td style="padding:10px 12px;font-size:0.82rem;white-space:nowrap;">${dateDisp}${dayLabel}</td>
-      <td style="padding:10px 12px;font-size:0.78rem;color:var(--text-muted);">${esc(r.panelMembers || '—')}</td>
+      <td style="padding:10px 12px;font-size:0.82rem;white-space:nowrap;">
+        ${dateDisp}${dayLabel}
+        ${r.interviewTime ? `<div style="font-size:0.72rem;color:var(--accent);font-weight:700;">🕐 ${r.interviewTime}</div>` : ''}
+      </td>
+      <td style="padding:10px 12px;font-size:0.78rem;">
+        <div style="font-weight:600;color:var(--text);">${esc(r.panelMembers || '—')}</div>
+        ${r.interviewTime ? `<div style="font-size:0.68rem;color:var(--text-muted);">${r.interviewTime} – ${addMinsToTime(r.interviewTime,r.duration||30)}</div>` : ''}
+      </td>
     </tr>`;
   }).join('');
 }
