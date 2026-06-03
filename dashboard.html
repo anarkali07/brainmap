@@ -5168,7 +5168,7 @@ function renderInterviews() {
   const partnerMap = {};
   all.forEach(i => {
     const key = (i.partner || '').trim() || '(No Partner)';
-    if (!partnerMap[key]) partnerMap[key] = { total:0, r1:0, r2:0, r3:0, underReview:0, screening:0, scheduled:0, filled:0, onHold:0, rejected:0, totalInterviews:0 };
+    if (!partnerMap[key]) partnerMap[key] = { total:0, r1:0, r2:0, r3:0, underReview:0, screening:0, scheduled:0, filled:0, onHold:0, rejected:0, screenedOut:0, totalInterviews:0 };
     partnerMap[key].total++;
     if (i.finalStatus === 'Selected')          partnerMap[key].filled++;
     else if (i.finalStatus === 'On Hold')      partnerMap[key].onHold++;
@@ -5176,6 +5176,11 @@ function renderInterviews() {
     else if (i.finalStatus === 'Screening')    partnerMap[key].screening++;
     else if (i.finalStatus === 'Scheduled')    partnerMap[key].scheduled++;
     else                                       partnerMap[key].underReview++;
+    // Screened out = rejected with no completed interview round
+    if (i.finalStatus === 'Rejected') {
+      const hasCompletedRound = (i.rounds||[]).some(r => r.interviewDate && r.interviewDate <= today());
+      if (!hasCompletedRound) partnerMap[key].screenedOut++;
+    }
     // Determine completed rounds:
     // R1 completed = rejected OR has R2
     // R2 completed = rejected OR has R3
@@ -5220,6 +5225,7 @@ function renderInterviews() {
                 <th style="text-align:center;padding:4px 8px 6px;color:var(--low);font-weight:600;">Filled</th>
                 <th style="text-align:center;padding:4px 8px 6px;color:var(--medium);font-weight:600;">Hold</th>
                 <th style="text-align:center;padding:4px 8px 6px;color:var(--critical);font-weight:600;">Rejected</th>
+                <th style="text-align:center;padding:4px 8px 6px;color:#fb923c;font-weight:600;">Screened Out</th>
                 <th style="text-align:center;padding:4px 8px 6px;color:var(--accent2);font-weight:600;">Total Interviews</th>
               </tr>
             </thead>
@@ -5241,6 +5247,7 @@ function renderInterviews() {
                   <td style="text-align:center;padding:5px 8px;">${badge(s.filled,'var(--low)')}</td>
                   <td style="text-align:center;padding:5px 8px;">${badge(s.onHold,'var(--medium)')}</td>
                   <td style="text-align:center;padding:5px 8px;">${badge(s.rejected,'var(--critical)')}</td>
+                  <td style="text-align:center;padding:5px 8px;">${badge(s.screenedOut,'#fb923c')}</td>
                   <td style="text-align:center;padding:5px 8px;font-weight:700;color:var(--accent2);">${s.totalInterviews||'—'}</td>
                 </tr>`;
               }).join('')}
