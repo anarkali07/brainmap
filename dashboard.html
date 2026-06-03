@@ -1327,23 +1327,6 @@ body[data-theme="light"] {
           </div>
         </div>
 
-        <!-- Paste Schedule — prominent full-width strip -->
-        <div style="background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:14px 18px;margin-bottom:14px;display:flex;align-items:flex-start;gap:12px;">
-          <div style="flex:1;">
-            <div style="font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--accent);margin-bottom:6px;">📋 Paste Today's Panel Availability</div>
-            <textarea id="ps-paste-input" rows="3"
-              placeholder="Paste like:&#10;Utkarsh Pratap Singh: 7 pm&#10;Yash Shahani: 4.30 pm&#10;Varsha Pal: 12.30 pm"
-              style="font-size:0.82rem;resize:none;width:100%;"></textarea>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;padding-top:22px;">
-            <button onclick="parsePastedSchedule()"
-              style="padding:8px 18px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:0.82rem;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 2px 8px var(--accent-glow);">
-              ⚡ Parse & Load
-            </button>
-            <div id="ps-paste-status" style="font-size:0.72rem;text-align:center;min-height:16px;"></div>
-          </div>
-        </div>
-
         <!-- Main 3-column layout -->
         <div style="display:grid;grid-template-columns:260px 1fr 210px;gap:12px;align-items:start;">
 
