@@ -7908,7 +7908,7 @@ function doExportCSV() {
   const q = s => `"${(s||'').toString().replace(/"/g,'""')}"`;
 
   const headers = [
-    'SI No','Candidate Name','Partner','YoE','Profile Status',
+    'Sourced On','SI No','Candidate Name','Partner','YoE','Profile Status',
     'Round 1','Interviewer','Remarks',
     'Round 2','Interviewer','Remarks',
     'Round 3','Interviewer','Remarks',
@@ -7932,7 +7932,9 @@ function doExportCSV() {
     const lastFeedback = roundsWithFeedback.slice(-1)[0] || {};
     const finalRemarks = lastFeedback.notes || i.finalStatus || '';
 
+    const sourcedOn = i.sourcedDate || (i.createdAt ? i.createdAt.slice(0,10) : '');
     const row = [
+      q(sourcedOn),
       idx + 1,
       q(i.candidateName),
       q(i.partner || ''),
