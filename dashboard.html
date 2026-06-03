@@ -1328,7 +1328,7 @@ body[data-theme="light"] {
         </div>
 
         <!-- Main 3-column layout -->
-        <div style="display:grid;grid-template-columns:220px 1fr 220px;gap:12px;align-items:start;">
+        <div style="display:grid;grid-template-columns:260px 1fr 210px;gap:12px;align-items:start;">
 
           <!-- COL 1: Saved Panel + Add custom -->
           <div style="display:flex;flex-direction:column;gap:10px;">
@@ -3222,7 +3222,7 @@ function renderSchedule() {
       <div style="display:flex;align-items:center;gap:4px;min-width:0;">
         <span style="flex-shrink:0;font-size:${isWater?'0.75':'0.8'}rem;">${BLOCK_ICONS[b.type]||'📋'}</span>
         <span style="font-size:${isWater?'0.68':'0.75'}rem;font-weight:${isWater?'500':'700'};color:${clr.text};
-          white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(b.title.replace(/^[^ ]+ /,''))}</span>
+          ">${esc(b.title.replace(/^[^ ]+ /,''))}</span>
       </div>
       ${actualHt > 36 && !isWater ? `<div style="font-size:0.63rem;color:var(--text-muted);margin-top:1px;">${b.start}–${b.end} · ${durLabel}</div>` : ''}
     </div>`;
@@ -6887,7 +6887,7 @@ function renderPanelMemberList() {
     <div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;">
       <div style="flex:1;min-width:0;">
         <div style="font-size:0.82rem;font-weight:600;">${esc(p.name)}</div>
-        <div style="font-size:0.7rem;color:var(--text-muted);">From ${p.from} · ${p.dur} min/slot · ${p.slots.length} assigned</div>
+        <div style="font-size:0.7rem;color:var(--text-muted);">Slots: ${(p.slotTimes||[p.from]).join(" & ")} · ${p.dur}min · ${p.slots.length}/${(p.slotTimes||[p.from]).length} assigned</div>
       </div>
       <button onclick="removePanelMember('${p.id}')" style="background:none;border:none;color:var(--critical);cursor:pointer;font-size:0.85rem;padding:2px;">✕</button>
     </div>`).join('');
