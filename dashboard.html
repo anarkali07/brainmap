@@ -7265,18 +7265,7 @@ function psRemoveSlot(panelId, idx) {
     }
   }
 
-  panel.slots[idx] = null; // clear specific slot, keep other slots
-  renderPanelScheduler();
-  renderPanelMemberList();
-  // Recalculate subsequent slot times
-  const addMins = (time, mins) => {
-    const [h,m] = time.split(':').map(Number);
-    const total = h*60+m+mins;
-    return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
-  };
-  panel.slots.forEach((s,i) => {
-    s.time = i===0 ? panel.from : addMins(panel.slots[i-1].time, panel.dur);
-  });
+  panel.slots[idx] = null; // clear specific slot
   renderPanelScheduler();
   renderPanelMemberList();
   renderPanelBoard();
