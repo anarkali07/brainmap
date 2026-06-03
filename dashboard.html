@@ -1,4 +1,38 @@
-<!DOCTYPE html>
+function psDrop(e, panelId) {
+  e.preventDefault();
+  if (_psDragId) {
+    const panel = _psPanel.find(p=>p.id===panelId);
+    if (panel) {
+      const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
+      if (emptyIdx>=0) psAssignToSlot(panelId, emptyIdx, _psDragId);
+      else alert(panel.name+' is fully booked.');
+    }
+    _psDragId = null;
+  }
+}
+
+function psAssignNext(panelId) {
+  const panel = _psPanel.find(p=>p.id===panelId);
+  if (!panel) return;
+  const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
+  if (emptyIdx<0) { alert(panel.name+' is fully booked.'); return; }
+  psClickSlot(panelId, emptyIdx);
+}
+
+function psAssignToPanel(panelId, candidateId) {
+  const panel = _psPanel.find(p=>p.id===panelId);
+  if (!panel) return;
+  const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
+  if (emptyIdx<0) { alert(panel.name+' is fully booked.'); return; }
+  psAssignToSlot(panelId, emptyIdx, candidateId);
+}
+
+function psRemoveSlot(panelId, idx) {
+  const panel = _psPanel.find(p => p.id === panelId);
+  if (!panel) return;
+  panel.slots[idx] = null;
+  renderPanelScheduler();
+  renderPanelMemberList();<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -6914,57 +6948,123 @@ function renderPanelBoard() {
   const board = document.getElementById('ps-board');
   if (!board) return;
   if (!_psPanel.length) {
-    board.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;font-size:0.85rem;">Add panel members on the left to build the schedule board.</div>';
+    board.innerHTML = `<div style="text-align:center;color:var(--text-muted);padding:60px 20px;">
+      <div style="font-size:2rem;margin-bottom:10px;">📋</div>
+      <div style="font-size:0.88rem;margin-bottom:6px;font-weight:600;">No panel members loaded</div>
+      <div style="font-size:0.78rem;">Paste availability above or click <strong>⚡ Load All Panel</strong></div>
+    </div>`;
     return;
   }
 
-  const addMins = (time, mins) => {
-    const [h,m] = time.split(':').map(Number);
-    const total = h*60+m+mins;
-    return `${String(Math.floor(total/60)).padStart(2,'0')}:${String(total%60).padStart(2,'0')}`;
-  };
-
   board.innerHTML = _psPanel.map(p => {
-    const slotsHtml = p.slots.map((s,idx) => `
-      <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;margin-bottom:6px;
-        background:var(--accent-glass);border:1px solid var(--accent);border-radius:8px;position:relative;">
-        <div style="font-size:0.7rem;font-weight:700;color:var(--accent);white-space:nowrap;min-width:80px;">
-          ${s.time} – ${addMins(s.time,p.dur)}
-        </div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:0.82rem;font-weight:600;">${esc(s.candidateName)}</div>
-          <div style="font-size:0.68rem;color:var(--text-muted);">${esc(s.round||'')} · ${esc(s.partner||'')}</div>
-        </div>
-        <button onclick="psRemoveSlot('${p.id}',${idx})"
-          style="background:none;border:none;color:var(--critical);cursor:pointer;font-size:0.8rem;">✕</button>
-      </div>`).join('');
+    const slotTimes = p.slotTimes || (p.from ? [p.from] : []);
+    const filled    = slotTimes.filter((t,idx) => p.slots[idx]?.candidateId).length;
+    const isFull    = filled >= slotTimes.length;
+    const dotClr    = isFull ? 'var(--low)' : filled > 0 ? 'var(--medium)' : 'var(--border-hi)';
 
-    // Next available slot time
-    const nextTime = p.slots.length
-      ? addMins(p.slots[p.slots.length-1].time, p.dur)
-      : p.from;
+    const slotsHtml = slotTimes.map((t, idx) => {
+      const s = p.slots[idx];
+      const endTime = addMinsToTime(t, p.dur);
 
-    return `<div style="margin-bottom:20px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></div>
-        <span style="font-size:0.85rem;font-weight:700;">${esc(p.name)}</span>
-        <span style="font-size:0.72rem;color:var(--text-muted);">${p.from}${p.until?' – '+p.until:''} · ${p.dur}min</span>
-        ${p.until ? `<span style="font-size:0.7rem;padding:2px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);">${p.slots.length}/${Math.floor((toMinsStr(p.until)-toMinsStr(p.from))/p.dur)} slots used</span>` : ''}
-        <span style="font-size:0.7rem;padding:2px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);">Next: ${nextTime}</span>
+      if (s?.candidateId) {
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:6px;
+            background:var(--accent-glass);border:1px solid var(--accent);border-radius:9px;">
+          <div style="text-align:center;min-width:80px;flex-shrink:0;">
+            <div style="font-size:0.75rem;font-weight:800;color:var(--accent);">${t}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);">– ${endTime}</div>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:0.85rem;font-weight:700;">${esc(s.candidateName)}</div>
+            <div style="display:flex;gap:6px;margin-top:2px;">
+              <span style="font-size:0.68rem;padding:1px 7px;background:rgba(79,142,247,0.15);color:var(--accent);border-radius:10px;font-weight:700;">${esc(s.round||'R1')}</span>
+              <span style="font-size:0.68rem;color:var(--text-muted);">${esc(s.partner||'')}</span>
+            </div>
+          </div>
+          <button onclick="psRemoveSlot('${p.id}',${idx})" title="Remove"
+            style="width:24px;height:24px;border-radius:6px;border:1px solid rgba(244,63,94,0.3);
+              background:rgba(244,63,94,0.08);color:var(--critical);cursor:pointer;font-size:0.75rem;
+              display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
+        </div>`;
+      } else {
+        return `<div id="psslot-${p.id}-${idx}"
+            ondragover="event.preventDefault();this.style.borderColor='var(--accent)';this.style.background='var(--accent-glass)'"
+            ondragleave="this.style.borderColor='var(--border)';this.style.background='transparent'"
+            ondrop="psDropToSlot(event,'${p.id}',${idx})"
+            onclick="psClickSlot('${p.id}',${idx})"
+            style="display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:6px;
+              border:2px dashed var(--border);border-radius:9px;cursor:pointer;transition:all 0.15s;">
+          <div style="text-align:center;min-width:80px;flex-shrink:0;">
+            <div style="font-size:0.75rem;font-weight:800;color:var(--text-muted);">${t}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);">– ${endTime}</div>
+          </div>
+          <div style="flex:1;font-size:0.78rem;color:var(--text-muted);">
+            Drag a candidate here or click to auto-assign
+          </div>
+          <span style="font-size:0.7rem;color:var(--text-muted);">EMPTY</span>
+        </div>`;
+      }
+    }).join('');
+
+    return `<div style="margin-bottom:22px;background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg2);border-bottom:1px solid var(--border);">
+        <div style="width:10px;height:10px;border-radius:50%;background:${dotClr};flex-shrink:0;"></div>
+        <span style="font-size:0.88rem;font-weight:700;flex:1;">${esc(p.name)}</span>
+        <span style="font-size:0.7rem;color:var(--text-muted);">${p.dur}min/slot</span>
+        <span style="font-size:0.72rem;padding:2px 10px;border-radius:20px;font-weight:700;
+          background:${isFull?'rgba(52,211,153,0.12)':'var(--bg)'};
+          color:${isFull?'var(--low)':'var(--text-muted)'};
+          border:1px solid ${isFull?'rgba(52,211,153,0.3)':'var(--border)'};">
+          ${filled}/${slotTimes.length} ${isFull?'✅ Full':'slots'}
+        </span>
       </div>
-      ${slotsHtml}
-      <div id="drop-${p.id}"
-        ondragover="event.preventDefault()"
-        ondrop="psDrop(event,'${p.id}')"
-        style="border:2px dashed var(--border);border-radius:8px;padding:12px;text-align:center;
-          font-size:0.78rem;color:var(--text-muted);cursor:pointer;transition:all 0.15s;"
-        onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
-        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'"
-        onclick="psAssignNext('${p.id}')">
-        + Drag candidate here or click to assign next pending
-      </div>
+      <div style="padding:10px 12px;">${slotsHtml}</div>
     </div>`;
   }).join('');
+}
+
+function psDropToSlot(e, panelId, idx) {
+  e.preventDefault();
+  const slot = document.getElementById(`psslot-${panelId}-${idx}`);
+  if (slot) { slot.style.borderColor='var(--border)'; slot.style.background='transparent'; }
+  if (_psDragId) { psAssignToSlot(panelId, idx, _psDragId); _psDragId = null; }
+}
+
+function psClickSlot(panelId, idx) {
+  const assignedIds = _psPanel.flatMap(p => p.slots.filter(Boolean).map(s => s.candidateId));
+  const pending = (DB.interviews||[]).filter(i =>
+    !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
+    (i.rounds||[]).some(r => !r.interviewDate) &&
+    !assignedIds.includes(i.id)
+  );
+  if (!pending.length) { alert('No more pending candidates.'); return; }
+  psAssignToSlot(panelId, idx, pending[0].id);
+}
+
+function psAssignToSlot(panelId, slotIdx, candidateId) {
+  const panel = _psPanel.find(p => p.id === panelId);
+  if (!panel) return;
+  const slotTimes = panel.slotTimes || [];
+  if (slotIdx >= slotTimes.length) return;
+  if (panel.slots[slotIdx]?.candidateId) return; // already taken
+
+  const i = DB.interviews.find(x => x.id === candidateId);
+  if (!i) return;
+  const nextRound = (i.rounds||[]).find(r => !r.interviewDate);
+
+  panel.slots[slotIdx] = {
+    time: slotTimes[slotIdx],
+    candidateId,
+    candidateName: i.candidateName,
+    round: nextRound?.round || 'R1',
+    roundId: nextRound?.id,
+    partner: i.partner || ''
+  };
+
+  const pendEl = document.getElementById('pend-' + candidateId);
+  if (pendEl) pendEl.remove();
+
+  renderPanelMemberList();
+  renderPanelBoard();
 }
 
 let _psDragId = null;
