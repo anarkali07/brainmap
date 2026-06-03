@@ -6713,15 +6713,16 @@ function renderPanelScheduler() {
         const r = (i.rounds||[]).find(x => x.interviewDate === schedDate && (!x.panelMembers || !x.panelMembers.trim()));
         return `<div id="pend-${i.id}"
           draggable="true"
-          ondragstart="psDragStart(event,'${i.id}');this.style.opacity='0.5';this.style.transform='scale(0.97)'"
-          ondragend="this.style.opacity='1';this.style.transform=''"
+          ondragstart="psDragStart(event,'${i.id}');this.style.opacity='0.5'"
+          ondragend="this.style.opacity='1'"
           ontouchstart="psTouchStart(event,'${i.id}')"
           ontouchmove="psTouchMove(event)"
           ontouchend="psTouchEnd(event)"
+          onclick="psSelectCandidate('${i.id}',this)"
           style="padding:8px 10px;background:var(--card);border:2px solid var(--border);border-radius:9px;
-            cursor:grab;transition:all 0.12s;display:flex;align-items:center;gap:8px;user-select:none;">
+            cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:8px;user-select:none;">
           <!-- Drag handle -->
-          <div style="color:var(--text-muted);font-size:0.9rem;flex-shrink:0;cursor:grab;padding:0 2px;">⠿</div>
+          <div style="color:var(--text-muted);font-size:1rem;flex-shrink:0;cursor:grab;padding:0 2px;" title="Drag to a slot">⠿</div>
           <div style="flex:1;min-width:0;">
             <div style="font-size:0.82rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(i.candidateName)}</div>
             <div style="display:flex;gap:5px;margin-top:2px;align-items:center;flex-wrap:wrap;">
@@ -7156,14 +7157,64 @@ function psDropToSlot(e, panelId, idx) {
   if (_psDragId) { psAssignToSlot(panelId, idx, _psDragId); _psDragId = null; }
 }
 
+function psSelectCandidate(candidateId, el) {
+  // Toggle selection
+  if (_psSelectedId === candidateId) {
+    _psSelectedId = null;
+    document.querySelectorAll('[id^="pend-"]').forEach(e => {
+      e.style.borderColor = 'var(--border)';
+      e.style.background  = 'var(--card)';
+      e.style.boxShadow   = '';
+    });
+    // Update instruction
+    const instr = document.getElementById('ps-select-hint');
+    if (instr) instr.style.display = 'none';
+    return;
+  }
+  // Select this candidate
+  _psSelectedId = candidateId;
+  // Highlight selected
+  document.querySelectorAll('[id^="pend-"]').forEach(e => {
+    e.style.borderColor = 'var(--border)';
+    e.style.background  = 'var(--card)';
+    e.style.boxShadow   = '';
+  });
+  el.style.borderColor = 'var(--accent)';
+  el.style.background  = 'var(--accent-glass)';
+  el.style.boxShadow   = '0 0 0 3px var(--accent-glow)';
+  // Show hint
+  let instr = document.getElementById('ps-select-hint');
+  if (!instr) {
+    instr = document.createElement('div');
+    instr.id = 'ps-select-hint';
+    instr.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;padding:8px 20px;border-radius:20px;font-size:0.82rem;font-weight:600;z-index:9999;box-shadow:0 4px 16px var(--accent-glow);';
+    instr.textContent = '✅ Candidate selected — now click any EMPTY slot to assign';
+    document.body.appendChild(instr);
+  }
+  instr.style.display = 'block';
+}
+
 function psClickSlot(panelId, idx) {
+  // If a candidate is selected via click — assign to this slot
+  if (_psSelectedId) {
+    psAssignToSlot(panelId, idx, _psSelectedId);
+    _psSelectedId = null;
+    document.querySelectorAll('[id^="pend-"]').forEach(e => {
+      e.style.borderColor='var(--border)'; e.style.background='var(--card)'; e.style.boxShadow='';
+    });
+    const instr = document.getElementById('ps-select-hint');
+    if (instr) instr.style.display = 'none';
+    return;
+  }
+  // Auto-assign next pending
   const assignedIds = _psPanel.flatMap(p => p.slots.filter(Boolean).map(s => s.candidateId));
+  const schedDate = document.getElementById('ps-date')?.value || today();
   const pending = (DB.interviews||[]).filter(i =>
     !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
-    (i.rounds||[]).some(r => !r.interviewDate) &&
+    (i.rounds||[]).some(r => r.interviewDate === schedDate && (!r.panelMembers || !r.panelMembers.trim())) &&
     !assignedIds.includes(i.id)
   );
-  if (!pending.length) { alert('No more pending candidates.'); return; }
+  if (!pending.length) { alert('No more pending candidates. Select one from the list first.'); return; }
   psAssignToSlot(panelId, idx, pending[0].id);
 }
 
