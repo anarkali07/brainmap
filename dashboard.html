@@ -2391,9 +2391,11 @@ function emptyData() {
       dashCards: { openTasks:true, overdue:true, dueToday:true, followUps:true, projects:true, interviews:true, goals:true, scratchPad:true },
       aiProvider: 'groq', groqKey: '', apiKey: '', aiModel: 'llama-3.3-70b-versatile', braveKey: '',
       savedPanelMembers: [
-        { id:'sp1', name:'Varsha Pal',           defaultTime:'12:30', dur:45 },
-        { id:'sp2', name:'Yash Shahani',          defaultTime:'16:30', dur:45 },
-        { id:'sp3', name:'Utkarsh Pratap Singh',  defaultTime:'19:00', dur:45 },
+        { id:'sp1', name:'Saumya',    defaultTime:'11:30', until:'16:30', dur:45 },
+        { id:'sp2', name:'Mangesh',   defaultTime:'12:00', until:'16:30', dur:45 },
+        { id:'sp3', name:'Pritam',    defaultTime:'12:30', until:'15:30', dur:45 },
+        { id:'sp4', name:'Lalit',     defaultTime:'16:00', until:'19:00', dur:45 },
+        { id:'sp5', name:'Seijan',    defaultTime:'14:30', until:'15:30', dur:45 },
       ],
       openL1: 0, openL2: 0, colorTheme: 'ocean'
     }
@@ -6656,6 +6658,8 @@ function renderPanelScheduler() {
   renderPanelBoard();
 }
 
+const toMinsStr = t => { if(!t)return 0; const[h,m]=t.split(':').map(Number); return h*60+m; };
+
 function renderSavedPanelList() {
   const el = document.getElementById('ps-saved-list');
   if (!el) return;
@@ -6666,7 +6670,7 @@ function renderSavedPanelList() {
     <div style="display:flex;align-items:center;gap:7px;padding:6px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:7px;">
       <div style="flex:1;min-width:0;">
         <div style="font-size:0.79rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(s.name)}</div>
-        <div style="font-size:0.67rem;color:var(--text-muted);">${s.defaultTime} · ${s.dur}min</div>
+        <div style="font-size:0.67rem;color:var(--text-muted);">${s.defaultTime}${s.until?' – '+s.until:''} · ${s.dur}min · ~${s.until?Math.floor((toMinsStr(s.until)-toMinsStr(s.defaultTime))/s.dur):'-'} slots</div>
       </div>
       <button onclick="loadSavedMember('${s.id}')" title="Load into today"
         style="font-size:0.68rem;padding:2px 8px;border-radius:5px;border:1px solid var(--accent);
@@ -6682,7 +6686,7 @@ function loadSavedMember(id) {
   const s = (DB.settings.savedPanelMembers||[]).find(x=>x.id===id);
   if (!s) return;
   if (_psPanel.find(p=>p.name===s.name)) { alert(`${s.name} already added.`); return; }
-  _psPanel.push({ id: uid(), name:s.name, from:s.defaultTime, dur:s.dur, slots:[] });
+  _psPanel.push({ id: uid(), name:s.name, from:s.defaultTime, until:s.until||'', dur:s.dur, slots:[] });
   renderPanelMemberList();
   renderPanelBoard();
 }
@@ -6690,7 +6694,7 @@ function loadSavedMember(id) {
 function loadAllSavedMembers() {
   (DB.settings.savedPanelMembers||[]).forEach(s => {
     if (!_psPanel.find(p=>p.name===s.name))
-      _psPanel.push({ id: uid(), name:s.name, from:s.defaultTime, dur:s.dur, slots:[] });
+      _psPanel.push({ id: uid(), name:s.name, from:s.defaultTime, until:s.until||'', dur:s.dur, slots:[] });
   });
   renderPanelMemberList();
   renderPanelBoard();
@@ -6797,7 +6801,8 @@ function renderPanelBoard() {
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
         <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);"></div>
         <span style="font-size:0.85rem;font-weight:700;">${esc(p.name)}</span>
-        <span style="font-size:0.72rem;color:var(--text-muted);">available from ${p.from} · ${p.dur} min slots</span>
+        <span style="font-size:0.72rem;color:var(--text-muted);">${p.from}${p.until?' – '+p.until:''} · ${p.dur}min</span>
+        ${p.until ? `<span style="font-size:0.7rem;padding:2px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);">${p.slots.length}/${Math.floor((toMinsStr(p.until)-toMinsStr(p.from))/p.dur)} slots used</span>` : ''}
         <span style="font-size:0.7rem;padding:2px 8px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text-muted);">Next: ${nextTime}</span>
       </div>
       ${slotsHtml}
@@ -6842,6 +6847,11 @@ function psAssignToPanel(panelId, candidateId) {
   const panel = _psPanel.find(p => p.id === panelId);
   if (!panel) return;
   if (panel.slots.find(s => s.candidateId === candidateId)) return; // already assigned
+  // Check capacity
+  if (panel.until) {
+    const maxSlots = Math.floor((toMinsStr(panel.until) - toMinsStr(panel.from)) / panel.dur);
+    if (panel.slots.length >= maxSlots) { alert(`${panel.name} is fully booked (${maxSlots} slots until ${panel.until})`); return; }
+  }
 
   const i = DB.interviews.find(x => x.id === candidateId);
   if (!i) return;
