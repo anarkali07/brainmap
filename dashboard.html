@@ -2462,11 +2462,11 @@ function loadData() {
   });
   // ── migrate: fix savedPanelMembers to use slotTimes + 30min ──
   const _defaultPanel = [
-    { id:'sp1', name:'Saumya',   slotTimes:['11:30','16:30'], dur:30 },
-    { id:'sp2', name:'Mangesh',  slotTimes:['12:00','16:30'], dur:30 },
-    { id:'sp3', name:'Pritam',   slotTimes:['12:30','15:30'], dur:30 },
-    { id:'sp4', name:'Lalit',    slotTimes:['16:00','19:00'], dur:30 },
-    { id:'sp5', name:'Seijan',   slotTimes:['14:30','15:30'], dur:30 },
+    { id:'sp1', name:'Vaishali Rane', slotTimes:['11:30','16:30'], dur:30 },
+    { id:'sp2', name:'Mangesh',       slotTimes:['12:00','16:30'], dur:30 },
+    { id:'sp3', name:'Aman Sahu',     slotTimes:['12:30','15:30'], dur:30 },
+    { id:'sp4', name:'Nishant P',     slotTimes:['16:00','19:00'], dur:30 },
+    { id:'sp5', name:'Shamika',       slotTimes:['16:30','15:30'], dur:30 },
   ];
   if (!DB.settings.savedPanelMembers || !DB.settings.savedPanelMembers.length) {
     DB.settings.savedPanelMembers = _defaultPanel;
@@ -8642,13 +8642,11 @@ async function pullFromGist() {
     const localGistId = DB.settings.gistId;
     const localGroq   = DB.settings.groqKey;
     const localApiKey = DB.settings.apiKey;
-    const localPanel  = DB.settings.savedPanelMembers;
     DB = parsed;
     DB.settings.githubPAT = localPAT;
     DB.settings.gistId    = localGistId;
     DB.settings.groqKey   = localGroq   || '';
     DB.settings.apiKey    = localApiKey || '';
-    if (localPanel && localPanel.length) DB.settings.savedPanelMembers = localPanel;
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
@@ -9138,14 +9136,12 @@ async function loadCloudData() {
     const keepGroq   = DB.settings.groqKey;
     const keepApiKey = DB.settings.apiKey;
     const keepColor  = DB.settings.colorTheme;
-    const keepPanel  = DB.settings.savedPanelMembers;
     DB = parsed;
     DB.settings.githubPAT  = keepPAT;
     DB.settings.gistId     = keepGistId;
     DB.settings.groqKey    = keepGroq    || parsed.settings.groqKey    || '';
     DB.settings.apiKey     = keepApiKey  || parsed.settings.apiKey     || '';
     DB.settings.colorTheme = keepColor   || parsed.settings.colorTheme || 'ocean';
-    if (keepPanel && keepPanel.length) DB.settings.savedPanelMembers = keepPanel;
     saveData();
     applyTheme();
     applyColorTheme(DB.settings.colorTheme || 'ocean');
@@ -9153,6 +9149,7 @@ async function loadCloudData() {
     try { renderTasks(); } catch(e) { console.warn('renderTasks error:', e); }
     try { renderInterviews(); } catch(e) { console.warn('renderInterviews error:', e); }
     try { renderInbox(); } catch(e) { console.warn('renderInbox error:', e); }
+    try { renderSavedPanelList(); } catch(e) {}
     _updateSyncButtons();
 
     indicator.remove();
