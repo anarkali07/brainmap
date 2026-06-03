@@ -6654,26 +6654,33 @@ function renderPanelScheduler() {
   if (dateEl && !dateEl.value) dateEl.value = today();
   renderSavedPanelList();
 
-  // Populate pending candidates (rounds with no date on selected date)
+  // Pending = candidates scheduled on selected date but no panel member assigned yet
+  const schedDate = (document.getElementById('ps-date')?.value) || today();
   const pendingEl = document.getElementById('ps-pending-list');
   const pending = (DB.interviews||[]).filter(i =>
     !['Rejected','Selected','Screened Out'].includes(i.finalStatus) &&
-    (i.rounds||[]).some(r => !r.interviewDate)
+    (i.rounds||[]).some(r => r.interviewDate === schedDate && (!r.panelMembers || r.panelMembers.trim() === ''))
   );
 
-  const countEl = document.getElementById('ps-pending-count'); if(countEl) countEl.textContent = ' · '+pending.length+' candidates';
-if (pendingEl) {
+  const countEl = document.getElementById('ps-pending-count');
+  if(countEl) countEl.textContent = ` · ${pending.length} scheduled, needs panel`;
+
+  if (pendingEl) {
     if (!pending.length) {
-      pendingEl.innerHTML = '<div style="font-size:0.8rem;color:var(--text-muted);text-align:center;padding:12px;">All candidates have dates assigned ✅</div>';
+      pendingEl.innerHTML = `<div style="font-size:0.78rem;color:var(--text-muted);text-align:center;padding:16px;">
+        No candidates scheduled for ${schedDate} without a panel, or select a different date.
+      </div>`;
     } else {
       pendingEl.innerHTML = pending.map(i => {
-        const nextRound = (i.rounds||[]).find(r => !r.interviewDate);
-        return `<div id="pend-${i.id}" style="padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:grab;"
-          draggable="true" ondragstart="psDragStart(event,'${i.id}')">
-          <div style="font-size:0.82rem;font-weight:600;">${esc(i.candidateName)}</div>
-          <div style="display:flex;gap:6px;margin-top:2px;flex-wrap:wrap;">
+        const r = (i.rounds||[]).find(x => x.interviewDate === schedDate && (!x.panelMembers || !x.panelMembers.trim()));
+        return `<div id="pend-${i.id}" style="padding:8px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;cursor:grab;transition:all 0.12s;"
+          draggable="true" ondragstart="psDragStart(event,'${i.id}')"
+          onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <div style="font-size:0.83rem;font-weight:700;">${esc(i.candidateName)}</div>
+          <div style="display:flex;gap:6px;margin-top:3px;align-items:center;flex-wrap:wrap;">
             <span style="font-size:0.68rem;color:var(--text-muted);">${i.experience||0}y · ${esc(i.partner||'')}</span>
-            <span style="font-size:0.68rem;padding:1px 6px;background:rgba(79,142,247,0.15);color:var(--accent);border-radius:10px;font-weight:700;">${esc(nextRound?.round||'R1')}</span>
+            <span style="font-size:0.68rem;padding:1px 7px;background:rgba(79,142,247,0.15);color:var(--accent);border-radius:10px;font-weight:700;">${esc(r?.round||'R1')}</span>
+            <span style="font-size:0.68rem;color:var(--medium);">📅 ${schedDate}</span>
           </div>
         </div>`;
       }).join('');
