@@ -1,38 +1,4 @@
-function psDrop(e, panelId) {
-  e.preventDefault();
-  if (_psDragId) {
-    const panel = _psPanel.find(p=>p.id===panelId);
-    if (panel) {
-      const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
-      if (emptyIdx>=0) psAssignToSlot(panelId, emptyIdx, _psDragId);
-      else alert(panel.name+' is fully booked.');
-    }
-    _psDragId = null;
-  }
-}
-
-function psAssignNext(panelId) {
-  const panel = _psPanel.find(p=>p.id===panelId);
-  if (!panel) return;
-  const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
-  if (emptyIdx<0) { alert(panel.name+' is fully booked.'); return; }
-  psClickSlot(panelId, emptyIdx);
-}
-
-function psAssignToPanel(panelId, candidateId) {
-  const panel = _psPanel.find(p=>p.id===panelId);
-  if (!panel) return;
-  const emptyIdx = (panel.slotTimes||[]).findIndex((t,i)=>!panel.slots[i]?.candidateId);
-  if (emptyIdx<0) { alert(panel.name+' is fully booked.'); return; }
-  psAssignToSlot(panelId, emptyIdx, candidateId);
-}
-
-function psRemoveSlot(panelId, idx) {
-  const panel = _psPanel.find(p => p.id === panelId);
-  if (!panel) return;
-  panel.slots[idx] = null;
-  renderPanelScheduler();
-  renderPanelMemberList();<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
