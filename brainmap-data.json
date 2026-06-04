@@ -152,10 +152,11 @@
           "id": "mpxmlvxux6kdf",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "",
+          "panelMembers": "Vaishali Rane",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
-          "notes": "Highly experienced Security Engineer with 8 years of experience in AppSec, threat modeling, and secure SDLC practices. Proven track record of reducing vulnerabilities and strengthening company-wide security posture. Expertise in multiple programming languages and technologies, including cloud security and DevSecOps. Strong background in research and development, with experience in building and maturing AppSec programs.\n\nKey Skills: AppSec, Threat Modeling, Python, Java, C, C++, SQL, JavaScript, Go, GraphQL, Shell, AWS, Terraform, Docker, GCP, Git, CI/CD"
+          "roundStatus": "Scheduled",
+          "notes": "Highly experienced Security Engineer with 8 years of experience in AppSec, threat modeling, and secure SDLC practices. Proven track record of reducing vulnerabilities and strengthening company-wide security posture. Expertise in multiple programming languages and technologies, including cloud security and DevSecOps. Strong background in research and development, with experience in building and maturing AppSec programs.\n\nKey Skills: AppSec, Threat Modeling, Python, Java, C, C++, SQL, JavaScript, Go, GraphQL, Shell, AWS, Terraform, Docker, GCP, Git, CI/CD",
+          "interviewTime": "16:30"
         }
       ],
       "createdAt": "2026-06-03T05:28:45.042Z"
@@ -175,10 +176,11 @@
           "id": "mpxmlv8fsh575",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "",
+          "panelMembers": "Mangesh",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
-          "notes": "Varsha is a skilled Cybersecurity Specialist with 4+ years of experience in web application security, API source code auditing, and mobile application security assessments. She is proficient in identifying vulnerabilities and implementing security measures. Varsha has a strong background in OWASP Top 10 and secure coding practices. She is a team player and can work effectively in a team as well as individually.\n\nKey Skills: Web/API security, OWASP, VAPT, Cloud (AWS/Azure), Burp Suite, Python, JavaScript, Java, API Security, Mobile Application Security"
+          "roundStatus": "Scheduled",
+          "notes": "Varsha is a skilled Cybersecurity Specialist with 4+ years of experience in web application security, API source code auditing, and mobile application security assessments. She is proficient in identifying vulnerabilities and implementing security measures. Varsha has a strong background in OWASP Top 10 and secure coding practices. She is a team player and can work effectively in a team as well as individually.\n\nKey Skills: Web/API security, OWASP, VAPT, Cloud (AWS/Azure), Burp Suite, Python, JavaScript, Java, API Security, Mobile Application Security",
+          "interviewTime": "12:00"
         }
       ],
       "createdAt": "2026-06-03T05:28:44.127Z",
@@ -716,10 +718,11 @@
           "id": "mpr6xura4ry9r",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "",
+          "panelMembers": "Shamika",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "16:30"
         }
       ],
       "createdAt": "2026-05-29T17:23:32.470Z",
@@ -846,10 +849,11 @@
           "id": "mpr6xpegf2l36",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "",
+          "panelMembers": "Vaishali Rane",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "11:30"
         }
       ],
       "createdAt": "2026-05-29T17:23:25.528Z",
