@@ -1424,7 +1424,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "light",
+    "theme": "dark",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
@@ -1489,6 +1489,6 @@
         "defaultTime": "16:30"
       }
     ],
-    "gistId": ""
+    "gistId": "631caf7bc54303c0cf02c5cab0abfbf0"
   }
 }
