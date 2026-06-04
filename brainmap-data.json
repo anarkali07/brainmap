@@ -110,7 +110,7 @@
       "candidateName": "Utkarsh Pratap Singh",
       "position": "Software Security Engineer",
       "experience": 6,
-      "finalStatus": "Under Review",
+      "finalStatus": "Scheduled",
       "level": "L2",
       "partner": "Quess",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 6\nAPPSEC: VAPT, SAST, DAST, Burp Suite, OWASP, Threat Modelling\nBACKGROUND: Dedicated security specialist with experience in cloud security and compliance\nFIT: Meets experience threshold with strong AppSec skills, including VAPT, SAST, DAST, and threat modeling, making them a suitable candidate\nCOMPANIES: CDAC, SRM Institute of Technology, Sunbeam Institute of Technology",
@@ -122,8 +122,9 @@
           "interviewDate": "2026-06-04",
           "panelMembers": "Nishant P",
           "feedbackStatus": "Pending",
-          "roundStatus": "Under Review",
-          "notes": "Utkarsh is a seasoned software security engineer with hands-on experience in cloud security, compliance, and application security. He has a strong background in AWS infrastructure security, vulnerability assessment, and penetration testing. Utkarsh is proficient in implementing encryption, integrating security tools, and automating compliance for regulated environments. He has a proven track record of identifying and remediating critical vulnerabilities and improving pipeline security.\n\nKey Skills: AWS Security, AppSec, IAM, OWASP, VAPT, Cloud Security, CI/CD, Qualys, Nessus, SonarQube, Checkov"
+          "roundStatus": "Scheduled",
+          "notes": "Utkarsh is a seasoned software security engineer with hands-on experience in cloud security, compliance, and application security. He has a strong background in AWS infrastructure security, vulnerability assessment, and penetration testing. Utkarsh is proficient in implementing encryption, integrating security tools, and automating compliance for regulated environments. He has a proven track record of identifying and remediating critical vulnerabilities and improving pipeline security.\n\nKey Skills: AWS Security, AppSec, IAM, OWASP, VAPT, Cloud Security, CI/CD, Qualys, Nessus, SonarQube, Checkov",
+          "interviewTime": "16:00"
         }
       ],
       "createdAt": "2026-06-03T05:29:11.285Z",
@@ -796,7 +797,8 @@
           "panelMembers": "Aman Sahu",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "12:30"
         }
       ],
       "createdAt": "2026-05-29T17:23:28.317Z",
