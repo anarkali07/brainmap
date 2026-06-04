@@ -7089,10 +7089,19 @@ function renderPanelBoard() {
       const endTime = addMinsToTime(t, p.dur);
 
       if (s?.candidateId) {
-        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:6px;
-            background:var(--accent-glass);border:1px solid var(--accent);border-radius:9px;">
-          <div style="text-align:center;min-width:80px;flex-shrink:0;">
-            <div style="font-size:0.75rem;font-weight:800;color:var(--accent);">${t}</div>
+        return `<div id="psslot-${p.id}-${idx}"
+            draggable="true"
+            ondragstart="psSlotDragStart(event,'${p.id}',${idx})"
+            ondragend="this.style.opacity='1'"
+            ondragover="event.preventDefault();this.style.borderColor='var(--medium)';this.style.background='rgba(251,191,36,0.08)'"
+            ondragleave="this.style.borderColor='var(--accent)';this.style.background='var(--accent-glass)'"
+            ondrop="psDropToSlot(event,'${p.id}',${idx});this.style.borderColor='var(--accent)';this.style.background='var(--accent-glass)'"
+            style="display:flex;align-items:center;gap:10px;padding:9px 14px;margin-bottom:6px;
+              background:${s.preExisting?'rgba(6,182,212,0.1)':'var(--accent-glass)'};
+              border:1px solid ${s.preExisting?'#06b6d4':'var(--accent)'};border-radius:9px;cursor:grab;transition:all 0.15s;">
+          <div style="color:var(--text-muted);font-size:0.9rem;flex-shrink:0;" title="Drag to move">⠿</div>
+          <div style="text-align:center;min-width:70px;flex-shrink:0;">
+            <div style="font-size:0.75rem;font-weight:800;color:${s.preExisting?'#06b6d4':'var(--accent)'};">${t}</div>
             <div style="font-size:0.62rem;color:var(--text-muted);">– ${endTime}</div>
           </div>
           <div style="flex:1;min-width:0;">
@@ -7102,7 +7111,7 @@ function renderPanelBoard() {
               <span style="font-size:0.68rem;color:var(--text-muted);">${esc(s.partner||'')}</span>
             </div>
           </div>
-          <button onclick="psRemoveSlot('${p.id}',${idx})" title="Remove"
+          <button onclick="event.stopPropagation();psRemoveSlot('${p.id}',${idx})" title="Remove"
             style="width:24px;height:24px;border-radius:6px;border:1px solid rgba(244,63,94,0.3);
               background:rgba(244,63,94,0.08);color:var(--critical);cursor:pointer;font-size:0.75rem;
               display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>
@@ -7152,9 +7161,31 @@ function renderPanelBoard() {
 
 function psDropToSlot(e, panelId, idx) {
   e.preventDefault();
-  const slot = document.getElementById(`psslot-${panelId}-${idx}`);
-  if (slot) { slot.style.borderColor='var(--border)'; slot.style.background='transparent'; }
-  if (_psDragId) { psAssignToSlot(panelId, idx, _psDragId); _psDragId = null; }
+  if (!_psDragId) return;
+
+  const toPanel = _psPanel.find(p => p.id === panelId);
+  if (!toPanel) return;
+
+  if (_psDragFromPanel !== null && _psDragFromIdx !== null) {
+    // Moving from one slot to another — swap or move
+    const fromPanel = _psPanel.find(p => p.id === _psDragFromPanel);
+    if (fromPanel) {
+      const fromSlot = fromPanel.slots[_psDragFromIdx];
+      const toSlot   = toPanel.slots[idx];
+      // Swap
+      toPanel.slots[idx]              = fromSlot   || null;
+      fromPanel.slots[_psDragFromIdx] = toSlot     || null;
+      if (toPanel.slots[idx])   toPanel.slots[idx].time   = (toPanel.slotTimes||[])[idx]   || toPanel.slots[idx].time;
+      if (fromPanel.slots[_psDragFromIdx]) fromPanel.slots[_psDragFromIdx].time = (fromPanel.slotTimes||[])[_psDragFromIdx] || fromPanel.slots[_psDragFromIdx].time;
+    }
+    _psDragFromPanel = null; _psDragFromIdx = null;
+  } else {
+    // Dragging from pending list
+    psAssignToSlot(panelId, idx, _psDragId);
+  }
+  _psDragId = null;
+  renderPanelMemberList();
+  renderPanelBoard();
 }
 
 function psSelectCandidate(candidateId, el) {
@@ -7249,10 +7280,27 @@ let _psDragId = null;
 let _psDragEl = null;
 let _psSelectedId = null;
 
+let _psDragFromPanel = null;
+let _psDragFromIdx   = null;
+
 function psDragStart(e, candidateId) {
   _psDragId = candidateId;
+  _psDragFromPanel = null;
+  _psDragFromIdx   = null;
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/plain', candidateId);
+}
+
+function psSlotDragStart(e, panelId, idx) {
+  const panel = _psPanel.find(p => p.id === panelId);
+  const slot  = panel?.slots[idx];
+  if (!slot?.candidateId) return;
+  _psDragId        = slot.candidateId;
+  _psDragFromPanel = panelId;
+  _psDragFromIdx   = idx;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', slot.candidateId);
+  e.currentTarget.style.opacity = '0.5';
 }
 
 // Touch drag support for mobile
