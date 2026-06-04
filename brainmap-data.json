@@ -142,7 +142,7 @@
       "candidateName": "Yash Shahani",
       "position": "Security Engineer",
       "experience": 8,
-      "finalStatus": "Scheduled",
+      "finalStatus": "Rejected",
       "level": "L2",
       "partner": "Quess",
       "profileSummary": "VERDICT: ✅ Schedule\nEXP: 8 \nAPPSEC: SAST, Threat Modelling, AppSec, API Security, Secret Scanning, SDLC\nBACKGROUND: Dedicated security background with strong AppSec expertise\nFIT: Strong AppSec skills, 5+ years of experience, and a master's degree in Information Security make this candidate a good fit for the role\nCOMPANIES: Eos Cyber, Qwiet AI, Verkada, Micro Focus, IBM, Sequretek IT Solutions",
@@ -154,8 +154,8 @@
           "interviewDate": "2026-06-04",
           "panelMembers": "Vaishali Rane",
           "feedbackStatus": "Pending",
-          "roundStatus": "Scheduled",
-          "notes": "Highly experienced Security Engineer with 8 years of experience in AppSec, threat modeling, and secure SDLC practices. Proven track record of reducing vulnerabilities and strengthening company-wide security posture. Expertise in multiple programming languages and technologies, including cloud security and DevSecOps. Strong background in research and development, with experience in building and maturing AppSec programs.\n\nKey Skills: AppSec, Threat Modeling, Python, Java, C, C++, SQL, JavaScript, Go, GraphQL, Shell, AWS, Terraform, Docker, GCP, Git, CI/CD",
+          "roundStatus": "Rejected",
+          "notes": "",
           "interviewTime": "16:30"
         }
       ],
@@ -720,9 +720,18 @@
           "interviewDate": "2026-06-04",
           "panelMembers": "Shamika",
           "feedbackStatus": "Pending",
-          "roundStatus": "Scheduled",
+          "roundStatus": "Selected",
           "notes": "",
           "interviewTime": "16:30"
+        },
+        {
+          "id": "mpzj1lc7r3z29",
+          "round": "R2",
+          "interviewDate": "",
+          "panelMembers": "Shamika",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Scheduled",
+          "notes": ""
         }
       ],
       "createdAt": "2026-05-29T17:23:32.470Z",
@@ -851,9 +860,18 @@
           "interviewDate": "2026-06-04",
           "panelMembers": "Vaishali Rane",
           "feedbackStatus": "Pending",
-          "roundStatus": "Scheduled",
+          "roundStatus": "Selected",
           "notes": "",
           "interviewTime": "11:30"
+        },
+        {
+          "id": "mpzj1tab3yygv",
+          "round": "R2",
+          "interviewDate": "",
+          "panelMembers": "Vaishali Rane",
+          "feedbackStatus": "Pending",
+          "roundStatus": "Scheduled",
+          "notes": ""
         }
       ],
       "createdAt": "2026-05-29T17:23:25.528Z",
@@ -1406,7 +1424,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "dark",
+    "theme": "light",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
@@ -1470,6 +1488,7 @@
         "dur": 30,
         "defaultTime": "16:30"
       }
-    ]
+    ],
+    "gistId": ""
   }
 }
