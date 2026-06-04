@@ -4748,7 +4748,6 @@ function openRoundModal(interviewId, roundId) {
 
 function saveRound() {
   const date = document.getElementById('rnd-date').value;
-  if (!date) { showErr('rnd-date-err', true); return; }
   showErr('rnd-date-err', false);
 
   const interviewId = document.getElementById('rnd-interview-id').value;
