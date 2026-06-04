@@ -7286,14 +7286,18 @@ function psAssignToSlot(panelId, slotIdx, candidateId) {
 
   const i = DB.interviews.find(x => x.id === candidateId);
   if (!i) return;
-  const nextRound = (i.rounds||[]).find(r => !r.interviewDate);
+  const schedDate = document.getElementById('ps-date')?.value || today();
+  // Find round: prefer one already scheduled for this date, else find unscheduled
+  const targetRound = (i.rounds||[]).find(r => r.interviewDate === schedDate)
+                   || (i.rounds||[]).find(r => !r.interviewDate)
+                   || (i.rounds||[])[0];
 
   panel.slots[slotIdx] = {
     time: slotTimes[slotIdx],
     candidateId,
     candidateName: i.candidateName,
-    round: nextRound?.round || 'R1',
-    roundId: nextRound?.id,
+    round: targetRound?.round || 'R1',
+    roundId: targetRound?.id,
     partner: i.partner || ''
   };
 
@@ -7471,9 +7475,11 @@ function savePanelSchedule() {
       if (!slot?.candidateId) return; // skip null/empty slots
       const i = DB.interviews.find(x => x.id === slot.candidateId);
       if (!i) return;
-      const r = slot.roundId
-        ? (i.rounds||[]).find(x => x.id === slot.roundId)
-        : (i.rounds||[]).find(x => !x.interviewDate);
+      // Find round: by ID if available, else by date match, else first unscheduled, else first round
+      const r = (slot.roundId && (i.rounds||[]).find(x => x.id === slot.roundId))
+             || (i.rounds||[]).find(x => x.interviewDate === date)
+             || (i.rounds||[]).find(x => !x.interviewDate)
+             || (i.rounds||[])[0];
       if (!r) return;
       r.interviewDate  = date;
       r.interviewTime  = slot.time || '';        // save the exact time slot
