@@ -6792,15 +6792,21 @@ function _preFillExistingAssignments() {
 
   _psPanel.forEach(panel => {
     const slotTimes = panel.slotTimes || [];
-    const panelName = panel.name.toLowerCase();
+    const panelName     = panel.name.toLowerCase();
+    const panelFirstName = panel.name.split(' ')[0].toLowerCase();
+    const matchesPanel  = (pm) => {
+      if (!pm) return false;
+      const pmLower = pm.trim().toLowerCase();
+      const pmFirst = pmLower.split(' ')[0];
+      return pmLower === panelName || pmFirst === panelFirstName || pmLower === panelFirstName || pmFirst === panelName;
+    };
     const localPlaced = new Set(); // track within this panel's loop
 
     // Get ALL candidates assigned to this panel on this date (one per round)
     const assigned = (DB.interviews||[]).filter(i =>
       !['Rejected','Screened Out'].includes(i.finalStatus) &&
       (i.rounds||[]).some(r =>
-        r.interviewDate === schedDate &&
-        r.panelMembers && r.panelMembers.trim().toLowerCase() === panelName
+        r.interviewDate === schedDate && matchesPanel(r.panelMembers)
       )
     );
 
@@ -6814,8 +6820,7 @@ function _preFillExistingAssignments() {
       if (!existing) return;
 
       const r = (existing.rounds||[]).find(x =>
-        x.interviewDate === schedDate &&
-        x.panelMembers && x.panelMembers.trim().toLowerCase() === panelName
+        x.interviewDate === schedDate && matchesPanel(x.panelMembers)
       );
 
       panel.slots[idx] = {
