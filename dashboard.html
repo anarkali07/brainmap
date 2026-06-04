@@ -7671,9 +7671,20 @@ function renderSchedulesModal() {
         ${dateDisp}${dayLabel}
         ${r.interviewTime ? `<div style="font-size:0.72rem;color:var(--accent);font-weight:700;">🕐 ${r.interviewTime}</div>` : ''}
       </td>
-      <td style="padding:10px 12px;font-size:0.78rem;">
-        <div style="font-weight:600;color:var(--text);">${esc(r.panelMembers || '—')}</div>
-        ${r.interviewTime ? `<div style="font-size:0.68rem;color:var(--text-muted);">${r.interviewTime} – ${addMinsToTime(r.interviewTime,r.duration||30)}</div>` : ''}
+      <td style="padding:6px 12px;min-width:150px;">
+        ${(() => {
+          const isDefault = r.panelMembers && (r.panelMembers.includes('Hiring Manager') || r.panelMembers.includes('AppSec Lead') || r.panelMembers.includes('HR'));
+          const displayVal = isDefault ? '' : (r.panelMembers || '');
+          return `<input value="${esc(displayVal)}" placeholder="+ Add panel members"
+            data-iid="${i.id}" data-rid="${r.id}"
+            style="background:transparent;border:none;border-bottom:1px dashed ${displayVal?'transparent':'var(--border)'};
+              color:${displayVal?'var(--text)':'var(--text-muted)'};font-size:0.78rem;font-weight:${displayVal?'600':'400'};
+              padding:2px 0;width:100%;cursor:text;outline:none;transition:all 0.15s;"
+            onfocus="this.style.borderBottomColor='var(--accent)'"
+            onblur="this.style.borderBottomColor='transparent';updateSchedPanel(this.dataset.iid,this.dataset.rid,this.value)"
+            onkeydown="if(event.key==='Enter'){this.blur()}">
+          ${r.interviewTime ? `<div style="font-size:0.65rem;color:var(--accent);font-weight:700;margin-top:1px;">🕐 ${r.interviewTime}</div>` : ''}`;
+        })()}
       </td>
     </tr>`;
   }).join('');
