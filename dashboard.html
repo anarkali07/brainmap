@@ -2474,6 +2474,15 @@ function loadData() {
       if (isAiGenerated) r.notes = '';
     });
   });
+
+  // ── migrate: clear AI-generated default panel members ──
+  (DB.interviews||[]).forEach(i => {
+    (i.rounds||[]).forEach(r => {
+      if (r.panelMembers && (r.panelMembers.includes('Hiring Manager') || r.panelMembers.includes('AppSec Lead'))) {
+        r.panelMembers = '';
+      }
+    });
+  });
   // ── migrate: fix savedPanelMembers to use slotTimes + 30min ──
   const _defaultPanel = [
     { id:'sp1', name:'Vaishali Rane', slotTimes:['11:30','16:30'], dur:30 },

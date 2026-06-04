@@ -151,7 +151,7 @@
           "id": "mpxmlvxux6kdf",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Highly experienced Security Engineer with 8 years of experience in AppSec, threat modeling, and secure SDLC practices. Proven track record of reducing vulnerabilities and strengthening company-wide security posture. Expertise in multiple programming languages and technologies, including cloud security and DevSecOps. Strong background in research and development, with experience in building and maturing AppSec programs.\n\nKey Skills: AppSec, Threat Modeling, Python, Java, C, C++, SQL, JavaScript, Go, GraphQL, Shell, AWS, Terraform, Docker, GCP, Git, CI/CD"
@@ -174,7 +174,7 @@
           "id": "mpxmlv8fsh575",
           "round": "R1",
           "interviewDate": "2026-06-04",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Varsha is a skilled Cybersecurity Specialist with 4+ years of experience in web application security, API source code auditing, and mobile application security assessments. She is proficient in identifying vulnerabilities and implementing security measures. Varsha has a strong background in OWASP Top 10 and secure coding practices. She is a team player and can work effectively in a team as well as individually.\n\nKey Skills: Web/API security, OWASP, VAPT, Cloud (AWS/Azure), Burp Suite, Python, JavaScript, Java, API Security, Mobile Application Security"
@@ -205,7 +205,7 @@
           "id": "mpxmlukgl0xs0",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Prashanth is a results-driven Application Security Analyst with 8+ years of proven experience in Vulnerability Assessment and Penetration Testing. He has hands-on experience with industry-leading tools and demonstrated ability to identify, validate, and exploit vulnerabilities. Prashanth is skilled in delivering clear, actionable penetration testing reports with remediation guidance for technical and non-technical stakeholders. He is committed to staying current with emerging threats, security frameworks, and industry best practices.\n\nKey Skills: Burp Suite, OWASP ZAP, Nessus, Nmap, Android, iOS, APKTool, Coverity, Postman, Wireshark, OWASP Top 10, OWASP Mobile Top 10"
@@ -228,7 +228,7 @@
           "id": "mpxmiqgbwpiyy",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Veenit Birje is a Security Engineer with 3+ years of experience in securing large scale Web, Mobile & API platforms. He has a proven track record of establishing and executing secure SDLC practices, resulting in a 40% reduction in critical vulnerabilities. Veenit has also demonstrated expertise in vulnerability assessment and penetration testing, having identified 47+ high-impact vulnerabilities. He is a strong candidate with a background in electronics and telecommunication engineering.\n\nKey Skills: Application Security, Vulnerability Assessment, Penetration Testing, OWASP, Burp Suite, Kali Linux, Postman, SQL, JavaScript, Python"
@@ -259,7 +259,7 @@
           "id": "mpxmipmb3157f",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Shivani Saini is a seasoned cybersecurity professional with a strong background in application security, API security, and cloud security assessments. She has a proven track record of improving security posture through automation, vulnerability management, and secure SDLC practices. With 5+ years of experience, she has demonstrated strong leadership skills, mentoring junior analysts and driving security operations at scale.\n\nKey Skills: Application Security, API Security, SAST, DAST, AWS Cloud Security, OWASP, Vulnerability Assessment, DevSecOps, Security Automation"
@@ -290,7 +290,7 @@
           "id": "mpxmfs5tj4j8s",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": "Neha is an experienced Application Security Engineer with 4+ years of experience in application security assessments, API security testing, and vulnerability management. She has hands-on expertise in manual and automated penetration testing and is skilled in collaborating with development teams for remediation guidance. Neha has a strong background in secure coding practices and DevSecOps security integration. She is well-versed in identifying and validating vulnerabilities, including IDOR/BOLA, Injection, Broken Authentication, and Security Misconfiguration.\n\nKey Skills: Web/API security, OWASP, VAPT, Cloud, Application Security, Secure SDLC, Vulnerability Management, Burp Suite Pro, Postman, SAST, DAST, SCA"
@@ -741,7 +741,7 @@
           "id": "mpr6xtnjo2e7s",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -767,7 +767,7 @@
           "id": "mpr6xsjsiiwb2",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -819,7 +819,7 @@
           "id": "mpr6xqj45nutg",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -878,7 +878,7 @@
           "id": "mpr6xoaz2enha",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, Cybersecurity Specialist",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -904,7 +904,7 @@
           "id": "mpr6rxvanq7ch",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -929,7 +929,7 @@
           "id": "mpr6rx38scnkj",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -955,7 +955,7 @@
           "id": "mpr6rwfa56pnn",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -981,7 +981,7 @@
           "id": "mpr6atnpunnqo",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, AppSec Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
@@ -1067,7 +1067,7 @@
           "id": "mpr6ar720x2vf",
           "round": "R1",
           "interviewDate": "",
-          "panelMembers": "Hiring Manager, Application Security Lead, HR",
+          "panelMembers": "",
           "feedbackStatus": "Pending",
           "roundStatus": "Under Review",
           "notes": ""
