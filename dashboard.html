@@ -7459,6 +7459,7 @@ function savePanelSchedule() {
   let saved = 0;
   _psPanel.forEach(panel => {
     panel.slots.forEach(slot => {
+      if (!slot?.candidateId) return; // skip null/empty slots
       const i = DB.interviews.find(x => x.id === slot.candidateId);
       if (!i) return;
       const r = slot.roundId
