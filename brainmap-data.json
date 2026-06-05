@@ -179,7 +179,7 @@
           "panelMembers": "Mangesh",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": "Varsha is a skilled Cybersecurity Specialist with 4+ years of experience in web application security, API source code auditing, and mobile application security assessments. She is proficient in identifying vulnerabilities and implementing security measures. Varsha has a strong background in OWASP Top 10 and secure coding practices. She is a team player and can work effectively in a team as well as individually.\n\nKey Skills: Web/API security, OWASP, VAPT, Cloud (AWS/Azure), Burp Suite, Python, JavaScript, Java, API Security, Mobile Application Security",
+          "notes": "",
           "interviewTime": "12:00"
         }
       ],
@@ -1492,7 +1492,6 @@
         "dur": 30,
         "defaultTime": "16:30"
       }
-    ],
-    "gistId": ""
+    ]
   }
 }
