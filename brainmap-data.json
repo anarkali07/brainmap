@@ -327,7 +327,8 @@
           "panelMembers": "Aman Sahu",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "12:30"
         }
       ],
       "createdAt": "2026-06-02T06:26:51.712Z",
@@ -355,10 +356,11 @@
           "id": "mpw98qeomv6kv",
           "round": "R1",
           "interviewDate": "2026-06-05",
-          "panelMembers": "",
+          "panelMembers": "Vaishali Rane",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": "Prajakta is a results-driven Information Security professional with 3+ years of experience in Application Penetration Testing and Network Security Testing. She is proficient in conducting end-to-end VAPT engagements and has demonstrated expertise in identifying and exploiting business-logic vulnerabilities. Prajakta holds CEH certification and is adept in Secure Code Review, Red Team methodologies, and Static/Dynamic Analysis. She has worked with government Banking clients and has experience in leading comprehensive Application Penetration Testing and VAPT engagements.\n\nKey Skills: OWASP Top 10, Burp Suite Pro, OWASP ZAP, Wireshark, Metasploit, Exploit DB, SQLmap, Nmap, Postman, Java Secure Code Review"
+          "notes": "Prajakta is a results-driven Information Security professional with 3+ years of experience in Application Penetration Testing and Network Security Testing. She is proficient in conducting end-to-end VAPT engagements and has demonstrated expertise in identifying and exploiting business-logic vulnerabilities. Prajakta holds CEH certification and is adept in Secure Code Review, Red Team methodologies, and Static/Dynamic Analysis. She has worked with government Banking clients and has experience in leading comprehensive Application Penetration Testing and VAPT engagements.\n\nKey Skills: OWASP Top 10, Burp Suite Pro, OWASP ZAP, Wireshark, Metasploit, Exploit DB, SQLmap, Nmap, Postman, Java Secure Code Review",
+          "interviewTime": "11:30"
         }
       ],
       "createdAt": "2026-06-02T06:26:50.160Z",
@@ -386,10 +388,11 @@
           "id": "mpr90r248k9o6",
           "round": "R1",
           "interviewDate": "2026-06-05",
-          "panelMembers": "",
+          "panelMembers": "Shamika",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "16:30"
         }
       ],
       "createdAt": "2026-05-29T18:21:46.876Z",
@@ -566,10 +569,11 @@
           "id": "mpr90puecyvnu",
           "round": "R1",
           "interviewDate": "2026-06-05",
-          "panelMembers": "Mangesh Matke",
+          "panelMembers": "Mangesh",
           "feedbackStatus": "Pending",
           "roundStatus": "Scheduled",
-          "notes": ""
+          "notes": "",
+          "interviewTime": "12:00"
         }
       ],
       "createdAt": "2026-05-29T18:21:45.302Z",
@@ -1424,7 +1428,7 @@
   },
   "customModules": {},
   "settings": {
-    "theme": "dark",
+    "theme": "light",
     "aiProvider": "groq",
     "aiModel": "llama-3.3-70b-versatile",
     "groqKey": "",
@@ -1489,6 +1493,6 @@
         "defaultTime": "16:30"
       }
     ],
-    "gistId": "631caf7bc54303c0cf02c5cab0abfbf0"
+    "gistId": ""
   }
 }
