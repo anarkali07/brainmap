@@ -5349,20 +5349,21 @@ function renderInterviews() {
     const isSelected  = i.finalStatus === 'Selected';
 
     (i.rounds || []).forEach(r => {
-      // Round must have a past interview date to be counted
       const hadInterview = r.interviewDate && r.interviewDate <= todayStr;
-      if (!hadInterview) return; // never happened — skip
 
+      // R1: count when completed (rejected, selected, or moved to R2) AND had interview
+      // R2: count when it exists (was created because R1 was selected/completed)
+      // R3: count when it exists (was created because R2 was selected/completed)
       const completed =
-        (r.round === 'R1' && (isRejected || isSelected || hasR2)) ||
-        (r.round === 'R2' && (isRejected || isSelected || hasR3)) ||
-        (r.round === 'R3' && (isRejected || isSelected));
+        (r.round === 'R1' && hadInterview && (isRejected || isSelected || hasR2)) ||
+        (r.round === 'R2' && (isRejected || isSelected || hasR3 || hasR2)) || // exists = was promoted to R2
+        (r.round === 'R3' && (isRejected || isSelected || hasR3));
 
       if (r.round === 'R1' && completed) partnerMap[key].r1++;
       else if (r.round === 'R2' && completed) partnerMap[key].r2++;
       else if (r.round === 'R3' && completed) partnerMap[key].r3++;
 
-      if (completed) partnerMap[key].totalInterviews++;
+      if (completed && hadInterview) partnerMap[key].totalInterviews++;
     });
 
   });
