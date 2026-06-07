@@ -1433,6 +1433,7 @@ body[data-theme="light"] {
                 <th style="padding:11px 12px;">Partner</th>
                 <th style="padding:11px 12px;">Round</th>
                 <th style="padding:11px 12px;">Date</th>
+                <th style="padding:11px 12px;">Time</th>
                 <th style="padding:11px 12px;">Panel</th>
                 <th style="padding:11px 12px;">Status</th>
               </tr>
@@ -7603,6 +7604,7 @@ function renderSchedulesPage() {
         <span style="background:${clr}22;color:${clr};border:1px solid ${clr}55;border-radius:6px;padding:2px 9px;font-size:0.74rem;font-weight:700;">${esc(r.round)}</span>
       </td>
       <td style="padding:10px 12px;white-space:nowrap;color:${isToday?'var(--medium)':isPast?'var(--text-muted)':'var(--text)'};">${dateFmt}</td>
+      <td style="padding:10px 12px;font-size:0.82rem;white-space:nowrap;color:var(--accent);font-weight:600;">${r.interviewTime||"—"}</td>
       <td style="padding:6px 12px;max-width:200px;" title="Click to edit panel">
         <input value="${esc(r.panelMembers||'')}" placeholder="+ Add panel members"
           data-iid="${i.id}" data-rid="${r.id}"
