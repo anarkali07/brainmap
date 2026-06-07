@@ -6455,11 +6455,11 @@ function renderIntDashboard() {
     {label:'Open Positions',  val:`L1:${openL1-filledL1>0?openL1-filledL1:0} L2:${openL2-filledL2>0?openL2-filledL2:0}`, clr:'var(--accent2)', sub:`${openL1} L1 · ${openL2} L2 open`},
   ];
 
-  const tilesHtml = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px;">
-    ${tiles.map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;box-shadow:var(--shadow);">
-      <div style="font-size:0.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;">${t.label}</div>
-      <div style="font-size:1.8rem;font-weight:800;color:${t.clr};line-height:1;">${t.val}</div>
-      <div style="font-size:0.68rem;color:var(--text-muted);margin-top:4px;">${t.sub}</div>
+  const tilesHtml = `<div style="display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:2px;">
+    ${tiles.map(t=>`<div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px 14px;box-shadow:var(--shadow);flex:1;min-width:100px;white-space:nowrap;">
+      <div style="font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px;">${t.label}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:${t.clr};line-height:1;">${t.val}</div>
+      <div style="font-size:0.62rem;color:var(--text-muted);margin-top:3px;">${t.sub}</div>
     </div>`).join('')}
   </div>`;
 
