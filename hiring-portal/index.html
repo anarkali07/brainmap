@@ -13570,6 +13570,9 @@ function saveToCloud() {
     // Render content
     if (typeof renderIntDashboard === 'function') {
       try {
+        // Test: force some content first
+        const testEl = document.getElementById('intdash-inner');
+        if (testEl) testEl.innerHTML = '<div style="padding:20px;color:green;font-size:1.2rem;">✅ Section active - calling renderIntDashboard...</div>';
         renderIntDashboard();
         console.log('renderIntDashboard completed, intdash-inner HTML length:', document.getElementById('intdash-inner')?.innerHTML?.length);
       } catch(err) {
