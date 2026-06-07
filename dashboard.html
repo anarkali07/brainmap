@@ -6541,12 +6541,12 @@ function renderIntDashboard() {
 
   el.innerHTML = `
     ${tilesHtml}
+    <div style="margin-bottom:14px;">
+      ${card('🤝 Partner Performance', partnerHtml, nb('interviews','View interviews'))}
+    </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
       ${card('📊 Pipeline Funnel', funnelHtml, nb('interviews','View all'))}
       ${card('📅 Interviews This Week', upcomingHtml, nb('intschedules','Full schedule'))}
-    </div>
-    <div style="margin-bottom:14px;">
-      ${card('🤝 Partner Performance', partnerHtml, nb('interviews','View interviews'))}
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
       ${card('🏁 Recent Decisions', decisionsHtml, nb('interviews','All candidates'))}
