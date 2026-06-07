@@ -12531,7 +12531,7 @@ function toggleScanCard(id) {
   if (arrow) arrow.style.transform = isCollapsed ? 'rotate(0deg)' : 'rotate(-90deg)';
 }
 </script>
-<script>if(typeof renderIntDashboard==="function")renderIntDashboard();else document.getElementById("intdash-inner").innerHTML="<p style=color:red>renderIntDashboard undefined</p>";</script>
+<script>document.querySelectorAll(".section").forEach(function(s){s.classList.remove("active");});var _s=document.getElementById("sec-intdashboard");if(_s)_s.classList.add("active");if(typeof renderIntDashboard==="function"){try{renderIntDashboard();}catch(e){document.getElementById("intdash-inner").innerHTML="<p style=padding:20px;color:red>"+e.message+"</p>";}}else{document.getElementById("intdash-inner").innerHTML="<p style=color:red>renderIntDashboard undefined</p>";}</script>
 </body>
 </html>`;
 
