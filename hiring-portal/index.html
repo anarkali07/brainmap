@@ -879,7 +879,7 @@ body[data-theme="light"] {
       <!-- HIRING DASHBOARD -->
       <section id="sec-intdashboard" class="section active">
         <h2>&#128202; Hiring Dashboard</h2>
-        <div id="intdash-inner"></div><script>if(typeof renderIntDashboard==="function")renderIntDashboard();</script>
+        <div id="intdash-inner"></div>
       </section>
 
       <!-- INTERVIEWS -->
@@ -12116,6 +12116,7 @@ window.addEventListener('load', function() {
   }, 500);
 });
 </script>
+<script>if(typeof renderIntDashboard==="function")renderIntDashboard();else document.getElementById("intdash-inner").innerHTML="<p style=color:red>renderIntDashboard undefined</p>";</script>
 </body>
 </html>`;
 
