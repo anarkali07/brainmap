@@ -13568,9 +13568,23 @@ function saveToCloud() {
     const headerTitle = document.getElementById('header-title');
     if (headerTitle) headerTitle.textContent = 'Hiring Dashboard';
     // Render content
-    if (typeof renderIntDashboard === 'function') renderIntDashboard();
+    if (typeof renderIntDashboard === 'function') {
+      try {
+        renderIntDashboard();
+        console.log('renderIntDashboard completed, intdash-inner HTML length:', document.getElementById('intdash-inner')?.innerHTML?.length);
+      } catch(err) {
+        const errDiv = document.getElementById('intdash-inner');
+        if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:red;font-family:monospace;"><b>renderIntDashboard Error:</b><br>' + err.message + '<br><pre>' + err.stack + '</pre></div>';
+        console.error('renderIntDashboard failed:', err);
+      }
+    } else {
+      const errDiv = document.getElementById('intdash-inner');
+      if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:orange;">renderIntDashboard is not defined</div>';
+    }
   } catch(e) {
     console.error('Hiring portal init error:', e);
+    const errDiv = document.getElementById('intdash-inner');
+    if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:red;">' + e.message + '</div>';
   }
 })();
 
