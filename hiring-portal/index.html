@@ -780,8 +780,8 @@ body[data-theme="light"] {
 [data-theme="light"] #header  { background: color-mix(in srgb, var(--card) 90%, transparent); }
 [data-theme="light"] th       { background: var(--bg2); }
 
-/* Teal accent override */
 :root { --accent:#14b8a6; --accent2:#0d9488; --accent-hover:#0f9384; --accent-glow:rgba(20,184,166,0.18); --accent-glass:rgba(20,184,166,0.08); }
+.hbtn { padding:4px 8px !important; font-size:0.76rem !important; }
 </style>
 </head>
 <body data-theme="dark">
@@ -807,11 +807,11 @@ body[data-theme="light"] {
   </aside>
   <div id="main">
     <header id="header">
-      <button id="hamburger" onclick="toggleSidebar()">&#9776;</button>
+      <button id="hamburger" onclick="toggleSidebar()">☰</button>
       <div id="header-title">Hiring Dashboard</div>
-      <button class="header-btn hbtn" onclick="loadCloudData()" id="hdr-load-btn">☁↓ Load</button>
-      <button class="header-btn primary hbtn" onclick="saveToCloud()" id="hdr-save-btn">☁↑ Save</button>
-      <button class="header-btn hbtn" onclick="exportData()" title="Export">↓</button>
+      <button class="header-btn hbtn" onclick="loadCloudData()" id="hdr-load-btn">☁↓</button>
+      <button class="header-btn primary hbtn" onclick="saveToCloud()" id="hdr-save-btn">☁↑</button>
+      <button class="header-btn hbtn" onclick="exportData()">↓ Export</button>
       <label style="margin:0;cursor:pointer;">
         <button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑ Import</button>
         <input type="file" accept=".json" style="display:none" onchange="importData(this)">
@@ -819,16 +819,16 @@ body[data-theme="light"] {
     </header>
     <div id="content">
       <div id="dash-inner" style="display:none;"></div>
-           SECTION: HIRING DASHBOARD
-           ====================================================== -->
+
+-->
       <section id="sec-intdashboard" class="section">
         <h2>📊 Hiring Dashboard</h2>
         <div id="intdash-inner"></div>
       </section>
 
       <!-- ======================================================
-           SECTION: INTERVIEWS
-           ====================================================== -->
+
+-->
       <section id="sec-interviews" class="section">
         <h2>&#129489; Interviews</h2>
         <div id="int-tiles" style="margin-bottom:12px;"></div>
@@ -932,8 +932,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-           SECTION: PERSONAL (tabs: Goals | Health | Planner)
-           ====================================================== -->
+
+-->
       <section id="sec-personal" class="section">
         <div class="inner-tabs">
           <button class="inner-tab active" id="itab-goals" onclick="showInnerTab('personal','itab-goals','ipanel-goals')">&#127919; Goals</button>
@@ -1028,8 +1028,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-           SECTION: TIME TRACKER
-           ====================================================== -->
+
+-->
       <section id="sec-timetracker" class="section">
         <h2>⏱ Time Tracker</h2>
 
@@ -1083,8 +1083,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-           SECTION: PANEL SCHEDULER
-           ====================================================== -->
+
+-->
       <section id="sec-panelscheduler" class="section">
 
         <!-- Header -->
@@ -1183,8 +1183,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-           SECTION: INTERVIEW SCHEDULES
-           ====================================================== -->
+
+-->
       <section id="sec-intschedules" class="section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">📅 Interview Schedules</h2>
@@ -1219,8 +1219,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-           SECTION: SCAN REPORTS
-           ====================================================== -->
+
+-->
       <section id="sec-scanreports" class="section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">🔍 Scan Reports</h2>
@@ -1241,12 +1241,11 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-      <!-- CONFIG (minimal) -->
       <section id="sec-config" class="section">
         <h2>⚙️ Settings</h2>
         <div class="card" style="max-width:460px;">
           <label>AI Provider</label>
-          <select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq (Free, Fast)</option><option value="anthropic">Anthropic</option></select>
+          <select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select>
           <label id="apikey-label">API Key</label>
           <div class="api-key-row">
             <input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off">
@@ -1255,11 +1254,11 @@ body[data-theme="light"] {
           <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
           <label>Model</label>
           <select id="apikey-model">
-            <option value="llama-3.3-70b-versatile">Llama 3.3 70B (Recommended)</option>
-            <option value="llama-3.1-8b-instant">Llama 3.1 8B (Fastest)</option>
+            <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
+            <option value="llama-3.1-8b-instant">Llama 3.1 8B</option>
           </select>
           <div class="mt-16" style="display:flex;justify-content:flex-end;">
-            <button class="btn-primary" onclick="saveApiKey()">💾 Save</button>
+            <button class="btn-primary" onclick="saveApiKey()">Save</button>
           </div>
         </div>
       </section>
@@ -8794,7 +8793,7 @@ Respond with a JSON object exactly matching this schema (no markdown fences, raw
 }
 
 
-// ── Hiring Portal ──
+/* Hiring Portal overrides */
 const HIRING_NAV = new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
 const _origNav = navigate;
 navigate = function(s){ if(!HIRING_NAV.has(s)&&!s.startsWith('custom-')) s='intdashboard'; _origNav(s); };
