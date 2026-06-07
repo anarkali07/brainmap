@@ -8804,14 +8804,15 @@ Respond with a JSON object exactly matching this schema (no markdown fences, raw
    ============================================================ */
 
 // Apply teal accent CSS vars
-(function applyTealTheme() {
+function applyTealTheme() {
   const r = document.documentElement.style;
   r.setProperty('--accent',       '#14b8a6');
   r.setProperty('--accent2',      '#0d9488');
   r.setProperty('--accent-hover', '#0f9384');
   r.setProperty('--accent-glow',  'rgba(20,184,166,0.18)');
   r.setProperty('--accent-glass', 'rgba(20,184,166,0.08)');
-})();
+}
+applyTealTheme();
 
 const HIRING_SECTIONS = new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
 
