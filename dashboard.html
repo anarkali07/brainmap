@@ -7530,6 +7530,18 @@ function updateSchedPanel(interviewId, roundId, value) {
   renderInterviews();
 }
 
+let _schedSort = { col: null, dir: 1 };
+
+function sortSchedPage(col) {
+  if (_schedSort.col === col) _schedSort.dir *= -1;
+  else { _schedSort.col = col; _schedSort.dir = 1; }
+  ['name','exp','partner','round','date','time','panel','status'].forEach(c => {
+    const el = document.getElementById('sched-si-' + c);
+    if (el) { el.textContent = c === col ? (_schedSort.dir === 1 ? '↑' : '↓') : '⇅'; el.style.opacity = c === col ? '1' : '0.5'; el.style.color = c === col ? 'var(--accent)' : ''; }
+  });
+  renderSchedulesPage();
+}
+
 function renderSchedulesPage() {
   const filter   = document.getElementById('sched-modal-filter')?.value || 'all';
   const todayStr = today();
@@ -7548,6 +7560,27 @@ function renderSchedulesPage() {
     });
   });
   rows.sort((a,b) => a.r.interviewDate.localeCompare(b.r.interviewDate));
+  // Apply column sort
+  if (_schedSort.col) {
+    rows.sort((a, b) => {
+      let va, vb;
+      const {i:ai, r:ar} = a, {i:bi, r:br} = b;
+      switch(_schedSort.col) {
+        case 'name':    va=ai.candidateName||''; vb=bi.candidateName||''; break;
+        case 'exp':     va=ai.experience||0;     vb=bi.experience||0;     break;
+        case 'partner': va=ai.partner||'';       vb=bi.partner||'';       break;
+        case 'round':   va=ar.round||'';         vb=br.round||'';         break;
+        case 'date':    va=ar.interviewDate||''; vb=br.interviewDate||''; break;
+        case 'time':    va=ar.interviewTime||''; vb=br.interviewTime||''; break;
+        case 'panel':   va=ar.panelMembers||'';  vb=br.panelMembers||'';  break;
+        case 'status':  va=ar.roundStatus||'';   vb=br.roundStatus||'';   break;
+        default: return 0;
+      }
+      if (va < vb) return -1 * _schedSort.dir;
+      if (va > vb) return  1 * _schedSort.dir;
+      return 0;
+    });
+  }
 
   // Summary chips
   const all   = (DB.interviews||[]).flatMap(i=>(i.rounds||[]).filter(r=>r.interviewDate));
