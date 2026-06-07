@@ -1576,7 +1576,7 @@ let DB = emptyData();
 function loadData() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) DB = Object.assign(emptyData(), JSON.parse(raw));
+    if (raw) DB = Object.assign(emptyData(), JSON.parse(raw)); window.DB = DB;
   } catch(e) { DB = emptyData(); }
   // ── migrate flat interview records to multi-round format ──
   DB.interviews.forEach(i => {
@@ -5518,7 +5518,8 @@ ${webFindings ? `🔗 ONLINE VERIFICATION FINDINGS:
 function renderIntDashboard() {
   const el = document.getElementById('intdash-inner');
   if (!el) return;
-  const all       = DB.interviews || [];
+  const _DB = (typeof DB !== "undefined") ? DB : (window.DB || {interviews:[]});
+  const all       = _DB.interviews || [];
   const todayStr  = today();
   const allRounds = all.flatMap(i => i.rounds||[]);
   const weekEnd   = (() => { const d=new Date(); d.setDate(d.getDate()+7); return d.toISOString().slice(0,10); })();
