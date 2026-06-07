@@ -10124,6 +10124,7 @@ ${webFindings ? `🔗 ONLINE VERIFICATION FINDINGS:
 function renderIntDashboard() {
   const el = document.getElementById('intdash-inner');
   if (!el) return;
+  var DB = window.DB; if(!DB){el.innerHTML="<p style="padding:20px;color:orange">Loading...</p>";return;}
   const all       = DB.interviews || [];
   const todayStr  = today();
   const allRounds = all.flatMap(i => i.rounds||[]);
