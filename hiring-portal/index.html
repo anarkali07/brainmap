@@ -12101,31 +12101,19 @@ function exportInterviewsHTML() {
 <script>
 window.addEventListener('load', function() {
   setTimeout(function() {
-    try {
-      document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
-      var sec = document.getElementById('sec-intdashboard');
-      if (sec) { sec.classList.add('active'); }
-      document.querySelectorAll('.nav-item').forEach(function(n){
-        n.classList.toggle('active', n.dataset.section === 'intdashboard');
-      });
-      var ht = document.getElementById('header-title');
-      if (ht) ht.textContent = 'Hiring Dashboard';
-      var el = document.getElementById('intdash-inner');
-      if (!el) { return; }
-      if (typeof renderIntDashboard !== 'function') {
-        el.innerHTML = '<p style="padding:20px;color:orange">renderIntDashboard not defined</p>';
-        return;
-      }
-      try {
-        renderIntDashboard();
-      } catch(e) {
-        el.innerHTML = '<p style="padding:20px;color:red;font-family:monospace"><b>Error:</b> ' + e.message + '</p>';
-      }
-    } catch(e2) {
-      var el2 = document.getElementById('intdash-inner');
-      if (el2) el2.innerHTML = '<p style="padding:20px;color:red">' + e2.message + '</p>';
-    }
-  }, 300);
+    // Step 1: Force show the section
+    document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+    var sec = document.getElementById('sec-intdashboard');
+    if (!sec) { document.body.innerHTML += '<h1 style="color:red">sec-intdashboard NOT FOUND</h1>'; return; }
+    sec.classList.add('active');
+
+    // Step 2: Inject hardcoded test content
+    var el = document.getElementById('intdash-inner');
+    if (!el) { document.body.innerHTML += '<h1 style="color:red">intdash-inner NOT FOUND</h1>'; return; }
+
+    el.innerHTML = '<div style="padding:30px;background:#d1fae5;border-radius:12px;margin:20px;"><h2 style="color:#065f46">✅ Section is working!</h2><p style="color:#065f46">DB.interviews count: ' + (DB && DB.interviews ? DB.interviews.length : 'DB not available') + '</p><button onclick="renderIntDashboard();this.parentNode.innerHTML+=\'<p>renderIntDashboard called!</p>\'">Call renderIntDashboard</button></div>';
+
+  }, 500);
 });
 </script>
 </body>
