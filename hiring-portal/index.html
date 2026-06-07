@@ -13552,44 +13552,30 @@ function saveToCloud() {
   alert('Cloud sync not available.');
 }
 
-// Start on intdashboard — direct activation to avoid override chain issues
-(function initHiringPortal() {
+// Start on intdashboard — use setTimeout to run after all script errors settle
+setTimeout(function() {
   try {
-    // Deactivate all sections
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-    // Activate hiring dashboard
     const sec = document.getElementById('sec-intdashboard');
     if (sec) sec.classList.add('active');
-    // Set nav active state
     document.querySelectorAll('.nav-item').forEach(n => {
       n.classList.toggle('active', n.dataset.section === 'intdashboard');
     });
-    // Update header
     const headerTitle = document.getElementById('header-title');
     if (headerTitle) headerTitle.textContent = 'Hiring Dashboard';
-    // Render content
-    if (typeof renderIntDashboard === 'function') {
-      try {
-        // Test: force some content first
-        const testEl = document.getElementById('intdash-inner');
-        if (testEl) testEl.innerHTML = '<div style="padding:20px;color:green;font-size:1.2rem;">✅ Section active - calling renderIntDashboard...</div>';
-        renderIntDashboard();
-        console.log('renderIntDashboard completed, intdash-inner HTML length:', document.getElementById('intdash-inner')?.innerHTML?.length);
-      } catch(err) {
-        const errDiv = document.getElementById('intdash-inner');
-        if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:red;font-family:monospace;"><b>renderIntDashboard Error:</b><br>' + err.message + '<br><pre>' + err.stack + '</pre></div>';
-        console.error('renderIntDashboard failed:', err);
-      }
-    } else {
-      const errDiv = document.getElementById('intdash-inner');
-      if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:orange;">renderIntDashboard is not defined</div>';
+    const el = document.getElementById('intdash-inner');
+    if (!el) { console.error('intdash-inner not found!'); return; }
+    if (typeof renderIntDashboard !== 'function') {
+      el.innerHTML = '<div style="padding:30px;color:orange;font-size:1rem;">renderIntDashboard not defined</div>';
+      return;
     }
+    renderIntDashboard();
   } catch(e) {
+    const el = document.getElementById('intdash-inner');
+    if (el) el.innerHTML = '<div style="padding:20px;color:red;font-family:monospace;font-size:0.85rem;"><b>Error:</b> ' + e.message + '</div>';
     console.error('Hiring portal init error:', e);
-    const errDiv = document.getElementById('intdash-inner');
-    if (errDiv) errDiv.innerHTML = '<div style="padding:20px;color:red;">' + e.message + '</div>';
   }
-})();
+}, 100);
 
 // Re-apply teal after any theme changes (applyColorTheme resets CSS vars)
 const _origApplyColorTheme = typeof applyColorTheme === 'function' ? applyColorTheme : null;
