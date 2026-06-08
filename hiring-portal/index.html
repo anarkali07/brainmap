@@ -4682,7 +4682,10 @@ function renderInterviews() {
             <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span style="font-size:0.7rem;color:var(--text-muted);">📅</span>
               <input type="date" value="${r.interviewDate||''}" style="${dateStyle}" onchange="updateRoundDate('${i.id}','${r.id}',this.value)">
-              ${r.interviewTime ? `<span style="font-size:0.72rem;font-weight:700;color:var(--accent);">🕐 ${r.interviewTime}</span>` : ''}
+              <span style="font-size:0.7rem;color:var(--text-muted);">🕐</span>
+              <input type="time" value="${r.interviewTime||''}" title="Interview time"
+                style="background:transparent;border:none;border-bottom:1px dashed var(--border);color:${r.interviewTime ? 'var(--accent)' : 'var(--text-muted)'};font-size:0.72rem;font-weight:${r.interviewTime ? '700' : '400'};padding:0;width:80px;cursor:pointer;"
+                onchange="updateRoundTime('${i.id}','${r.id}',this.value)">
               ${upcoming ? `<span style="font-size:0.65rem;color:var(--medium);font-weight:600;">Soon</span>` : ''}
             </div>
             <div style="display:flex;align-items:center;gap:4px;">
@@ -6894,6 +6897,12 @@ function updateRoundDate(interviewId, roundId, val) {
   if (!i) return;
   const r = (i.rounds||[]).find(r => r.id === roundId);
   if (r) { r.interviewDate = val; saveData(); renderInterviews(); }
+}
+function updateRoundTime(interviewId, roundId, val) {
+  const i = DB.interviews.find(x => x.id === interviewId);
+  if (!i) return;
+  const r = (i.rounds||[]).find(r => r.id === roundId);
+  if (r) { r.interviewTime = val; saveData(); renderInterviews(); }
 }
 
 /* ============================================================
