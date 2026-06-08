@@ -1495,10 +1495,29 @@ body[data-theme="light"] {
 // === NULL-SAFE getElementById PATCH ===
 (function(){
   const _orig = Document.prototype.getElementById;
-  const _dummy = new Proxy({}, {
-    get(t,p){ return p==='value'?'': p==='checked'?false: p==='options'?[]: p==='classList'?{add:()=>{},remove:()=>{},toggle:()=>{},contains:()=>false}: p==='style'? new Proxy({},{get:()=>'',set:()=>true}): typeof p==='string' && p!=='then'? _dummy: undefined; },
-    set(){ return true; }
-  });
+  function makeDummy(){
+    const dummy = new Proxy(function(){return dummy;},{
+      get(t,p){
+        if(p==='value'||p==='innerHTML'||p==='textContent'||p==='placeholder') return '';
+        if(p==='checked') return false;
+        if(p==='style') return new Proxy({},{get:()=>'',set:()=>true});
+        if(p==='classList') return {add:()=>{},remove:()=>{},toggle:()=>{},contains:()=>false,replace:()=>{}};
+        if(p==='options') return {length:0};
+        if(p==='dataset') return {};
+        if(p==='contains') return ()=>false;
+        if(p==='appendChild'||p==='removeChild'||p==='setAttribute'||p==='removeAttribute'||p==='addEventListener'||p==='dispatchEvent'||p==='focus'||p==='blur'||p==='click'||p==='scrollIntoView') return ()=>{};
+        if(p==='querySelectorAll'||p==='getElementsByClassName') return ()=>[];
+        if(p==='querySelector') return ()=>null;
+        if(p==='getBoundingClientRect') return ()=>({top:0,left:0,width:0,height:0,bottom:0,right:0});
+        if(typeof p==='string'&&p!=='then'&&p!=='toJSON') return dummy;
+        return undefined;
+      },
+      set(){ return true; },
+      apply(){ return dummy; }
+    });
+    return dummy;
+  }
+  const _dummy = makeDummy();
   Document.prototype.getElementById = function(id){
     return _orig.call(this,id) || _dummy;
   };
