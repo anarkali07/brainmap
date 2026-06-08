@@ -1492,6 +1492,19 @@ body[data-theme="light"] {
 
 
 <script>
+// === NULL-SAFE getElementById PATCH ===
+(function(){
+  const _orig = Document.prototype.getElementById;
+  const _dummy = new Proxy({}, {
+    get(t,p){ return p==='value'?'': p==='checked'?false: p==='options'?[]: p==='classList'?{add:()=>{},remove:()=>{},toggle:()=>{},contains:()=>false}: p==='style'? new Proxy({},{get:()=>'',set:()=>true}): typeof p==='string' && p!=='then'? _dummy: undefined; },
+    set(){ return true; }
+  });
+  Document.prototype.getElementById = function(id){
+    return _orig.call(this,id) || _dummy;
+  };
+})();
+</script>
+<script>
 
 window.onerror = function(msg, src, line, col, err) {
   var d = document.createElement('div');
@@ -8799,4 +8812,39 @@ navigate=function(s){if(!HIRING_NAV.has(s)&&!s.startsWith('custom-'))s='intdashb
 document.querySelectorAll('.nav-item[data-section]').forEach(el=>el.onclick=()=>navigate(el.dataset.section));
 navigate('intdashboard');
 if(typeof lucide!=='undefined')lucide.createIcons();
-</script></body></html>
+</script>
+<!-- Round Modal -->
+<div class="modal-overlay" id="round-modal">
+  <div class="modal" style="max-width:420px;">
+    <h3 id="round-modal-title">Add Round</h3>
+    <input type="hidden" id="rnd-interview-id">
+    <input type="hidden" id="rnd-round-id">
+    <label>Round</label>
+    <div style="display:flex;gap:8px;margin-bottom:4px;">
+      <button type="button" id="rndbtn-r1" onclick="setRoundType('R1')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-weight:700;">R1</button>
+      <button type="button" id="rndbtn-r2" onclick="setRoundType('R2')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R2</button>
+      <button type="button" id="rndbtn-r3" onclick="setRoundType('R3')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R3</button>
+    </div>
+    <input type="hidden" id="rnd-type" value="R1">
+    <label>Interview Date</label>
+    <input type="date" id="rnd-date">
+    <div class="error-msg hidden" id="rnd-date-err">Required</div>
+    <label>Panel Members</label>
+    <input id="rnd-panel" placeholder="Comma-separated names">
+    <label>Feedback Status</label>
+    <select id="rnd-feedback">
+      <option>Pending</option><option>Submitted</option>
+    </select>
+    <label>Round Status</label>
+    <select id="rnd-status">
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
+    </select>
+    <label>Interview Feedback <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(exported to CSV)</span></label>
+    <textarea id="rnd-notes" rows="3" placeholder="Post-interview remarks, strengths, concerns…"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('round-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveRound()">Save Round</button>
+    </div>
+  </div>
+</div>
+</body></html>
