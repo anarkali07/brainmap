@@ -798,9 +798,7 @@ body[data-theme="light"] {
   </nav>
   <div id="sidebar-footer" style="padding:5px;border-top:1px solid var(--border);margin-top:auto;">
     <div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:15px;height:15px;"></i></span><span class="nav-label"> Settings</span></div>
-    <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" style="width:100%;margin-top:4px;padding:6px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-      <span class="toggle-arrow" style="font-size:0.7rem;">◀</span><span class="nav-label" style="font-size:0.72rem;">Collapse</span>
-    </button>
+    <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" style="width:100%;margin-top:4px;padding:6px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;"><span class="toggle-arrow" style="font-size:0.7rem;">◀</span><span class="nav-label" style="font-size:0.72rem;">Collapse</span></button>
   </div>
 </aside>
 <div id="main">
@@ -1237,7 +1235,7 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-    <section id="sec-config" class="section"><h2>⚙️ Settings</h2><div class="card" style="max-width:460px;"><label>AI Provider</label><select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select><label id="apikey-label">API Key</label><div class="api-key-row"><input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off"><button class="btn-primary" onclick="saveApiKey()">Save</button></div><div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div><label>Model</label><select id="apikey-model"><option value="llama-3.3-70b-versatile">Llama 3.3 70B</option><option value="llama-3.1-8b-instant">Llama 3.1 8B</option></select><div class="mt-16" style="display:flex;justify-content:flex-end;"><button class="btn-primary" onclick="saveApiKey()">Save</button></div></div></section>
+    <section id="sec-config" class="section"><h2>⚙️ Settings</h2><div class="card" style="max-width:460px;"><label>AI Provider</label><select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select><label id="apikey-label">API Key</label><div class="api-key-row"><input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off"><button class="btn-primary" onclick="saveApiKey()">Save</button></div><div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div><label>Model</label><select id="apikey-model"><option value="llama-3.3-70b-versatile">Llama 3.3 70B</option></select><div class="mt-16" style="display:flex;justify-content:flex-end;"><button class="btn-primary" onclick="saveApiKey()">Save</button></div></div></section>
   </div>
 </div>
 </div>
