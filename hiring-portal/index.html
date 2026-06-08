@@ -1527,6 +1527,7 @@ body[data-theme="light"] {
 
 
 <script>
+
 window.onerror = function(msg, src, line, col, err) {
   var d = document.createElement('div');
   d.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#1e293b;color:#f87171;padding:20px;font-family:monospace;font-size:0.85rem;overflow:auto;';
@@ -8827,11 +8828,13 @@ Respond with a JSON object exactly matching this schema (no markdown fences, raw
 }
 
 
-const HIRING_NAV = new Set(["intdashboard","interviews","intschedules","panelscheduler","scanreports","config"]);
+/* Hiring Portal overrides */
+const HIRING_NAV = new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
 const _origNav = navigate;
-navigate = function(s){ if(!HIRING_NAV.has(s)&&!s.startsWith("custom-")) s="intdashboard"; _origNav(s); };
-document.querySelectorAll(".nav-item[data-section]").forEach(el=>el.onclick=()=>navigate(el.dataset.section));
-navigate("intdashboard");
-if(typeof lucide!=="undefined") lucide.createIcons();</script>
+navigate = function(s){ if(!HIRING_NAV.has(s)&&!s.startsWith('custom-')) s='intdashboard'; _origNav(s); };
+document.querySelectorAll('.nav-item[data-section]').forEach(el=>el.onclick=()=>navigate(el.dataset.section));
+navigate('intdashboard');
+if(typeof lucide!=='undefined') lucide.createIcons();
+</script>
 </body>
 </html>
