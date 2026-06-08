@@ -3842,6 +3842,7 @@ function openRoundModal(interviewId, roundId) {
   document.getElementById('rnd-interview-id').value = interviewId;
   document.getElementById('rnd-round-id').value = roundId || '';
   document.getElementById('rnd-date').value = '';
+  document.getElementById('rnd-time').value = '';
   document.getElementById('rnd-panel').value = '';
   document.getElementById('rnd-notes').value = '';
   document.getElementById('rnd-feedback').value = 'Pending';
@@ -3854,6 +3855,7 @@ function openRoundModal(interviewId, roundId) {
     if (rnd) {
       setRoundType(rnd.round || 'R1');
       document.getElementById('rnd-date').value        = rnd.interviewDate  || '';
+      document.getElementById('rnd-time').value        = rnd.interviewTime  || '';
       document.getElementById('rnd-panel').value       = rnd.panelMembers   || '';
       document.getElementById('rnd-notes').value       = rnd.notes          || '';
       document.getElementById('rnd-feedback').value    = rnd.feedbackStatus || 'Pending';
@@ -3892,6 +3894,7 @@ function saveRound() {
   const rndData = {
     round:          document.getElementById('rnd-type').value,
     interviewDate:  date,
+    interviewTime:  document.getElementById('rnd-time').value || '',
     panelMembers:   document.getElementById('rnd-panel').value.trim(),
     feedbackStatus: document.getElementById('rnd-feedback').value,
     roundStatus:    document.getElementById('rnd-status').value,
@@ -8845,8 +8848,11 @@ if(typeof lucide!=='undefined')lucide.createIcons();
       <button type="button" id="rndbtn-r3" onclick="setRoundType('R3')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R3</button>
     </div>
     <input type="hidden" id="rnd-type" value="R1">
-    <label>Interview Date</label>
-    <input type="date" id="rnd-date">
+    <label>Interview Date &amp; Time</label>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input type="date" id="rnd-date" style="flex:1;">
+      <input type="time" id="rnd-time" placeholder="HH:MM" style="width:110px;">
+    </div>
     <div class="error-msg hidden" id="rnd-date-err">Required</div>
     <label>Panel Members</label>
     <input id="rnd-panel" placeholder="Comma-separated names">
