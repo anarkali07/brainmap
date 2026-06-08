@@ -1428,14 +1428,14 @@ body[data-theme="light"] {
           <table style="width:100%;border-collapse:collapse;font-size:0.84rem;">
             <thead>
               <tr>
-                <th style="padding:11px 16px;">Candidate</th>
-                <th style="padding:11px 12px;">YoE</th>
-                <th style="padding:11px 12px;">Partner</th>
-                <th style="padding:11px 12px;">Round</th>
-                <th style="padding:11px 12px;">Date</th>
-                <th style="padding:11px 12px;">Time</th>
-                <th style="padding:11px 12px;">Panel</th>
-                <th style="padding:11px 12px;">Status</th>
+                <th onclick="sortSchedPage("name")" style="padding:11px 16px;cursor:pointer;">Candidate <span id="sched-si-name" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("exp")" style="padding:11px 12px;cursor:pointer;">YoE <span id="sched-si-exp" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("partner")" style="padding:11px 12px;cursor:pointer;">Partner <span id="sched-si-partner" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("round")" style="padding:11px 12px;cursor:pointer;">Round <span id="sched-si-round" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("date")" style="padding:11px 12px;cursor:pointer;">Date <span id="sched-si-date" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("time")" style="padding:11px 12px;cursor:pointer;">Time <span id="sched-si-time" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("panel")" style="padding:11px 12px;cursor:pointer;">Panel <span id="sched-si-panel" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("status")" style="padding:11px 12px;cursor:pointer;">Status <span id="sched-si-status" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
               </tr>
             </thead>
             <tbody id="sched-page-tbody"></tbody>

@@ -9,7 +9,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
-
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */
@@ -780,45 +779,41 @@ body[data-theme="light"] {
 [data-theme="light"] #header  { background: color-mix(in srgb, var(--card) 90%, transparent); }
 [data-theme="light"] th       { background: var(--bg2); }
 
-:root { --accent:#14b8a6; --accent2:#0d9488; --accent-hover:#0f9384; --accent-glow:rgba(20,184,166,0.18); --accent-glass:rgba(20,184,166,0.08); }
-.hbtn { padding:4px 8px !important; font-size:0.76rem !important; }
-</style>
-</head>
+:root{--accent:#14b8a6;--accent2:#0d9488;--accent-hover:#0f9384;--accent-glow:rgba(20,184,166,0.18);--accent-glass:rgba(20,184,166,0.08);}
+.hbtn{padding:4px 8px !important;font-size:0.76rem !important;}
+</style></head>
 <body data-theme="dark">
 <div id="app">
-  <aside id="sidebar">
-    <div id="sidebar-logo" style="padding:10px 12px 8px;border-bottom:1px solid var(--border);">
-      <div class="logo-mark" style="font-size:0.9rem;font-weight:800;">BrainMap</div>
-      <div style="font-size:0.56rem;color:var(--text-muted);font-style:italic;">Hiring Portal</div>
-    </div>
-    <nav id="nav" style="padding:8px 5px 4px;">
-      <div class="nav-item active" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:15px;height:15px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
-      <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Interviews</span></div>
-      <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:15px;height:15px;"></i></span><span class="nav-label"> Schedules</span></div>
-      <div class="nav-item" data-section="panelscheduler"><span class="nav-icon"><i data-lucide="calendar-clock" style="width:15px;height:15px;"></i></span><span class="nav-label"> Panel Scheduler</span></div>
-      <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Scan Reports</span></div>
-    </nav>
-    <div id="sidebar-footer" style="padding:5px;border-top:1px solid var(--border);margin-top:auto;">
-      <div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:15px;height:15px;"></i></span><span class="nav-label"> Settings</span></div>
-      <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" style="width:100%;margin-top:4px;padding:6px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
-        <span class="toggle-arrow" style="font-size:0.7rem;">◀</span><span class="nav-label" style="font-size:0.72rem;">Collapse</span>
-      </button>
-    </div>
-  </aside>
-  <div id="main">
-    <header id="header">
-      <button id="hamburger" onclick="toggleSidebar()">☰</button>
-      <div id="header-title">Hiring Dashboard</div>
-      <button class="header-btn hbtn" onclick="loadCloudData()" id="hdr-load-btn">☁↓</button>
-      <button class="header-btn primary hbtn" onclick="saveToCloud()" id="hdr-save-btn">☁↑</button>
-      <button class="header-btn hbtn" onclick="exportData()">↓ Export</button>
-      <label style="margin:0;cursor:pointer;">
-        <button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑ Import</button>
-        <input type="file" accept=".json" style="display:none" onchange="importData(this)">
-      </label>
-    </header>
-    <div id="content">
-      <div id="dash-inner" style="display:none;"></div>
+<aside id="sidebar">
+  <div id="sidebar-logo" style="padding:10px 12px 8px;border-bottom:1px solid var(--border);">
+    <div class="logo-mark" style="font-size:0.9rem;font-weight:800;">BrainMap</div>
+    <div style="font-size:0.56rem;color:var(--text-muted);font-style:italic;">Hiring Portal</div>
+  </div>
+  <nav id="nav" style="padding:8px 5px 4px;">
+    <div class="nav-item active" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:15px;height:15px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
+    <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Interviews</span></div>
+    <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:15px;height:15px;"></i></span><span class="nav-label"> Schedules</span></div>
+    <div class="nav-item" data-section="panelscheduler"><span class="nav-icon"><i data-lucide="calendar-clock" style="width:15px;height:15px;"></i></span><span class="nav-label"> Panel Scheduler</span></div>
+    <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Scan Reports</span></div>
+  </nav>
+  <div id="sidebar-footer" style="padding:5px;border-top:1px solid var(--border);margin-top:auto;">
+    <div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:15px;height:15px;"></i></span><span class="nav-label"> Settings</span></div>
+    <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" style="width:100%;margin-top:4px;padding:6px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+      <span class="toggle-arrow" style="font-size:0.7rem;">◀</span><span class="nav-label" style="font-size:0.72rem;">Collapse</span>
+    </button>
+  </div>
+</aside>
+<div id="main">
+  <header id="header">
+    <button id="hamburger" onclick="toggleSidebar()">☰</button>
+    <div id="header-title">Hiring Dashboard</div>
+    <button class="header-btn hbtn" onclick="loadCloudData()" id="hdr-load-btn">☁↓</button>
+    <button class="header-btn primary hbtn" onclick="saveToCloud()" id="hdr-save-btn">☁↑</button>
+    <button class="header-btn hbtn" onclick="exportData()">↓ Export</button>
+    <label style="margin:0;cursor:pointer;"><button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑ Import</button><input type="file" accept=".json" style="display:none" onchange="importData(this)"></label>
+  </header>
+  <div id="content">
+    <div id="dash-inner" style="display:none;"></div>
 
 -->
       <section id="sec-intdashboard" class="section">
@@ -1204,14 +1199,14 @@ body[data-theme="light"] {
           <table style="width:100%;border-collapse:collapse;font-size:0.84rem;">
             <thead>
               <tr>
-                <th style="padding:11px 16px;">Candidate</th>
-                <th style="padding:11px 12px;">YoE</th>
-                <th style="padding:11px 12px;">Partner</th>
-                <th style="padding:11px 12px;">Round</th>
-                <th style="padding:11px 12px;">Date</th>
-                <th style="padding:11px 12px;">Time</th>
-                <th style="padding:11px 12px;">Panel</th>
-                <th style="padding:11px 12px;">Status</th>
+                <th onclick="sortSchedPage("name")" style="padding:11px 16px;cursor:pointer;">Candidate <span id="sched-si-name" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("exp")" style="padding:11px 12px;cursor:pointer;">YoE <span id="sched-si-exp" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("partner")" style="padding:11px 12px;cursor:pointer;">Partner <span id="sched-si-partner" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("round")" style="padding:11px 12px;cursor:pointer;">Round <span id="sched-si-round" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("date")" style="padding:11px 12px;cursor:pointer;">Date <span id="sched-si-date" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("time")" style="padding:11px 12px;cursor:pointer;">Time <span id="sched-si-time" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("panel")" style="padding:11px 12px;cursor:pointer;">Panel <span id="sched-si-panel" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th onclick="sortSchedPage("status")" style="padding:11px 12px;cursor:pointer;">Status <span id="sched-si-status" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
               </tr>
             </thead>
             <tbody id="sched-page-tbody"></tbody>
@@ -1242,29 +1237,9 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-      <section id="sec-config" class="section">
-        <h2>⚙️ Settings</h2>
-        <div class="card" style="max-width:460px;">
-          <label>AI Provider</label>
-          <select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select>
-          <label id="apikey-label">API Key</label>
-          <div class="api-key-row">
-            <input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off">
-            <button class="btn-primary" onclick="saveApiKey()">Save</button>
-          </div>
-          <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
-          <label>Model</label>
-          <select id="apikey-model">
-            <option value="llama-3.3-70b-versatile">Llama 3.3 70B</option>
-            <option value="llama-3.1-8b-instant">Llama 3.1 8B</option>
-          </select>
-          <div class="mt-16" style="display:flex;justify-content:flex-end;">
-            <button class="btn-primary" onclick="saveApiKey()">Save</button>
-          </div>
-        </div>
-      </section>
-    </div>
+    <section id="sec-config" class="section"><h2>⚙️ Settings</h2><div class="card" style="max-width:460px;"><label>AI Provider</label><select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select><label id="apikey-label">API Key</label><div class="api-key-row"><input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off"><button class="btn-primary" onclick="saveApiKey()">Save</button></div><div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div><label>Model</label><select id="apikey-model"><option value="llama-3.3-70b-versatile">Llama 3.3 70B</option><option value="llama-3.1-8b-instant">Llama 3.1 8B</option></select><div class="mt-16" style="display:flex;justify-content:flex-end;"><button class="btn-primary" onclick="saveApiKey()">Save</button></div></div></section>
   </div>
+</div>
 </div>
 <!-- ── CSV Export Modal ── -->
 <div id="csv-export-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;">
@@ -8828,13 +8803,11 @@ Respond with a JSON object exactly matching this schema (no markdown fences, raw
 }
 
 
-/* Hiring Portal overrides */
-const HIRING_NAV = new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
-const _origNav = navigate;
-navigate = function(s){ if(!HIRING_NAV.has(s)&&!s.startsWith('custom-')) s='intdashboard'; _origNav(s); };
+const HIRING_NAV=new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
+const _origNav=navigate;
+navigate=function(s){if(!HIRING_NAV.has(s)&&!s.startsWith('custom-'))s='intdashboard';_origNav(s);};
 document.querySelectorAll('.nav-item[data-section]').forEach(el=>el.onclick=()=>navigate(el.dataset.section));
 navigate('intdashboard');
-if(typeof lucide!=='undefined') lucide.createIcons();
+if(typeof lucide!=='undefined')lucide.createIcons();
 </script>
-</body>
-</html>
+</body></html>
