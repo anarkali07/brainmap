@@ -15,9 +15,9 @@ while ((m = scriptRe.exec(main)) !== null) {
 }
 console.log('Script:', mainScript.length, 'chars');
 
-// 3. Hiring sections
-const secStart = main.indexOf('SECTION: HIRING DASHBOARD') - 10;
-const secEnd   = main.indexOf('SECTION: DAY SCHEDULE') - 10;
+// 3. Hiring sections — start at the actual <section> tags, not the comment
+const secStart = main.indexOf('<section id="sec-intdashboard"');
+const secEnd   = main.indexOf('<section id="sec-schedule"');  // day schedule — exclude
 const sections = main.slice(secStart, secEnd).trim();
 console.log('Sections:', sections.length, 'chars | has intdashboard:', sections.includes('sec-intdashboard'));
 
