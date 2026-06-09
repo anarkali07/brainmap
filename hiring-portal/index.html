@@ -5972,28 +5972,36 @@ function _preFillExistingAssignments() {
       )
     );
 
+    // First pass: match candidates to their EXACT saved time slot
+    const unmatched = [];
     slotTimes.forEach((t, idx) => {
       if (panel.slots[idx]?.candidateId) return; // already manually set
-
-      // Find a candidate not yet placed in this panel's slots
-      const existing = assigned.find(i =>
-        !globalPlaced.has(i.id) && !localPlaced.has(i.id)
-      );
-      if (!existing) return;
-
-      const r = (existing.rounds||[]).find(x =>
-        x.interviewDate === schedDate && matchesPanel(x.panelMembers)
-      );
-
-      panel.slots[idx] = {
-        time: r?.interviewTime || t,
-        candidateId: existing.id,
-        candidateName: existing.candidateName,
-        round: r?.round || 'R1',
-        roundId: r?.id,
-        partner: existing.partner || '',
-        preExisting: true
-      };
+      const exactMatch = assigned.find(i => {
+        if (globalPlaced.has(i.id) || localPlaced.has(i.id)) return false;
+        const r = (i.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
+        return r?.interviewTime === t;
+      });
+      if (exactMatch) {
+        const r = (exactMatch.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
+        panel.slots[idx] = { time: r?.interviewTime || t, candidateId: exactMatch.id, candidateName: exactMatch.candidateName, round: r?.round || 'R1', roundId: r?.id, partner: exactMatch.partner || '', preExisting: true };
+        localPlaced.add(exactMatch.id);
+        globalPlaced.add(exactMatch.id);
+      } else {
+        unmatched.push({ t, idx });
+      }
+    });
+    const remaining = assigned
+      .filter(i => !globalPlaced.has(i.id) && !localPlaced.has(i.id))
+      .sort((a, b) => {
+        const ra = (a.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
+        const rb = (b.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
+        return (ra?.interviewTime||'').localeCompare(rb?.interviewTime||'');
+      });
+    unmatched.forEach(({ t, idx }, i) => {
+      if (i >= remaining.length) return;
+      const existing = remaining[i];
+      const r = (existing.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
+      panel.slots[idx] = { time: r?.interviewTime || t, candidateId: existing.id, candidateName: existing.candidateName, round: r?.round || 'R1', roundId: r?.id, partner: existing.partner || '', preExisting: true };
       localPlaced.add(existing.id);
       globalPlaced.add(existing.id);
     });
@@ -6268,8 +6276,8 @@ function renderPanelBoard() {
               border:1px solid ${s.preExisting?'#06b6d4':'var(--accent)'};border-radius:9px;cursor:grab;transition:all 0.15s;">
           <div style="color:var(--text-muted);font-size:0.9rem;flex-shrink:0;" title="Drag to move">⠿</div>
           <div style="text-align:center;min-width:70px;flex-shrink:0;">
-            <div style="font-size:0.75rem;font-weight:800;color:${s.preExisting?'#06b6d4':'var(--accent)'};">${t}</div>
-            <div style="font-size:0.62rem;color:var(--text-muted);">– ${endTime}</div>
+            <div style="font-size:0.75rem;font-weight:800;color:${s.preExisting?'#06b6d4':'var(--accent)'};">${s.time||t}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);">– ${addMinsToTime(s.time||t, p.dur)}</div>
           </div>
           <div style="flex:1;min-width:0;">
             <div style="font-size:0.85rem;font-weight:700;">${esc(s.candidateName)}${s.preExisting?" <span style=\"font-size:0.62rem;padding:1px 5px;background:rgba(6,182,212,0.15);color:#06b6d4;border-radius:4px;\">existing</span>":""}</div>
