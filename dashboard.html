@@ -7546,11 +7546,7 @@ function savePanelSchedule() {
   });
 
   saveData();
-  // Refresh all views
-  try { renderInterviews(); }     catch(e){}
-  try { renderSchedulesPage(); }  catch(e){}
-  try { renderIntDashboard(); }   catch(e){}
-  try { renderDashboard(); }      catch(e){}
+  refreshAllViews();
 
   if (saved === 0) {
     alert('No assignments to save. Load panel members and assign candidates first.');
