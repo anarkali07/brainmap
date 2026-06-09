@@ -6143,7 +6143,11 @@ function parsePastedCandidates() {
   if (notFound.length) parts.push(`⚠ Not found: ${notFound.slice(0,3).join(', ')}`);
   if (skipped.length)  parts.push(`⚠ ${skipped.length} skipped`);
   if(statusEl) statusEl.innerHTML = `<span style="color:${assigned?'var(--low)':'var(--medium)'};">${parts.join(' · ')}</span>`;
-  if(assigned>0) document.getElementById('ps-paste-input').value = '';
+  if (assigned > 0) {
+    document.getElementById('ps-paste-input').value = '';
+    // Auto-save so changes are immediately reflected in Schedules
+    savePanelSchedule();
+  }
 }
 
 function parsePastedSchedule() {
