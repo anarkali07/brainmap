@@ -1129,6 +1129,7 @@ body[data-theme="light"] {
               <th style="width:100px;" onclick="sortInterviews('partner')" class="sortable-th" data-col="partner">Partner <span class="sort-icon" id="si-partner"></span></th>
               <th style="width:90px;">Next Round</th>
               <th onclick="sortInterviews('status')" class="sortable-th" data-col="status">Status <span class="sort-icon" id="si-status"></span></th>
+              <th style="width:60px;text-align:center;">Round</th>
               <th style="width:70px;text-align:center;">Actions</th>
             </tr></thead>
             <tbody id="int-tbody"></tbody>
@@ -5782,6 +5783,15 @@ function renderInterviews() {
         </div>
       </td>
       <td style="vertical-align:middle;text-align:center;" onclick="event.stopPropagation()">
+        ${(() => {
+          const rounds = (i.rounds||[]);
+          if (!rounds.length) return '<span style="color:var(--text-muted);font-size:0.75rem;">—</span>';
+          const latest = rounds[rounds.length - 1];
+          const rClr = ROUND_COLORS[latest.round] || '#64748b';
+          return `<span style="background:${rClr};color:#fff;border-radius:6px;padding:3px 9px;font-weight:700;font-size:0.75rem;white-space:nowrap;">${esc(latest.round)}</span>`;
+        })()}
+      </td>
+      <td style="vertical-align:middle;text-align:center;" onclick="event.stopPropagation()">
         <div style="display:flex;gap:4px;justify-content:center;">
           <button onclick="openInterviewModal('${i.id}')" title="Edit"
             style="width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);font-size:0.8rem;display:flex;align-items:center;justify-content:center;cursor:pointer;">✏️</button>
@@ -5792,7 +5802,7 @@ function renderInterviews() {
     </tr>
     <!-- Expanded detail row (hidden by default) -->
     <tr id="int-detail-${i.id}" style="display:none;">
-      <td colspan="6" style="padding:0 0 8px 32px;background:var(--bg2);">
+      <td colspan="7" style="padding:0 0 8px 32px;background:var(--bg2);">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 16px 12px 8px;">
           <!-- Left: Rounds -->
           <div>
@@ -5825,7 +5835,7 @@ function renderInterviews() {
       : hasFilter
         ? 'No candidates match the current filters.'
         : 'All candidates are archived (Rejected). Use 🗃️ Show Archives to view them.';
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:18px;">${msg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:18px;">${msg}</td></tr>`;
   } else {
     tbody.innerHTML = sortedActive.map(buildRow).join('');
   }
