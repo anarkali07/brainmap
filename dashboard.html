@@ -4803,7 +4803,7 @@ function saveRound() {
     }
   }
 
-  saveData(); closeModal('round-modal'); renderInterviews();
+  saveData(); closeModal('round-modal'); refreshAllViews();
 }
 
 function deleteRound(interviewId, roundId) {
@@ -7575,6 +7575,13 @@ function savePanelSchedule() {
   }, 100);
 }
 
+function refreshAllViews() {
+  try { renderInterviews(); }    catch(e){}
+  try { renderSchedulesPage(); } catch(e){}
+  try { renderIntDashboard(); }  catch(e){}
+  try { renderPanelScheduler(); }catch(e){}
+}
+
 function updateSchedPanel(interviewId, roundId, value) {
   const i = DB.interviews.find(x => x.id === interviewId);
   if (!i) return;
@@ -7582,8 +7589,7 @@ function updateSchedPanel(interviewId, roundId, value) {
   if (!r) return;
   r.panelMembers = value.trim();
   saveData();
-  // Refresh panel filter dropdown if open
-  renderInterviews();
+  refreshAllViews();
 }
 
 let _schedSort = { col: null, dir: 1 };
@@ -7814,13 +7820,13 @@ function updateRoundDate(interviewId, roundId, val) {
   const i = DB.interviews.find(x => x.id === interviewId);
   if (!i) return;
   const r = (i.rounds||[]).find(r => r.id === roundId);
-  if (r) { r.interviewDate = val; saveData(); renderInterviews(); }
+  if (r) { r.interviewDate = val; saveData(); refreshAllViews(); }
 }
 function updateRoundTime(interviewId, roundId, val) {
   const i = DB.interviews.find(x => x.id === interviewId);
   if (!i) return;
   const r = (i.rounds||[]).find(r => r.id === roundId);
-  if (r) { r.interviewTime = val; saveData(); renderInterviews(); }
+  if (r) { r.interviewTime = val; saveData(); refreshAllViews(); }
 }
 
 /* ============================================================
