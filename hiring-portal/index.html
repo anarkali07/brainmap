@@ -1,11 +1,13 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>BrainMap — Hiring Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<style>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BrainMap · Hiring Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */
@@ -775,42 +777,72 @@ body[data-theme="light"] {
 [data-theme="light"] #sidebar { box-shadow: 1px 0 0 var(--border); }
 [data-theme="light"] #header  { background: color-mix(in srgb, var(--card) 90%, transparent); }
 [data-theme="light"] th       { background: var(--bg2); }
-:root{--accent:#14b8a6;--accent2:#0d9488;--accent-hover:#0f9384;--accent-glow:rgba(20,184,166,0.18);--accent-glass:rgba(20,184,166,0.08);}.hbtn{padding:4px 8px !important;font-size:0.76rem !important;}</style>
-</head><body data-theme="dark"><div id="app">
-<aside id="sidebar">
-<div id="sidebar-logo" style="padding:10px 12px 8px;border-bottom:1px solid var(--border);">
-<div class="logo-mark" style="font-size:0.9rem;font-weight:800;">BrainMap</div>
-<div style="font-size:0.56rem;color:var(--text-muted);font-style:italic;">Hiring Portal</div></div>
-<nav id="nav" style="padding:8px 5px 4px;">
-<div class="nav-item active" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:15px;height:15px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
-<div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Interviews</span></div>
-<div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:15px;height:15px;"></i></span><span class="nav-label"> Schedules</span></div>
-<div class="nav-item" data-section="panelscheduler"><span class="nav-icon"><i data-lucide="calendar-clock" style="width:15px;height:15px;"></i></span><span class="nav-label"> Panel Scheduler</span></div>
-<div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:15px;height:15px;"></i></span><span class="nav-label"> Scan Reports</span></div>
-</nav>
-<div id="sidebar-footer" style="padding:5px;border-top:1px solid var(--border);margin-top:auto;">
-<div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:15px;height:15px;"></i></span><span class="nav-label"> Settings</span></div>
-<button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()" style="width:100%;margin-top:4px;padding:6px 0;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;"><span class="toggle-arrow" style="font-size:0.7rem;">◀</span><span class="nav-label" style="font-size:0.72rem;">Collapse</span></button>
-</div></aside>
-<div id="main"><header id="header">
-<button id="hamburger" onclick="toggleSidebar()">☰</button>
-<div id="header-title">Hiring Dashboard</div>
-<button class="header-btn hbtn" onclick="loadCloudData()" id="hdr-load-btn">☁↓</button>
-<button class="header-btn primary hbtn" onclick="saveToCloud()" id="hdr-save-btn">☁↑</button>
-<button class="header-btn hbtn" onclick="exportData()">↓ Export</button>
-<label style="margin:0;cursor:pointer;"><button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑ Import</button><input type="file" accept=".json" style="display:none" onchange="importData(this)"></label>
-</header><div id="content">
-<div id="dash-inner" style="display:none;"></div>
+</style>
+  <style>:root{--accent:#14b8a6;--accent2:#0d9488;}.section{display:none;}.section.active{display:block;}</style>
+</head>
+<body>
+<script>(function(){
+  const _orig=Document.prototype.getElementById;
+  const noop=function(){};
+  const dummy=new Proxy(function(){return dummy;},{
+    get:function(t,p){
+      if(['value','innerHTML','textContent','placeholder'].includes(p))return '';
+      if(p==='checked')return false;
+      if(p==='style')return new Proxy({},{get:function(){return'';},set:function(){return true;}});
+      if(p==='classList')return{add:noop,remove:noop,toggle:noop,contains:function(){return false;},replace:noop};
+      if(p==='dataset')return{};
+      if(p==='options')return{length:0};
+      if(p==='contains')return function(){return false;};
+      if(['appendChild','removeChild','setAttribute','removeAttribute','addEventListener','dispatchEvent','focus','blur','click','scrollIntoView'].includes(p))return noop;
+      if(p==='querySelectorAll'||p==='getElementsByClassName')return function(){return[];};
+      if(p==='querySelector')return function(){return null;};
+      if(p==='getBoundingClientRect')return function(){return{top:0,left:0,width:0,height:0,bottom:0,right:0};};
+      if(typeof p==='string'&&p!=='then'&&p!=='toJSON')return dummy;
+      return undefined;
+    },
+    set:function(){return true;},
+    apply:function(){return dummy;}
+  });
+  Document.prototype.getElementById=function(id){return _orig.call(this,id)||dummy;};
+})();</script>
 
--->
+<div class="app-layout">
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <span class="app-logo">🧠</span>
+      <span class="app-name">BrainMap</span>
+      <button class="sidebar-close" onclick="document.getElementById('sidebar').classList.remove('open')">✕</button>
+    </div>
+    <div class="nav-items">
+      <div class="nav-item active" data-section="intdashboard" onclick="navigate('intdashboard')">📊 Dashboard</div>
+      <div class="nav-item" data-section="interviews" onclick="navigate('interviews')">👥 Interviews</div>
+      <div class="nav-item" data-section="intschedules" onclick="navigate('intschedules')">📅 Schedules</div>
+      <div class="nav-item" data-section="panelscheduler" onclick="navigate('panelscheduler')">🗓️ Panel Scheduler</div>
+      <div class="nav-item" data-section="scanreports" onclick="navigate('scanreports')">🔍 Scan Reports</div>
+      <div class="nav-item" data-section="config" onclick="navigate('config')">⚙️ Settings</div>
+    </div>
+  </nav>
+  <div class="main-content">
+    <header class="header">
+      <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <span id="header-title" style="font-weight:700;font-size:1rem;">Hiring Portal</span>
+      <div style="display:flex;gap:8px;align-items:center;margin-left:auto;">
+        <button onclick="openModal('apikey-modal')" class="btn-secondary btn-sm" title="AI Key">🔓 API Key</button>
+        <button onclick="toggleTheme()" class="btn-secondary btn-sm" title="Toggle theme">☺</button>
+      </div>
+    </header>
+    <main class="content">
+
+SECTION: HIRING DASHBOARD
+           ====================================================== -->
       <section id="sec-intdashboard" class="section">
         <h2>📊 Hiring Dashboard</h2>
         <div id="intdash-inner"></div>
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: INTERVIEWS
+           ====================================================== -->
       <section id="sec-interviews" class="section">
         <h2>&#129489; Interviews</h2>
         <div id="int-tiles" style="margin-bottom:12px;"></div>
@@ -914,8 +946,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: PERSONAL (tabs: Goals | Health | Planner)
+           ====================================================== -->
       <section id="sec-personal" class="section">
         <div class="inner-tabs">
           <button class="inner-tab active" id="itab-goals" onclick="showInnerTab('personal','itab-goals','ipanel-goals')">&#127919; Goals</button>
@@ -1010,8 +1042,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: TIME TRACKER
+           ====================================================== -->
       <section id="sec-timetracker" class="section">
         <h2>⏱ Time Tracker</h2>
 
@@ -1065,8 +1097,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: PANEL SCHEDULER
+           ====================================================== -->
       <section id="sec-panelscheduler" class="section">
 
         <!-- Header -->
@@ -1165,8 +1197,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: INTERVIEW SCHEDULES
+           ====================================================== -->
       <section id="sec-intschedules" class="section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">📅 Interview Schedules</h2>
@@ -1202,8 +1234,8 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-
--->
+           SECTION: SCAN REPORTS
+           ====================================================== -->
       <section id="sec-scanreports" class="section">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
           <h2 style="margin:0;">🔍 Scan Reports</h2>
@@ -1224,13 +1256,160 @@ body[data-theme="light"] {
       </section>
 
       <!-- ======================================================
-<section id="sec-config" class="section"><h2>⚙️ Settings</h2><div class="card" style="max-width:460px;">
-<label>AI Provider</label><select id="apikey-provider" onchange="onProviderChange()"><option value="groq">Groq</option><option value="anthropic">Anthropic</option></select>
-<label id="apikey-label">API Key</label><div class="api-key-row"><input type="password" id="apikey-input" placeholder="gsk_..." autocorrect="off" autocapitalize="off"><button class="btn-primary" onclick="saveApiKey()">Save</button></div>
-<div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
-<label>Model</label><select id="apikey-model"><option value="llama-3.3-70b-versatile">Llama 3.3 70B</option></select>
-<div class="mt-16" style="display:flex;justify-content:flex-end;"><button class="btn-primary" onclick="saveApiKey()">Save</button></div></div></section>
-</div></div></div>
+
+<section id="sec-config" class="section">
+  <h2>⚙️ Settings</h2>
+  <div class="card" style="max-width:480px;">
+    <h3>🤖 AI Provider</h3>
+    <label>Provider</label>
+    <select id="apikey-provider" onchange="onProviderChange()" style="margin-bottom:8px;">
+      <option value="groq">Groq (Free, Fast)</option>
+      <option value="anthropic">Anthropic (Claude)</option>
+    </select>
+    <label id="apikey-label">Groq API Key</label>
+    <input id="apikey-input" type="password" placeholder="Enter API key…">
+    <label>Model</label>
+    <input id="apikey-model" placeholder="e.g. llama-3.3-70b-versatile">
+    <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
+    <button class="btn-primary" onclick="saveApiKey()" style="margin-top:10px;">Save Key</button>
+  </div>
+</section>
+
+    </main>
+  </div>
+</div>
+
+<!-- Follow-Up Modal -->
+<div class="modal-overlay" id="fu-modal">
+  <div class="modal">
+    <h3 id="fu-modal-title">Add Follow-Up</h3>
+    <input type="hidden" id="fu-id">
+    <label>Subject *</label>
+    <input id="fu-subject" placeholder="Subject of follow-up">
+    <div class="error-msg hidden" id="fu-subject-err">Required</div>
+    <label>Waiting On *</label>
+    <input id="fu-waiting" placeholder="Person or team">
+    <div class="error-msg hidden" id="fu-waiting-err">Required</div>
+    <label>Last Follow-Up Date</label>
+    <input type="date" id="fu-last">
+    <label>Next Follow-Up Date</label>
+    <input type="date" id="fu-next">
+    <label>Status</label>
+    <select id="fu-status">
+      <option>Pending</option><option>Responded</option><option>Escalated</option><option>Closed</option>
+    </select>
+    <label>Notes</label>
+    <textarea id="fu-notes" rows="2"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('fu-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveFollowUp()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Project Modal -->
+<div class="modal-overlay" id="project-modal">
+  <div class="modal">
+    <h3 id="project-modal-title">Add Project</h3>
+    <input type="hidden" id="proj-id">
+    <label>Name *</label>
+    <input id="proj-name" placeholder="Project name">
+    <div class="error-msg hidden" id="proj-name-err">Required</div>
+    <label>Description</label>
+    <textarea id="proj-desc" rows="2"></textarea>
+    <label>Priority</label>
+    <select id="proj-pri">
+      <option>High</option><option>Critical</option><option>Medium</option><option>Low</option>
+    </select>
+    <label>Progress (%) *</label>
+    <input type="number" id="proj-progress" min="0" max="100" value="0">
+    <label>Target Date</label>
+    <input type="date" id="proj-target">
+    <label>Notes</label>
+    <textarea id="proj-notes" rows="2"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('project-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveProject()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Interview Modal -->
+<div class="modal-overlay" id="interview-modal">
+  <div class="modal" style="max-width:420px;">
+    <h3 id="int-modal-title">Add Candidate</h3>
+    <input type="hidden" id="int-id">
+    <label>Candidate Name *</label>
+    <input id="int-name" placeholder="Full name">
+    <div class="error-msg hidden" id="int-name-err">Required</div>
+    <label>Position *</label>
+    <input id="int-pos" placeholder="Role being interviewed for">
+    <div class="error-msg hidden" id="int-pos-err">Required</div>
+    <label>Experience (years)</label>
+    <input type="number" id="int-exp" min="0" value="0">
+    <label>Position Level</label>
+    <div style="display:flex;gap:8px;margin-bottom:4px;">
+      <button type="button" id="lvlbtn-l1" onclick="setCandidateLevel('L1')"
+        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid #3b82f6;background:#3b82f6;color:#fff;font-weight:700;">L1</button>
+      <button type="button" id="lvlbtn-l2" onclick="setCandidateLevel('L2')"
+        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">L2</button>
+    </div>
+    <input type="hidden" id="int-level" value="L1">
+    <label>Partner / Hiring Manager</label>
+    <input id="int-partner" placeholder="e.g. Infosys, TCS, Internal">
+    <label>Overall Status</label>
+    <select id="int-final">
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
+    </select>
+    <p id="int-add-round-note" style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;">💡 After saving, use <strong>+ Round</strong> to add interview round details (date, panel, feedback).</p>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('interview-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveInterview()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Paste Resume Modal -->
+<div class="modal-overlay" id="img-paste-modal">
+  <div class="modal" style="max-width:560px;">
+    <h3>📷 Paste Resume Images</h3>
+    <!-- mode toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button type="button" id="imgmode-multi" onclick="setImgMode('multi')"
+        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;">
+        👥 Multiple Candidates<br><span style="font-size:0.68rem;font-weight:400;opacity:0.85;">1 image = 1 resume</span>
+      </button>
+      <button type="button" id="imgmode-single" onclick="setImgMode('single')"
+        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:600;cursor:pointer;">
+        👤 Single Candidate<br><span style="font-size:0.68rem;font-weight:400;opacity:0.7;">All images = 1 resume (multi-page)</span>
+      </button>
+    </div>
+    <input type="hidden" id="img-mode" value="multi">
+    <!-- paste / drop zone -->
+    <div id="img-paste-zone"
+      tabindex="0"
+      style="border:2px dashed var(--border);border-radius:var(--radius);min-height:82px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:border-color 0.2s;outline:none;padding:10px;"
+      onclick="this.focus()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+      ondragleave="this.style.borderColor='var(--border)'"
+      ondrop="handleImgDrop(event)">
+      <div style="font-size:1.4rem;">📋</div>
+      <div style="font-size:0.82rem;font-weight:600;color:var(--text);">Click here → Ctrl+V to paste · or drag &amp; drop</div>
+      <div id="img-zone-hint" style="font-size:0.7rem;color:var(--text-muted);">Paste again to add more</div>
+    </div>
+    <!-- thumbnail queue -->
+    <div id="img-queue" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-height:0;"></div>
+    <div id="img-queue-count" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
+    <label style="margin-top:10px;">Partner / Source (optional)</label>
+    <input id="img-paste-partner" placeholder="e.g. Infosys, LinkedIn, Internal">
+    <div id="img-paste-status" style="display:none;font-size:0.82rem;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('img-paste-modal');clearImgPaste()">Cancel</button>
+      <button class="btn-primary" id="img-paste-btn" onclick="processImageResume()" disabled>&#129302; Extract &amp; Add</button>
+    </div>
+  </div>
+</div>
+
 <!-- ── CSV Export Modal ── -->
 <div id="csv-export-modal" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(0,0,0,0.55);display:none;align-items:center;justify-content:center;">
   <div style="background:var(--card);border-radius:14px;width:420px;max-width:95vw;box-shadow:0 8px 40px rgba(0,0,0,0.35);overflow:hidden;">
@@ -1490,39 +1669,139 @@ body[data-theme="light"] {
   </div>
 </div>
 
+<!-- ── Sticky Note Widget ── -->
+<div id="sticky-widget" style="position:fixed;bottom:24px;right:24px;z-index:9000;display:flex;flex-direction:column;align-items:flex-end;gap:0;">
+  <!-- expanded panel -->
+  <div id="sticky-panel" style="display:none;width:300px;background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.18);overflow:hidden;margin-bottom:8px;">
+    <div style="background:#f59e0b;padding:9px 14px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-weight:700;font-size:0.85rem;color:#fff;">📝 Quick Note</span>
+      <button onclick="closeStickyNote()" style="background:none;border:none;color:#fff;font-size:1.1rem;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div style="padding:12px;display:flex;flex-direction:column;gap:8px;">
+      <input id="sticky-title" placeholder="Note title…" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:0.82rem;width:100%;box-sizing:border-box;">
+      <select id="sticky-cat" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:0.82rem;width:100%;box-sizing:border-box;">
+        <option value="">— Category —</option>
+        <option>Team Management</option><option>Projects</option>
+        <option>Partner Onboarding</option><option>Interviews</option>
+        <option>Learning</option><option>Personal</option><option>Health</option>
+      </select>
+      <textarea id="sticky-notes" rows="4" placeholder="Write your note…" style="padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:0.82rem;resize:vertical;width:100%;box-sizing:border-box;"></textarea>
+      <div style="display:flex;gap:6px;justify-content:flex-end;">
+        <button onclick="saveStickyNote()" style="padding:5px 14px;background:#f59e0b;color:#fff;border:none;border-radius:6px;font-size:0.8rem;font-weight:600;cursor:pointer;">Save to Scratch Pad</button>
+      </div>
+      <div id="sticky-saved-msg" style="display:none;font-size:0.75rem;color:var(--low);text-align:center;">✅ Saved!</div>
+    </div>
+  </div>
+  <!-- toggle button -->
+  <button id="sticky-btn" onclick="toggleStickyNote()"
+    style="width:48px;height:48px;border-radius:50%;background:#f59e0b;border:none;box-shadow:0 4px 14px rgba(245,158,11,0.5);cursor:pointer;font-size:1.4rem;display:flex;align-items:center;justify-content:center;transition:transform 0.15s;"
+    title="Quick Note">📝</button>
+</div>
 
-<script>
-// === NULL-SAFE getElementById PATCH ===
-(function(){
-  const _orig = Document.prototype.getElementById;
-  function makeDummy(){
-    const dummy = new Proxy(function(){return dummy;},{
-      get(t,p){
-        if(p==='value'||p==='innerHTML'||p==='textContent'||p==='placeholder') return '';
-        if(p==='checked') return false;
-        if(p==='style') return new Proxy({},{get:()=>'',set:()=>true});
-        if(p==='classList') return {add:()=>{},remove:()=>{},toggle:()=>{},contains:()=>false,replace:()=>{}};
-        if(p==='options') return {length:0};
-        if(p==='dataset') return {};
-        if(p==='contains') return ()=>false;
-        if(p==='appendChild'||p==='removeChild'||p==='setAttribute'||p==='removeAttribute'||p==='addEventListener'||p==='dispatchEvent'||p==='focus'||p==='blur'||p==='click'||p==='scrollIntoView') return ()=>{};
-        if(p==='querySelectorAll'||p==='getElementsByClassName') return ()=>[];
-        if(p==='querySelector') return ()=>null;
-        if(p==='getBoundingClientRect') return ()=>({top:0,left:0,width:0,height:0,bottom:0,right:0});
-        if(typeof p==='string'&&p!=='then'&&p!=='toJSON') return dummy;
-        return undefined;
-      },
-      set(){ return true; },
-      apply(){ return dummy; }
-    });
-    return dummy;
-  }
-  const _dummy = makeDummy();
-  Document.prototype.getElementById = function(id){
-    return _orig.call(this,id) || _dummy;
-  };
-})();
-</script>
+<!-- Upload Results Summary Modal -->
+<div class="modal-overlay" id="upload-results-modal">
+  <div class="modal" style="max-width:460px;">
+    <h3>📊 Upload Summary</h3>
+    <div id="upload-results-body" style="margin:12px 0;"></div>
+    <div id="upload-results-details" style="margin-top:12px;font-size:0.8rem;"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="closeModal('upload-results-modal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Partner Name Modal (shown before resume upload processing) -->
+<div class="modal-overlay" id="partner-upload-modal">
+  <div class="modal" style="max-width:360px;">
+    <h3>🤝 Partner / Source</h3>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin:6px 0 12px;">Select an existing partner or add a new one.</p>
+    <label>Partner / Hiring Agency</label>
+    <select id="upload-partner-select" onchange="onPartnerSelectChange()" style="margin-bottom:8px;">
+      <option value="">— None —</option>
+    </select>
+    <!-- shown only when "Other" selected -->
+    <input id="upload-partner-name" placeholder="Type new partner name…" autocomplete="off"
+      style="display:none;margin-top:4px;">
+    <div style="margin-top:8px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem;color:var(--text);">
+        <input type="checkbox" id="upload-partner-remember" style="width:auto;"> Remember for this session
+      </label>
+    </div>
+    <div id="upload-file-count" style="font-size:0.78rem;color:var(--text-muted);margin-top:10px;"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="cancelPartnerUpload()">Cancel</button>
+      <button class="btn-primary" onclick="confirmPartnerUpload()">&#128196; Proceed</button>
+    </div>
+  </div>
+</div>
+
+<!-- Round Modal -->
+<div class="modal-overlay" id="round-modal">
+  <div class="modal" style="max-width:420px;">
+    <h3 id="round-modal-title">Add Round</h3>
+    <input type="hidden" id="rnd-interview-id">
+    <input type="hidden" id="rnd-round-id">
+    <label>Round</label>
+    <div style="display:flex;gap:8px;margin-bottom:4px;">
+      <button type="button" id="rndbtn-r1" onclick="setRoundType('R1')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-weight:700;">R1</button>
+      <button type="button" id="rndbtn-r2" onclick="setRoundType('R2')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R2</button>
+      <button type="button" id="rndbtn-r3" onclick="setRoundType('R3')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R3</button>
+    </div>
+    <input type="hidden" id="rnd-type" value="R1">
+    <label>Interview Date &amp; Time</label>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input type="date" id="rnd-date" style="flex:1;">
+      <input type="time" id="rnd-time" placeholder="HH:MM" style="width:110px;">
+    </div>
+    <div class="error-msg hidden" id="rnd-date-err">Required</div>
+    <label>Panel Members</label>
+    <input id="rnd-panel" placeholder="Comma-separated names">
+    <label>Feedback Status</label>
+    <select id="rnd-feedback">
+      <option>Pending</option><option>Submitted</option>
+    </select>
+    <label>Round Status</label>
+    <select id="rnd-status">
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
+    </select>
+    <label>Interview Feedback <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(exported to CSV)</span></label>
+    <textarea id="rnd-notes" rows="3" placeholder="Post-interview remarks, strengths, concerns…"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('round-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveRound()">Save Round</button>
+    </div>
+  </div>
+</div>
+
+<!-- API Key Settings Modal -->
+<div class="modal-overlay" id="apikey-modal">
+  <div class="modal" style="max-width:460px;">
+    <h3>&#128273; AI Provider Settings</h3>
+    <p style="font-size:0.85rem;color:var(--text-muted);margin:8px 0 10px;">Keys are stored only in your browser's localStorage.</p>
+    <label>Provider</label>
+    <select id="apikey-provider" onchange="onProviderChange()">
+      <option value="groq">Groq (Free, Fast)</option>
+      <option value="anthropic">Anthropic (Claude)</option>
+    </select>
+    <label style="margin-top:10px;" id="apikey-label">API Key</label>
+    <div class="api-key-row">
+      <input type="password" id="apikey-input" placeholder="gsk_...">
+      <button class="btn-primary" onclick="saveApiKey()">Save</button>
+    </div>
+    <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
+    <label style="margin-top:12px;">Model</label>
+    <select id="apikey-model">
+      <option value="llama-3.3-70b-versatile" selected>Llama 3.3 70B Versatile (Recommended)</option>
+      <option value="llama-3.1-8b-instant">Llama 3.1 8B Instant (Fastest)</option>
+      <option value="mixtral-8x7b-32768">Mixtral 8x7B</option>
+      <option value="gemma2-9b-it">Gemma 2 9B</option>
+    </select>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('apikey-modal')">Close</button>
+    </div>
+  </div>
+</div>
+
 <script>
 
 window.onerror = function(msg, src, line, col, err) {
@@ -5982,6 +6261,8 @@ function _preFillExistingAssignments() {
     const unmatched = [];
     slotTimes.forEach((t, idx) => {
       if (panel.slots[idx]?.candidateId) return; // already manually set
+
+      // Try exact time match first
       const exactMatch = assigned.find(i => {
         if (globalPlaced.has(i.id) || localPlaced.has(i.id)) return false;
         const r = (i.rounds||[]).find(x => x.interviewDate === schedDate && matchesPanel(x.panelMembers));
@@ -5993,9 +6274,10 @@ function _preFillExistingAssignments() {
         localPlaced.add(exactMatch.id);
         globalPlaced.add(exactMatch.id);
       } else {
-        unmatched.push({ t, idx });
+        unmatched.push({ t, idx }); // fill later with remaining candidates
       }
     });
+    // Second pass: fill unmatched slots with remaining assigned candidates (order by their saved time)
     const remaining = assigned
       .filter(i => !globalPlaced.has(i.id) && !localPlaced.has(i.id))
       .sort((a, b) => {
@@ -6120,34 +6402,39 @@ function parsePastedCandidates() {
       p.slots = p.slots.map(s => (s?.candidateId === candidate.id ? null : s));
     });
 
-    // Find best slot by time (exact or within 60 min)
+    // Find the panel member whose slot matches this time (exact or within 30 min)
     let bestPanel = null, bestSlotIdx = -1, bestDiff = 999;
     _psPanel.forEach(p => {
       (p.slotTimes||[]).forEach((t, idx) => {
-        if (p.slots[idx]?.candidateId) return;
+        if (p.slots[idx]?.candidateId) return; // already taken
         const diff = Math.abs(toMinsStr(t) - toMinsStr(time));
         if (diff < bestDiff && diff <= 60) { bestDiff=diff; bestPanel=p; bestSlotIdx=idx; }
       });
     });
 
     if (bestPanel && bestSlotIdx >= 0) {
-      const i2 = DB.interviews.find(x => x.id === candidate.id);
-      if (i2) {
+      // Force-assign (bypassing the "already taken" check since we cleared above)
+      const slotTimes = bestPanel.slotTimes || [];
+      const i = DB.interviews.find(x => x.id === candidate.id);
+      if (i) {
         const schedDate = document.getElementById('ps-date')?.value || today();
-        const tR = (i2.rounds||[]).find(r => r.interviewDate === schedDate) || (i2.rounds||[]).find(r => !r.interviewDate) || (i2.rounds||[])[0];
-        bestPanel.slots[bestSlotIdx] = { time, candidateId: candidate.id, candidateName: i2.candidateName, round: tR?.round||'R1', roundId: tR?.id, partner: i2.partner||'' };
+        const targetRound = (i.rounds||[]).find(r => r.interviewDate === schedDate)
+                         || (i.rounds||[]).find(r => !r.interviewDate)
+                         || (i.rounds||[])[0];
+        bestPanel.slots[bestSlotIdx] = { time, candidateId: candidate.id, candidateName: i.candidateName, round: targetRound?.round||'R1', roundId: targetRound?.id, partner: i.partner||'' };
         assigned++;
       }
     } else {
+      // No matching slot — find any empty slot
       let placed = false;
       for (const p of _psPanel) {
-        const emptyIdx = (p.slotTimes||[]).findIndex((t2,si)=>!p.slots[si]?.candidateId);
+        const emptyIdx = (p.slotTimes||[]).findIndex((t,si)=>!p.slots[si]?.candidateId);
         if (emptyIdx >= 0) {
-          const i2 = DB.interviews.find(x => x.id === candidate.id);
-          if (i2) {
+          const i = DB.interviews.find(x => x.id === candidate.id);
+          if (i) {
             const schedDate = document.getElementById('ps-date')?.value || today();
-            const tR = (i2.rounds||[]).find(r => r.interviewDate === schedDate) || (i2.rounds||[]).find(r => !r.interviewDate) || (i2.rounds||[])[0];
-            p.slots[emptyIdx] = { time, candidateId: candidate.id, candidateName: i2.candidateName, round: tR?.round||'R1', roundId: tR?.id, partner: i2.partner||'' };
+            const targetRound = (i.rounds||[]).find(r => r.interviewDate === schedDate) || (i.rounds||[]).find(r => !r.interviewDate) || (i.rounds||[])[0];
+            p.slots[emptyIdx] = { time, candidateId: candidate.id, candidateName: i.candidateName, round: targetRound?.round||'R1', roundId: targetRound?.id, partner: i.partner||'' };
             assigned++; placed = true; break;
           }
         }
@@ -6673,18 +6960,6 @@ function savePanelSchedule() {
   try { renderIntDashboard(); }   catch(e){}
   try { renderDashboard(); }      catch(e){}
 
-  // Show summary
-  const btn = document.querySelector('[onclick="savePanelSchedule()"]');
-  if (btn) {
-    btn.textContent = `✅ Saved ${saved} assignments!`;
-    btn.style.background = '#16a34a';
-    setTimeout(() => {
-      btn.textContent = '💾 Save All Assignments';
-      btn.style.background = '';
-    }, 3000);
-  }
-  alert(`✅ ${saved} candidates assigned!\nDate: ${date}\nPanel & time saved to interview rounds.`);
-
   if (saved === 0) {
     alert('No assignments to save. Load panel members and assign candidates first.');
     return;
@@ -6695,9 +6970,11 @@ function savePanelSchedule() {
   renderPanelMemberList();
   renderPanelBoard();
 
-  // Navigate to Schedules page so user sees updated schedule immediately
+  // Navigate to Schedules page so user can see the updated schedule immediately
   navigate('intschedules');
+  // Show a toast/banner on the schedules page
   setTimeout(() => {
+    const header = document.querySelector('#sec-intschedules h2, #sec-intschedules .page-header');
     const toast = document.createElement('div');
     toast.textContent = `✅ ${saved} assignment${saved>1?'s':''} saved for ${date}`;
     toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#16a34a;color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
@@ -8892,162 +9169,26 @@ Respond with a JSON object exactly matching this schema (no markdown fences, raw
 }
 
 
-const HIRING_NAV=new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
-const _origNav=navigate;
-navigate=function(s){if(!HIRING_NAV.has(s)&&!s.startsWith('custom-'))s='intdashboard';_origNav(s);};
-document.querySelectorAll('.nav-item[data-section]').forEach(el=>el.onclick=()=>navigate(el.dataset.section));
+
+// === HIRING PORTAL OVERRIDES ===
+const HIRING_NAV = new Set(['intdashboard','interviews','intschedules','panelscheduler','scanreports','config']);
+const _origNav = navigate;
+navigate = function(s) {
+  if (!HIRING_NAV.has(s) && !s.startsWith('custom-')) s = 'intdashboard';
+  _origNav(s);
+};
+
+renderConfig = function() {
+  var prov = document.getElementById('apikey-provider');
+  var key  = document.getElementById('apikey-input');
+  var mod  = document.getElementById('apikey-model');
+  if (prov) prov.value = (DB.settings && DB.settings.aiProvider) || 'groq';
+  if (key)  key.value  = (DB.settings && (DB.settings.groqKey || DB.settings.apiKey)) || '';
+  if (mod)  mod.value  = (DB.settings && DB.settings.aiModel) || '';
+};
+
 navigate('intdashboard');
-if(typeof lucide!=='undefined')lucide.createIcons();
+if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
-<!-- Round Modal -->
-<div class="modal-overlay" id="round-modal">
-  <div class="modal" style="max-width:420px;">
-    <h3 id="round-modal-title">Add Round</h3>
-    <input type="hidden" id="rnd-interview-id">
-    <input type="hidden" id="rnd-round-id">
-    <label>Round</label>
-    <div style="display:flex;gap:8px;margin-bottom:4px;">
-      <button type="button" id="rndbtn-r1" onclick="setRoundType('R1')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-weight:700;">R1</button>
-      <button type="button" id="rndbtn-r2" onclick="setRoundType('R2')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R2</button>
-      <button type="button" id="rndbtn-r3" onclick="setRoundType('R3')" style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">R3</button>
-    </div>
-    <input type="hidden" id="rnd-type" value="R1">
-    <label>Interview Date &amp; Time</label>
-    <div style="display:flex;gap:8px;align-items:center;">
-      <input type="date" id="rnd-date" style="flex:1;">
-      <input type="time" id="rnd-time" placeholder="HH:MM" style="width:110px;">
-    </div>
-    <div class="error-msg hidden" id="rnd-date-err">Required</div>
-    <label>Panel Members</label>
-    <input id="rnd-panel" placeholder="Comma-separated names">
-    <label>Feedback Status</label>
-    <select id="rnd-feedback">
-      <option>Pending</option><option>Submitted</option>
-    </select>
-    <label>Round Status</label>
-    <select id="rnd-status">
-      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
-    </select>
-    <label>Interview Feedback <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(exported to CSV)</span></label>
-    <textarea id="rnd-notes" rows="3" placeholder="Post-interview remarks, strengths, concerns…"></textarea>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('round-modal')">Cancel</button>
-      <button class="btn-primary" onclick="saveRound()">Save Round</button>
-    </div>
-  </div>
-</div>
-
-<!-- Interview Modal -->
-<div class="modal-overlay" id="interview-modal">
-  <div class="modal" style="max-width:420px;">
-    <h3 id="int-modal-title">Add Candidate</h3>
-    <input type="hidden" id="int-id">
-    <label>Candidate Name *</label>
-    <input id="int-name" placeholder="Full name">
-    <div class="error-msg hidden" id="int-name-err">Required</div>
-    <label>Position *</label>
-    <input id="int-pos" placeholder="Role being interviewed for">
-    <div class="error-msg hidden" id="int-pos-err">Required</div>
-    <label>Experience (years)</label>
-    <input type="number" id="int-exp" min="0" value="0">
-    <label>Position Level</label>
-    <div style="display:flex;gap:8px;margin-bottom:4px;">
-      <button type="button" id="lvlbtn-l1" onclick="setCandidateLevel('L1')"
-        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid #3b82f6;background:#3b82f6;color:#fff;font-weight:700;">L1</button>
-      <button type="button" id="lvlbtn-l2" onclick="setCandidateLevel('L2')"
-        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">L2</button>
-    </div>
-    <input type="hidden" id="int-level" value="L1">
-    <label>Partner / Hiring Manager</label>
-    <input id="int-partner" placeholder="e.g. Infosys, TCS, Internal">
-    <label>Overall Status</label>
-    <select id="int-final">
-      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
-    </select>
-    <p id="int-add-round-note" style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;">💡 After saving, use <strong>+ Round</strong> to add interview round details (date, panel, feedback).</p>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('interview-modal')">Cancel</button>
-      <button class="btn-primary" onclick="saveInterview()">Save</button>
-    </div>
-  </div>
-</div>
-
-<!-- Image Paste Resume Modal -->
-<div class="modal-overlay" id="img-paste-modal">
-  <div class="modal" style="max-width:560px;">
-    <h3>📷 Paste Resume Images</h3>
-    <!-- mode toggle -->
-    <div style="display:flex;gap:8px;margin-bottom:12px;">
-      <button type="button" id="imgmode-multi" onclick="setImgMode('multi')"
-        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;">
-        👥 Multiple Candidates<br><span style="font-size:0.68rem;font-weight:400;opacity:0.85;">1 image = 1 resume</span>
-      </button>
-      <button type="button" id="imgmode-single" onclick="setImgMode('single')"
-        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:600;cursor:pointer;">
-        👤 Single Candidate<br><span style="font-size:0.68rem;font-weight:400;opacity:0.7;">All images = 1 resume (multi-page)</span>
-      </button>
-    </div>
-    <input type="hidden" id="img-mode" value="multi">
-    <!-- paste / drop zone -->
-    <div id="img-paste-zone"
-      tabindex="0"
-      style="border:2px dashed var(--border);border-radius:var(--radius);min-height:82px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:border-color 0.2s;outline:none;padding:10px;"
-      onclick="this.focus()"
-      ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
-      ondragleave="this.style.borderColor='var(--border)'"
-      ondrop="handleImgDrop(event)">
-      <div style="font-size:1.4rem;">📋</div>
-      <div style="font-size:0.82rem;font-weight:600;color:var(--text);">Click here → Ctrl+V to paste · or drag &amp; drop</div>
-      <div id="img-zone-hint" style="font-size:0.7rem;color:var(--text-muted);">Paste again to add more</div>
-    </div>
-    <!-- thumbnail queue -->
-    <div id="img-queue" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-height:0;"></div>
-    <div id="img-queue-count" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
-    <label style="margin-top:10px;">Partner / Source (optional)</label>
-    <input id="img-paste-partner" placeholder="e.g. Infosys, LinkedIn, Internal">
-    <div id="img-paste-status" style="display:none;font-size:0.82rem;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;"></div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="closeModal('img-paste-modal');clearImgPaste()">Cancel</button>
-      <button class="btn-primary" id="img-paste-btn" onclick="processImageResume()" disabled>&#129302; Extract &amp; Add</button>
-    </div>
-  </div>
-</div>
-
-<!-- Upload Results Summary Modal -->
-<div class="modal-overlay" id="upload-results-modal">
-  <div class="modal" style="max-width:460px;">
-    <h3>📊 Upload Summary</h3>
-    <div id="upload-results-body" style="margin:12px 0;"></div>
-    <div id="upload-results-details" style="margin-top:12px;font-size:0.8rem;"></div>
-    <div class="modal-footer">
-      <button class="btn-primary" onclick="closeModal('upload-results-modal')">Done</button>
-    </div>
-  </div>
-</div>
-
-<!-- Partner Name Modal (shown before resume upload processing) -->
-<div class="modal-overlay" id="partner-upload-modal">
-  <div class="modal" style="max-width:360px;">
-    <h3>🤝 Partner / Source</h3>
-    <p style="font-size:0.82rem;color:var(--text-muted);margin:6px 0 12px;">Select an existing partner or add a new one.</p>
-    <label>Partner / Hiring Agency</label>
-    <select id="upload-partner-select" onchange="onPartnerSelectChange()" style="margin-bottom:8px;">
-      <option value="">— None —</option>
-    </select>
-    <!-- shown only when "Other" selected -->
-    <input id="upload-partner-name" placeholder="Type new partner name…" autocomplete="off"
-      style="display:none;margin-top:4px;">
-    <div style="margin-top:8px;">
-      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem;color:var(--text);">
-        <input type="checkbox" id="upload-partner-remember" style="width:auto;"> Remember for this session
-      </label>
-    </div>
-    <div id="upload-file-count" style="font-size:0.78rem;color:var(--text-muted);margin-top:10px;"></div>
-    <div class="modal-footer">
-      <button class="btn-secondary" onclick="cancelPartnerUpload()">Cancel</button>
-      <button class="btn-primary" onclick="confirmPartnerUpload()">&#128196; Proceed</button>
-    </div>
-  </div>
-</div>
-
-</body></html>
+</body>
+</html>
