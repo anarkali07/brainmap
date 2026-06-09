@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BrainMap — BrainMap — because someone has to think</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1436,6 +1437,7 @@ body[data-theme="light"] {
                 <th onclick="sortSchedPage('time')" style="padding:11px 12px;cursor:pointer;">Time <span id="sched-si-time" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
                 <th onclick="sortSchedPage('panel')" style="padding:11px 12px;cursor:pointer;">Panel <span id="sched-si-panel" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
                 <th onclick="sortSchedPage('status')" style="padding:11px 12px;cursor:pointer;">Status <span id="sched-si-status" style="font-size:0.62rem;opacity:0.5;">⇅</span></th>
+                <th style="padding:11px 12px;">Email</th>
               </tr>
             </thead>
             <tbody id="sched-page-tbody"></tbody>
@@ -1540,6 +1542,7 @@ body[data-theme="light"] {
           <button class="inner-tab"        id="cfg-tab-ai"       onclick="cfgTab('ai')">&#129302; AI</button>
           <button class="inner-tab"        id="cfg-tab-modules"  onclick="cfgTab('modules')">&#10133; Modules</button>
           <button class="inner-tab"        id="cfg-tab-data"     onclick="cfgTab('data')">&#128190; Data</button>
+          <button class="inner-tab"        id="cfg-tab-email"    onclick="cfgTab('email')">📧 Email</button>
         </div>
 
         <!-- Profile -->
@@ -1738,6 +1741,51 @@ body[data-theme="light"] {
             </div>
           </div>
         </div>
+
+        <!-- Email Settings Panel -->
+        <div id="cfg-panel-email" class="hidden">
+          <div class="card" style="max-width:500px;">
+            <h3 style="margin-bottom:4px;">📧 SMTP / EmailJS Setup</h3>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:16px;line-height:1.6;">
+              Uses <a href="https://www.emailjs.com" target="_blank" style="color:var(--accent);">EmailJS</a> to send emails directly from the browser using your SMTP account (Gmail, Outlook, etc.).<br>
+              <strong>Free plan: 200 emails/month.</strong>
+            </p>
+
+            <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;font-size:0.78rem;color:var(--text-muted);line-height:1.8;">
+              <strong style="color:var(--text);">Setup steps:</strong><br>
+              1. Sign up at <a href="https://www.emailjs.com" target="_blank" style="color:var(--accent);">emailjs.com</a><br>
+              2. Add an Email Service (Gmail / Outlook / SMTP) → copy <strong>Service ID</strong><br>
+              3. Create an Email Template → copy <strong>Template ID</strong><br>
+              4. Go to Account → API Keys → copy <strong>Public Key</strong><br>
+              5. In the template, use variables: <code style="background:var(--card);padding:1px 5px;border-radius:4px;">{{to_email}}</code> <code style="background:var(--card);padding:1px 5px;border-radius:4px;">{{subject}}</code> <code style="background:var(--card);padding:1px 5px;border-radius:4px;">{{message}}</code> <code style="background:var(--card);padding:1px 5px;border-radius:4px;">{{from_name}}</code>
+            </div>
+
+            <label>EmailJS Public Key</label>
+            <input id="cfg-ejs-pubkey" type="password" placeholder="user_xxxxxxxxxxxx" autocomplete="off">
+            <label>Service ID</label>
+            <input id="cfg-ejs-service" placeholder="service_xxxxxxxx">
+            <label>Template ID</label>
+            <input id="cfg-ejs-template" placeholder="template_xxxxxxxx">
+            <label>Sender Name (shown in email)</label>
+            <input id="cfg-ejs-sendername" placeholder="e.g. Hiring Team">
+            <div id="cfg-email-status" style="font-size:0.75rem;margin-top:8px;min-height:18px;"></div>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button class="btn-primary" onclick="saveEmailConfig()">💾 Save</button>
+              <button class="btn-secondary" onclick="testEmailConfig()">🧪 Send Test Email</button>
+            </div>
+          </div>
+
+          <div class="card" style="max-width:500px;margin-top:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <h3 style="margin:0;">🏢 Partner Email Directory</h3>
+              <button class="btn-secondary" style="font-size:0.75rem;padding:5px 10px;"
+                onclick="openModal('partner-emails-modal');renderPartnerEmailList()">Manage →</button>
+            </div>
+            <p style="font-size:0.78rem;color:var(--text-muted);margin:0;">Store partner/company email addresses. These auto-fill when you click 📧 in the Schedules view.</p>
+            <div id="cfg-partner-email-preview" style="margin-top:10px;font-size:0.78rem;"></div>
+          </div>
+        </div>
+
       </section>
 
     </div><!-- #content -->
@@ -1955,6 +2003,78 @@ body[data-theme="light"] {
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('img-paste-modal');clearImgPaste()">Cancel</button>
       <button class="btn-primary" id="img-paste-btn" onclick="processImageResume()" disabled>&#129302; Extract &amp; Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Send Feedback Email Modal ── -->
+<div class="modal-overlay" id="feedback-email-modal">
+  <div class="modal" style="max-width:520px;">
+    <h3>📧 Send Feedback to Partner</h3>
+    <input type="hidden" id="fb-interview-id">
+    <input type="hidden" id="fb-round-id">
+
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <div style="flex:1;">
+        <label>Candidate</label>
+        <input id="fb-candidate" readonly style="background:var(--bg2);cursor:default;">
+      </div>
+      <div style="flex:1;">
+        <label>Round</label>
+        <input id="fb-round" readonly style="background:var(--bg2);cursor:default;">
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:10px;">
+      <div style="flex:1;">
+        <label>Partner / Company</label>
+        <input id="fb-partner" readonly style="background:var(--bg2);cursor:default;">
+      </div>
+      <div style="flex:1;">
+        <label>Interview Date</label>
+        <input id="fb-date" readonly style="background:var(--bg2);cursor:default;">
+      </div>
+    </div>
+
+    <label>Partner Email *</label>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+      <input id="fb-to-email" type="email" placeholder="partner@company.com" style="flex:1;">
+      <button class="btn-secondary" style="white-space:nowrap;font-size:0.75rem;padding:6px 10px;"
+        onclick="savePartnerEmailFromModal()">💾 Save Email</button>
+    </div>
+
+    <label>Subject</label>
+    <input id="fb-subject" style="margin-bottom:10px;">
+
+    <label>Message</label>
+    <textarea id="fb-body" rows="8" style="width:100%;resize:vertical;font-family:inherit;font-size:0.82rem;padding:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);line-height:1.5;"></textarea>
+
+    <div style="display:flex;gap:8px;margin-top:8px;margin-bottom:4px;">
+      <button class="btn-secondary" style="font-size:0.75rem;padding:6px 10px;" onclick="generateFeedbackEmail()">🤖 AI Draft</button>
+      <button class="btn-secondary" style="font-size:0.75rem;padding:6px 10px;" onclick="previewFeedbackEmail()">👁 Preview</button>
+      <span id="fb-status" style="flex:1;font-size:0.75rem;color:var(--text-muted);align-self:center;"></span>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('feedback-email-modal')">Cancel</button>
+      <button class="btn-primary" onclick="sendFeedbackEmail()">📤 Send Email</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Partner Emails Modal ── -->
+<div class="modal-overlay" id="partner-emails-modal">
+  <div class="modal" style="max-width:460px;">
+    <h3>📧 Partner Email Directory</h3>
+    <p style="font-size:0.78rem;color:var(--text-muted);margin-bottom:12px;">Emails saved here auto-fill when sending feedback.</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input id="pe-name" placeholder="Partner / Company name" style="flex:1.2;">
+      <input id="pe-email" type="email" placeholder="email@company.com" style="flex:1.5;">
+      <button class="btn-primary" style="padding:6px 12px;font-size:0.78rem;" onclick="addPartnerEmail()">Add</button>
+    </div>
+    <div id="pe-list" style="max-height:300px;overflow-y:auto;"></div>
+    <div class="modal-footer" style="margin-top:10px;">
+      <button class="btn-secondary" onclick="closeModal('partner-emails-modal')">Close</button>
     </div>
   </div>
 </div>
@@ -2415,6 +2535,7 @@ const _ST = ['github_pat_11CDOYHPQ0gkhrvf5GWDW8_A2R3OiULnmq5','zHbvtpSl1Dj4QLhL6
 function emptyData() {
   return {
     tasks: [], followUps: [], projects: [], interviews: [],
+    partnerEmails: {},
     teamMembers: [], goals: [], health: [], inbox: [],
     dailyPlanner: {}, schedule: {}, timeEntries: [], activeTimer: null, customModules: {}, settings: {
       theme: 'dark',
@@ -2423,6 +2544,7 @@ function emptyData() {
       hiddenNav: [],
       dashCards: { openTasks:true, overdue:true, dueToday:true, followUps:true, projects:true, interviews:true, goals:true, scratchPad:true },
       aiProvider: 'groq', groqKey: '', apiKey: '', aiModel: 'llama-3.3-70b-versatile', braveKey: '',
+      emailjsPublicKey: '', emailjsServiceId: '', emailjsTemplateId: '', emailSenderName: 'Hiring Team',
       savedPanelMembers: [
         { id:'sp1', name:'Saumya',    defaultTime:'11:30', until:'16:30', dur:45 },
         { id:'sp2', name:'Mangesh',   defaultTime:'12:00', until:'16:30', dur:45 },
@@ -7578,6 +7700,229 @@ function refreshAllViews() {
   try { renderPanelScheduler(); }catch(e){}
 }
 
+/* ============================================================
+   EMAIL / FEEDBACK
+   ============================================================ */
+
+function openFeedbackModal(interviewId, roundId) {
+  const i = DB.interviews.find(x => x.id === interviewId);
+  if (!i) return;
+  const r = (i.rounds||[]).find(x => x.id === roundId) || (i.rounds||[])[0];
+  if (!r) { alert('No round data found.'); return; }
+
+  document.getElementById('fb-interview-id').value = interviewId;
+  document.getElementById('fb-round-id').value     = roundId;
+  document.getElementById('fb-candidate').value    = i.candidateName || '';
+  document.getElementById('fb-round').value        = r.round || '';
+  document.getElementById('fb-partner').value      = i.partner || '';
+  document.getElementById('fb-date').value         = r.interviewDate ? new Date(r.interviewDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short',year:'numeric'}) : '—';
+
+  // Auto-fill partner email from directory
+  const partnerEmails = DB.partnerEmails || {};
+  const knownEmail = i.partner ? (partnerEmails[i.partner] || '') : '';
+  document.getElementById('fb-to-email').value = knownEmail;
+
+  // Auto-fill subject
+  document.getElementById('fb-subject').value = `Interview Feedback – ${i.candidateName} (${r.round||'R1'}) – ${i.position||''}`;
+
+  // Pre-fill body template
+  const dateLine = r.interviewDate ? new Date(r.interviewDate+'T12:00:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+  document.getElementById('fb-body').value =
+`Dear ${i.partner||'Hiring Team'},
+
+We have completed the ${r.round||'R1'} interview for ${i.candidateName} (${i.position||''}) held on ${dateLine}.
+
+Interview Details:
+• Round: ${r.round||'R1'}
+• Date: ${dateLine}${r.interviewTime ? '\n• Time: ' + r.interviewTime : ''}
+• Panel: ${r.panelMembers||'—'}
+• Status: ${r.roundStatus||'—'}
+
+Feedback:
+${r.notes || '[Please add feedback notes here]'}
+
+Overall Recommendation: ${r.roundStatus === 'Selected' ? '✅ Recommended for next round / offer.' : r.roundStatus === 'Rejected' ? '❌ Not proceeding further at this time.' : 'Pending final decision.'}
+
+Regards,
+${DB.settings.userName || DB.settings.emailSenderName || 'Hiring Team'}`;
+
+  document.getElementById('fb-status').textContent = '';
+  openModal('feedback-email-modal');
+}
+
+function savePartnerEmailFromModal() {
+  const partner = document.getElementById('fb-partner').value.trim();
+  const email   = document.getElementById('fb-to-email').value.trim();
+  if (!partner) { alert('No partner name to save.'); return; }
+  if (!email || !email.includes('@')) { alert('Enter a valid email first.'); return; }
+  if (!DB.partnerEmails) DB.partnerEmails = {};
+  DB.partnerEmails[partner] = email;
+  saveData();
+  document.getElementById('fb-status').textContent = `✅ Saved ${partner} → ${email}`;
+  setTimeout(()=>{ const el = document.getElementById('fb-status'); if(el) el.textContent=''; }, 3000);
+}
+
+async function generateFeedbackEmail() {
+  const iid = document.getElementById('fb-interview-id').value;
+  const rid  = document.getElementById('fb-round-id').value;
+  const i    = DB.interviews.find(x => x.id === iid);
+  const r    = (i?.rounds||[]).find(x => x.id === rid) || (i?.rounds||[])[0];
+  if (!i || !r) return;
+  const statusEl = document.getElementById('fb-status');
+  if(statusEl) statusEl.textContent = '🤖 Generating AI draft…';
+  const prompt = `Write a professional interview feedback email to a hiring partner/recruiter.
+Candidate: ${i.candidateName}, Position: ${i.position||'—'}, Experience: ${i.experience||0} yrs
+Round: ${r.round||'R1'}, Date: ${r.interviewDate||'—'}, Panel: ${r.panelMembers||'—'}
+Round Status: ${r.roundStatus||'—'}, Feedback Notes: ${r.notes||'No notes provided.'}
+Write a concise, professional email body (no subject line). Be direct and factual.`;
+  try {
+    const s = DB.settings;
+    const body = JSON.stringify({ model: s.aiModel||'llama-3.3-70b-versatile', messages:[{role:'user',content:prompt}], max_tokens:600 });
+    const url  = s.aiProvider==='anthropic' ? 'https://api.anthropic.com/v1/messages' : 'https://api.groq.com/openai/v1/chat/completions';
+    const headers = { 'Content-Type':'application/json' };
+    if (s.aiProvider==='anthropic') { headers['x-api-key'] = s.apiKey||s.groqKey; headers['anthropic-version']='2023-06-01'; }
+    else headers['Authorization'] = 'Bearer ' + (s.groqKey||s.apiKey);
+    const res  = await fetch(url, { method:'POST', headers, body });
+    const data = await res.json();
+    const text = s.aiProvider==='anthropic' ? data.content?.[0]?.text : data.choices?.[0]?.message?.content;
+    if (text) { document.getElementById('fb-body').value = text; if(statusEl) statusEl.textContent = '✅ AI draft ready'; }
+    else { if(statusEl) statusEl.textContent = '⚠ AI returned empty response'; }
+  } catch(e) { if(statusEl) statusEl.textContent = '❌ AI error: ' + e.message; }
+}
+
+function previewFeedbackEmail() {
+  const subj = document.getElementById('fb-subject').value;
+  const body = document.getElementById('fb-body').value;
+  const to   = document.getElementById('fb-to-email').value;
+  const win  = window.open('','_blank','width=700,height=600');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Email Preview</title>
+  <style>body{font-family:sans-serif;max-width:620px;margin:40px auto;color:#222;line-height:1.7;}
+  .hdr{background:#f1f5f9;padding:14px 20px;border-radius:8px;font-size:0.85rem;margin-bottom:16px;}
+  pre{white-space:pre-wrap;font-family:inherit;font-size:0.9rem;}</style></head><body>
+  <div class="hdr"><strong>To:</strong> ${to||'—'}<br><strong>Subject:</strong> ${subj||'—'}</div>
+  <pre>${body.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre></body></html>`);
+}
+
+async function sendFeedbackEmail() {
+  const s      = DB.settings;
+  const pubKey = s.emailjsPublicKey;
+  const svcId  = s.emailjsServiceId;
+  const tplId  = s.emailjsTemplateId;
+  if (!pubKey || !svcId || !tplId) {
+    if (confirm('EmailJS is not configured. Open Email Settings now?')) { closeModal('feedback-email-modal'); navigate('config'); setTimeout(()=>cfgTab('email'),300); }
+    return;
+  }
+
+  const toEmail = document.getElementById('fb-to-email').value.trim();
+  if (!toEmail || !toEmail.includes('@')) { alert('Enter a valid recipient email.'); return; }
+  const subject = document.getElementById('fb-subject').value.trim();
+  const message = document.getElementById('fb-body').value.trim();
+  const statusEl = document.getElementById('fb-status');
+  if(statusEl) statusEl.textContent = '📤 Sending…';
+
+  try {
+    emailjs.init(pubKey);
+    const params = {
+      to_email:  toEmail,
+      subject:   subject,
+      message:   message,
+      from_name: s.emailSenderName || s.userName || 'Hiring Team',
+      candidate: document.getElementById('fb-candidate').value,
+      partner:   document.getElementById('fb-partner').value,
+    };
+    const res = await emailjs.send(svcId, tplId, params);
+    if (res.status === 200) {
+      if(statusEl) statusEl.textContent = `✅ Email sent to ${toEmail}`;
+      // Mark round feedback as sent
+      const iid = document.getElementById('fb-interview-id').value;
+      const rid = document.getElementById('fb-round-id').value;
+      const iv  = DB.interviews.find(x => x.id === iid);
+      const rv  = (iv?.rounds||[]).find(x => x.id === rid);
+      if (rv) { rv.feedbackStatus = 'Submitted'; rv.feedbackSentTo = toEmail; rv.feedbackSentAt = new Date().toISOString(); saveData(); refreshAllViews(); }
+      setTimeout(()=>closeModal('feedback-email-modal'), 2000);
+    } else { if(statusEl) statusEl.textContent = `⚠ Unexpected status: ${res.status}`; }
+  } catch(e) {
+    if(statusEl) statusEl.textContent = `❌ Failed: ${e?.text || e?.message || JSON.stringify(e)}`;
+  }
+}
+
+/* --- Email Config --- */
+function saveEmailConfig() {
+  DB.settings.emailjsPublicKey  = document.getElementById('cfg-ejs-pubkey').value.trim();
+  DB.settings.emailjsServiceId  = document.getElementById('cfg-ejs-service').value.trim();
+  DB.settings.emailjsTemplateId = document.getElementById('cfg-ejs-template').value.trim();
+  DB.settings.emailSenderName   = document.getElementById('cfg-ejs-sendername').value.trim();
+  saveData();
+  const el = document.getElementById('cfg-email-status');
+  if(el) { el.textContent = '✅ Email settings saved!'; el.style.color='var(--low)'; setTimeout(()=>el.textContent='', 3000); }
+  updatePartnerEmailPreview();
+}
+
+async function testEmailConfig() {
+  const s = DB.settings;
+  if (!s.emailjsPublicKey || !s.emailjsServiceId || !s.emailjsTemplateId) {
+    alert('Save your EmailJS config first.'); return;
+  }
+  const to = prompt('Send test to (your email):');
+  if (!to) return;
+  const el = document.getElementById('cfg-email-status');
+  if(el) { el.textContent = '📤 Sending test…'; el.style.color='var(--text-muted)'; }
+  try {
+    emailjs.init(s.emailjsPublicKey);
+    const res = await emailjs.send(s.emailjsServiceId, s.emailjsTemplateId, {
+      to_email: to, subject: '✅ Test Email from Hiring Portal', message: 'EmailJS is configured correctly! 🎉',
+      from_name: s.emailSenderName || 'Hiring Portal', candidate: 'Test Candidate', partner: 'Test Partner'
+    });
+    if(el) { el.textContent = res.status === 200 ? `✅ Test sent to ${to}!` : `⚠ Status: ${res.status}`; el.style.color = res.status===200?'var(--low)':'var(--medium)'; }
+  } catch(e) { if(el) { el.textContent = `❌ ${e?.text||e?.message||JSON.stringify(e)}`; el.style.color='var(--critical)'; } }
+}
+
+/* --- Partner Email Directory --- */
+function renderPartnerEmailList() {
+  const list = document.getElementById('pe-list');
+  if (!list) return;
+  const emails = DB.partnerEmails || {};
+  const entries = Object.entries(emails);
+  if (!entries.length) { list.innerHTML = '<div style="color:var(--text-muted);font-size:0.82rem;padding:10px;">No partner emails saved yet.</div>'; return; }
+  list.innerHTML = entries.map(([name, email]) => `
+    <div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);">
+      <div style="flex:1.2;font-weight:600;font-size:0.82rem;">${esc(name)}</div>
+      <div style="flex:1.5;font-size:0.8rem;color:var(--text-muted);">${esc(email)}</div>
+      <button onclick="deletePartnerEmail('${esc(name)}')"
+        style="background:transparent;border:1px solid var(--border);border-radius:5px;padding:3px 8px;cursor:pointer;font-size:0.72rem;color:var(--critical);">✕</button>
+    </div>`).join('');
+  updatePartnerEmailPreview();
+}
+
+function addPartnerEmail() {
+  const name  = document.getElementById('pe-name')?.value.trim();
+  const email = document.getElementById('pe-email')?.value.trim();
+  if (!name || !email || !email.includes('@')) { alert('Enter a valid partner name and email.'); return; }
+  if (!DB.partnerEmails) DB.partnerEmails = {};
+  DB.partnerEmails[name] = email;
+  saveData();
+  document.getElementById('pe-name').value = '';
+  document.getElementById('pe-email').value = '';
+  renderPartnerEmailList();
+}
+
+function deletePartnerEmail(name) {
+  if (!DB.partnerEmails) return;
+  delete DB.partnerEmails[name];
+  saveData();
+  renderPartnerEmailList();
+}
+
+function updatePartnerEmailPreview() {
+  const el = document.getElementById('cfg-partner-email-preview');
+  if (!el) return;
+  const emails = DB.partnerEmails || {};
+  const entries = Object.entries(emails);
+  if (!entries.length) { el.innerHTML = '<span style="color:var(--text-muted);">No emails saved.</span>'; return; }
+  el.innerHTML = entries.slice(0,5).map(([n,e]) => `<div style="padding:3px 0;"><strong>${esc(n)}</strong> → ${esc(e)}</div>`).join('') +
+    (entries.length > 5 ? `<div style="color:var(--text-muted);">…and ${entries.length-5} more</div>` : '');
+}
+
 function updateSchedPanel(interviewId, roundId, value) {
   const i = DB.interviews.find(x => x.id === interviewId);
   if (!i) return;
@@ -7660,7 +8005,7 @@ function renderSchedulesPage() {
   const tbody = document.getElementById('sched-page-tbody');
   if (!tbody) return;
   if (!rows.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text-muted);">No interviews found for this filter</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text-muted);">No interviews found for this filter</td></tr>`;
     return;
   }
 
@@ -7710,6 +8055,13 @@ function renderSchedulesPage() {
       <td style="padding:10px 12px;">
         <span style="font-size:0.72rem;font-weight:600;color:${sClr};">${esc(r.roundStatus||'')}</span>
         <div style="font-size:0.68rem;color:var(--text-muted);">${r.feedbackStatus||''}</div>
+      </td>
+      <td style="padding:6px 12px;text-align:center;">
+        <button onclick="openFeedbackModal('${i.id}','${r.id}')"
+          title="Send feedback to partner"
+          style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:0.75rem;color:var(--accent);transition:all 0.15s;"
+          onmouseover="this.style.background='var(--accent)';this.style.color='#fff'"
+          onmouseout="this.style.background='transparent';this.style.color='var(--accent)'">📧</button>
       </td>
     </tr>`;
   }).join('');
@@ -8673,15 +9025,18 @@ const DASH_CARD_LABELS = {
 };
 
 function cfgTab(name) {
-  ['profile','nav','cats','dash','ai','modules','data'].forEach(t => {
-    document.getElementById('cfg-tab-'+t).classList.toggle('active', t===name);
-    document.getElementById('cfg-panel-'+t).classList.toggle('hidden', t!==name);
+  ['profile','nav','cats','dash','ai','modules','data','email'].forEach(t => {
+    const tab = document.getElementById('cfg-tab-'+t);
+    const panel = document.getElementById('cfg-panel-'+t);
+    if(tab)   tab.classList.toggle('active', t===name);
+    if(panel) panel.classList.toggle('hidden', t!==name);
   });
   if (name==='nav')     renderNavToggles();
   if (name==='cats')    renderCatList();
   if (name==='dash')    renderDashToggles();
   if (name==='ai')      renderAiConfig();
   if (name==='modules') cfgTabModules();
+  if (name==='email')   updatePartnerEmailPreview();
 }
 
 function renderConfig() {
@@ -8691,6 +9046,12 @@ function renderConfig() {
   document.getElementById('cfg-apptitle').value = s.appTitle  || 'BrainMap';
   document.getElementById('cfg-github-pat').value = s.githubPAT || '';
   document.getElementById('cfg-gist-id').value    = s.gistId   || '';
+  // Email settings
+  const epk = document.getElementById('cfg-ejs-pubkey');    if(epk) epk.value = s.emailjsPublicKey||'';
+  const esi = document.getElementById('cfg-ejs-service');   if(esi) esi.value = s.emailjsServiceId||'';
+  const eti = document.getElementById('cfg-ejs-template');  if(eti) eti.value = s.emailjsTemplateId||'';
+  const esn = document.getElementById('cfg-ejs-sendername');if(esn) esn.value = s.emailSenderName||'';
+  updatePartnerEmailPreview();
   cfgTab('profile');
 }
 
