@@ -5839,6 +5839,7 @@ function toggleScanCard(id) {
    PANEL SCHEDULER
    ============================================================ */
 let _psPanel = []; // [{ name, from, dur, slots:[{time, candidateId, candidateName}] }]
+let _psLastDate = ''; // tracks last rendered date to detect date changes
 
 function renderPanelScheduler() {
   const dateEl = document.getElementById('ps-date');
@@ -5847,10 +5848,15 @@ function renderPanelScheduler() {
 
   const schedDate = (document.getElementById('ps-date')?.value) || today();
 
-  // Pre-fill if panel already loaded (e.g. date changed)
-  if (_psPanel.length) {
+  // Re-fill preExisting slots only when date changed (preserve manual drags)
+  const _newDate = (document.getElementById('ps-date')?.value) || today();
+  if (_psPanel.length && _newDate !== (_psLastDate||'')) {
+    _psLastDate = _newDate;
     _psPanel.forEach(p => { p.slots = p.slots.map(s => s?.preExisting ? null : s); });
     _preFillExistingAssignments();
+    renderPanelBoard();
+    renderPanelMemberList();
+  } else if (_psPanel.length) {
     renderPanelBoard();
     renderPanelMemberList();
   }
@@ -6658,11 +6664,25 @@ function savePanelSchedule() {
   }
   alert(`✅ ${saved} candidates assigned!\nDate: ${date}\nPanel & time saved to interview rounds.`);
 
+  if (saved === 0) {
+    alert('No assignments to save. Load panel members and assign candidates first.');
+    return;
+  }
+
   // Clear board for next session
   _psPanel.forEach(p => p.slots = []);
   renderPanelMemberList();
   renderPanelBoard();
-  renderPanelScheduler();
+
+  // Navigate to Schedules page so user sees updated schedule immediately
+  navigate('intschedules');
+  setTimeout(() => {
+    const toast = document.createElement('div');
+    toast.textContent = `✅ ${saved} assignment${saved>1?'s':''} saved for ${date}`;
+    toast.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#16a34a;color:#fff;padding:10px 20px;border-radius:8px;font-weight:600;font-size:0.85rem;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }, 100);
 }
 
 function updateSchedPanel(interviewId, roundId, value) {
