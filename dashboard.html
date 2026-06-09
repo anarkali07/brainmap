@@ -6989,25 +6989,47 @@ function parsePastedCandidates() {
     );
     if (!candidate) { notFound.push(candidateName); return; }
 
-    // Find the panel member whose slot matches this time (within 30 min)
+    // Remove candidate from any existing slot first (allow re-assignment)
+    _psPanel.forEach(p => {
+      p.slots = p.slots.map(s => (s?.candidateId === candidate.id ? null : s));
+    });
+
+    // Find the panel member whose slot matches this time (exact or within 30 min)
     let bestPanel = null, bestSlotIdx = -1, bestDiff = 999;
     _psPanel.forEach(p => {
       (p.slotTimes||[]).forEach((t, idx) => {
         if (p.slots[idx]?.candidateId) return; // already taken
         const diff = Math.abs(toMinsStr(t) - toMinsStr(time));
-        if (diff < bestDiff && diff <= 30) { bestDiff=diff; bestPanel=p; bestSlotIdx=idx; }
+        if (diff < bestDiff && diff <= 60) { bestDiff=diff; bestPanel=p; bestSlotIdx=idx; }
       });
     });
 
     if (bestPanel && bestSlotIdx >= 0) {
-      psAssignToSlot(bestPanel.id, bestSlotIdx, candidate.id);
-      assigned++;
+      // Force-assign (bypassing the "already taken" check since we cleared above)
+      const slotTimes = bestPanel.slotTimes || [];
+      const i = DB.interviews.find(x => x.id === candidate.id);
+      if (i) {
+        const schedDate = document.getElementById('ps-date')?.value || today();
+        const targetRound = (i.rounds||[]).find(r => r.interviewDate === schedDate)
+                         || (i.rounds||[]).find(r => !r.interviewDate)
+                         || (i.rounds||[])[0];
+        bestPanel.slots[bestSlotIdx] = { time, candidateId: candidate.id, candidateName: i.candidateName, round: targetRound?.round||'R1', roundId: targetRound?.id, partner: i.partner||'' };
+        assigned++;
+      }
     } else {
-      // No matching slot — find any empty slot and assign
+      // No matching slot — find any empty slot
       let placed = false;
       for (const p of _psPanel) {
-        const emptyIdx = (p.slotTimes||[]).findIndex((t,i)=>!p.slots[i]?.candidateId);
-        if (emptyIdx >= 0) { psAssignToSlot(p.id, emptyIdx, candidate.id); assigned++; placed=true; break; }
+        const emptyIdx = (p.slotTimes||[]).findIndex((t,si)=>!p.slots[si]?.candidateId);
+        if (emptyIdx >= 0) {
+          const i = DB.interviews.find(x => x.id === candidate.id);
+          if (i) {
+            const schedDate = document.getElementById('ps-date')?.value || today();
+            const targetRound = (i.rounds||[]).find(r => r.interviewDate === schedDate) || (i.rounds||[]).find(r => !r.interviewDate) || (i.rounds||[])[0];
+            p.slots[emptyIdx] = { time, candidateId: candidate.id, candidateName: i.candidateName, round: targetRound?.round||'R1', roundId: targetRound?.id, partner: i.partner||'' };
+            assigned++; placed = true; break;
+          }
+        }
       }
       if (!placed) notFound.push(candidateName + ' (no empty slot)');
     }
