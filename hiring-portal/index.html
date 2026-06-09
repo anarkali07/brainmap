@@ -8881,4 +8881,118 @@ if(typeof lucide!=='undefined')lucide.createIcons();
     </div>
   </div>
 </div>
+
+<!-- Interview Modal -->
+<div class="modal-overlay" id="interview-modal">
+  <div class="modal" style="max-width:420px;">
+    <h3 id="int-modal-title">Add Candidate</h3>
+    <input type="hidden" id="int-id">
+    <label>Candidate Name *</label>
+    <input id="int-name" placeholder="Full name">
+    <div class="error-msg hidden" id="int-name-err">Required</div>
+    <label>Position *</label>
+    <input id="int-pos" placeholder="Role being interviewed for">
+    <div class="error-msg hidden" id="int-pos-err">Required</div>
+    <label>Experience (years)</label>
+    <input type="number" id="int-exp" min="0" value="0">
+    <label>Position Level</label>
+    <div style="display:flex;gap:8px;margin-bottom:4px;">
+      <button type="button" id="lvlbtn-l1" onclick="setCandidateLevel('L1')"
+        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid #3b82f6;background:#3b82f6;color:#fff;font-weight:700;">L1</button>
+      <button type="button" id="lvlbtn-l2" onclick="setCandidateLevel('L2')"
+        style="flex:1;padding:8px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-weight:700;">L2</button>
+    </div>
+    <input type="hidden" id="int-level" value="L1">
+    <label>Partner / Hiring Manager</label>
+    <input id="int-partner" placeholder="e.g. Infosys, TCS, Internal">
+    <label>Overall Status</label>
+    <select id="int-final">
+      <option>Scheduled</option><option>Under Review</option><option>Screening</option><option>Selected</option><option>Rejected</option><option>On Hold</option><option>Screened Out</option>
+    </select>
+    <p id="int-add-round-note" style="font-size:0.8rem;color:var(--text-muted);margin-top:10px;">💡 After saving, use <strong>+ Round</strong> to add interview round details (date, panel, feedback).</p>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('interview-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveInterview()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Paste Resume Modal -->
+<div class="modal-overlay" id="img-paste-modal">
+  <div class="modal" style="max-width:560px;">
+    <h3>📷 Paste Resume Images</h3>
+    <!-- mode toggle -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button type="button" id="imgmode-multi" onclick="setImgMode('multi')"
+        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--accent);background:var(--accent);color:#fff;font-size:0.8rem;font-weight:600;cursor:pointer;">
+        👥 Multiple Candidates<br><span style="font-size:0.68rem;font-weight:400;opacity:0.85;">1 image = 1 resume</span>
+      </button>
+      <button type="button" id="imgmode-single" onclick="setImgMode('single')"
+        style="flex:1;padding:8px 10px;border-radius:var(--radius);border:2px solid var(--border);background:transparent;color:var(--text);font-size:0.8rem;font-weight:600;cursor:pointer;">
+        👤 Single Candidate<br><span style="font-size:0.68rem;font-weight:400;opacity:0.7;">All images = 1 resume (multi-page)</span>
+      </button>
+    </div>
+    <input type="hidden" id="img-mode" value="multi">
+    <!-- paste / drop zone -->
+    <div id="img-paste-zone"
+      tabindex="0"
+      style="border:2px dashed var(--border);border-radius:var(--radius);min-height:82px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:border-color 0.2s;outline:none;padding:10px;"
+      onclick="this.focus()"
+      ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+      ondragleave="this.style.borderColor='var(--border)'"
+      ondrop="handleImgDrop(event)">
+      <div style="font-size:1.4rem;">📋</div>
+      <div style="font-size:0.82rem;font-weight:600;color:var(--text);">Click here → Ctrl+V to paste · or drag &amp; drop</div>
+      <div id="img-zone-hint" style="font-size:0.7rem;color:var(--text-muted);">Paste again to add more</div>
+    </div>
+    <!-- thumbnail queue -->
+    <div id="img-queue" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;min-height:0;"></div>
+    <div id="img-queue-count" style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;"></div>
+    <label style="margin-top:10px;">Partner / Source (optional)</label>
+    <input id="img-paste-partner" placeholder="e.g. Infosys, LinkedIn, Internal">
+    <div id="img-paste-status" style="display:none;font-size:0.82rem;padding:8px 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-top:8px;"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('img-paste-modal');clearImgPaste()">Cancel</button>
+      <button class="btn-primary" id="img-paste-btn" onclick="processImageResume()" disabled>&#129302; Extract &amp; Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Results Summary Modal -->
+<div class="modal-overlay" id="upload-results-modal">
+  <div class="modal" style="max-width:460px;">
+    <h3>📊 Upload Summary</h3>
+    <div id="upload-results-body" style="margin:12px 0;"></div>
+    <div id="upload-results-details" style="margin-top:12px;font-size:0.8rem;"></div>
+    <div class="modal-footer">
+      <button class="btn-primary" onclick="closeModal('upload-results-modal')">Done</button>
+    </div>
+  </div>
+</div>
+
+<!-- Partner Name Modal (shown before resume upload processing) -->
+<div class="modal-overlay" id="partner-upload-modal">
+  <div class="modal" style="max-width:360px;">
+    <h3>🤝 Partner / Source</h3>
+    <p style="font-size:0.82rem;color:var(--text-muted);margin:6px 0 12px;">Select an existing partner or add a new one.</p>
+    <label>Partner / Hiring Agency</label>
+    <select id="upload-partner-select" onchange="onPartnerSelectChange()" style="margin-bottom:8px;">
+      <option value="">— None —</option>
+    </select>
+    <!-- shown only when "Other" selected -->
+    <input id="upload-partner-name" placeholder="Type new partner name…" autocomplete="off"
+      style="display:none;margin-top:4px;">
+    <div style="margin-top:8px;">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem;color:var(--text);">
+        <input type="checkbox" id="upload-partner-remember" style="width:auto;"> Remember for this session
+      </label>
+    </div>
+    <div id="upload-file-count" style="font-size:0.78rem;color:var(--text-muted);margin-top:10px;"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="cancelPartnerUpload()">Cancel</button>
+      <button class="btn-primary" onclick="confirmPartnerUpload()">&#128196; Proceed</button>
+    </div>
+  </div>
+</div>
+
 </body></html>
