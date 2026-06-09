@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>BrainMap · Hiring Portal</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-  <style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainMap — BrainMap — because someone has to think</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
 /* ============================================================
    DESIGN TOKENS
    ============================================================ */
@@ -778,62 +779,182 @@ body[data-theme="light"] {
 [data-theme="light"] #header  { background: color-mix(in srgb, var(--card) 90%, transparent); }
 [data-theme="light"] th       { background: var(--bg2); }
 </style>
-  <style>:root{--accent:#14b8a6;--accent2:#0d9488;}.section{display:none;}.section.active{display:block;}</style>
-</head>
-<body>
-<script>(function(){
-  const _orig=Document.prototype.getElementById;
-  const noop=function(){};
-  const dummy=new Proxy(function(){return dummy;},{
+
+<style>
+  :root { --accent:#14b8a6 !important; --accent2:#0d9488 !important; }
+</style>
+<script>
+// NULL-SAFE getElementById
+(function(){
+  var _orig=Document.prototype.getElementById;
+  var noop=function(){};
+  var dummy=new Proxy(function(){return dummy;},{
     get:function(t,p){
-      if(['value','innerHTML','textContent','placeholder'].includes(p))return '';
+      if(p==='value'||p==='innerHTML'||p==='textContent'||p==='placeholder')return'';
       if(p==='checked')return false;
       if(p==='style')return new Proxy({},{get:function(){return'';},set:function(){return true;}});
       if(p==='classList')return{add:noop,remove:noop,toggle:noop,contains:function(){return false;},replace:noop};
-      if(p==='dataset')return{};
-      if(p==='options')return{length:0};
+      if(p==='dataset')return{};if(p==='options')return{length:0};
       if(p==='contains')return function(){return false;};
-      if(['appendChild','removeChild','setAttribute','removeAttribute','addEventListener','dispatchEvent','focus','blur','click','scrollIntoView'].includes(p))return noop;
+      if(p==='appendChild'||p==='removeChild'||p==='setAttribute'||p==='removeAttribute'||p==='addEventListener'||p==='dispatchEvent'||p==='focus'||p==='blur'||p==='click'||p==='scrollIntoView')return noop;
       if(p==='querySelectorAll'||p==='getElementsByClassName')return function(){return[];};
       if(p==='querySelector')return function(){return null;};
       if(p==='getBoundingClientRect')return function(){return{top:0,left:0,width:0,height:0,bottom:0,right:0};};
       if(typeof p==='string'&&p!=='then'&&p!=='toJSON')return dummy;
       return undefined;
     },
-    set:function(){return true;},
-    apply:function(){return dummy;}
+    set:function(){return true;},apply:function(){return dummy;}
   });
   Document.prototype.getElementById=function(id){return _orig.call(this,id)||dummy;};
-})();</script>
+})();
+</script>
+</head>
+<body data-theme="dark">
 
-<div class="app-layout">
-  <nav id="sidebar" class="sidebar">
-    <div class="sidebar-header">
-      <span class="app-logo">🧠</span>
-      <span class="app-name">BrainMap</span>
-      <button class="sidebar-close" onclick="document.getElementById('sidebar').classList.remove('open')">✕</button>
+<!-- ============================================================
+     APP SHELL
+     ============================================================ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div id="sidebar-logo">
+      <!-- Expanded: full wordmark -->
+      <div class="logo-text">
+        <div class="logo-mark" style="font-size:0.9rem;font-weight:800;letter-spacing:-0.02em;">BrainMap</div>
+        <div style="font-size:0.56rem;color:var(--text-muted);font-weight:400;margin-top:1px;font-style:italic;">because someone has to think</div>
+      </div>
+      <!-- Collapsed: stacked Brain/Map -->
+      <div class="logo-collapsed" style="display:none;text-align:center;line-height:1.1;">
+        <div class="logo-mark" style="font-size:0.72rem;font-weight:800;letter-spacing:-0.01em;">Brain</div>
+        <div class="logo-mark" style="font-size:0.72rem;font-weight:800;letter-spacing:-0.01em;">Map</div>
+      </div>
     </div>
-    <div class="nav-items">
-      <div class="nav-item active" data-section="intdashboard" onclick="navigate('intdashboard')">📊 Dashboard</div>
-      <div class="nav-item" data-section="interviews" onclick="navigate('interviews')">👥 Interviews</div>
-      <div class="nav-item" data-section="intschedules" onclick="navigate('intschedules')">📅 Schedules</div>
-      <div class="nav-item" data-section="panelscheduler" onclick="navigate('panelscheduler')">🗓️ Panel Scheduler</div>
-      <div class="nav-item" data-section="scanreports" onclick="navigate('scanreports')">🔍 Scan Reports</div>
-      <div class="nav-item" data-section="config" onclick="navigate('config')">⚙️ Settings</div>
+    <nav id="nav">
+      <div class="nav-item active" data-section="dashboard"><span class="nav-icon"><i data-lucide="zap" style="width:16px;height:16px;"></i></span><span class="nav-label"> Dashboard</span></div>
+      <div class="nav-section-label">Workspace</div>
+      <div class="nav-item" data-section="inbox"><span class="nav-icon"><i data-lucide="notebook-pen" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scratch Pad</span></div>
+      <div class="nav-item" data-section="tasks"><span class="nav-icon"><i data-lucide="list-checks" style="width:16px;height:16px;"></i></span><span class="nav-label"> Tasks</span></div>
+      <div class="nav-item" data-section="work"><span class="nav-icon"><i data-lucide="folder-kanban" style="width:16px;height:16px;"></i></span><span class="nav-label"> Projects</span></div>
+      <div class="nav-section-label">Hiring</div>
+      <div class="nav-item" data-section="intdashboard"><span class="nav-icon"><i data-lucide="layout-dashboard" style="width:16px;height:16px;"></i></span><span class="nav-label"> Hiring Dashboard</span></div>
+      <div class="nav-item" data-section="interviews"><span class="nav-icon"><i data-lucide="user-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Interviews</span></div>
+      <div class="nav-item" data-section="intschedules"><span class="nav-icon"><i data-lucide="calendar-check" style="width:16px;height:16px;"></i></span><span class="nav-label"> Schedules</span></div>
+      <div class="nav-item" data-section="panelscheduler"><span class="nav-icon"><i data-lucide="calendar-clock" style="width:16px;height:16px;"></i></span><span class="nav-label"> Panel Scheduler</span></div>
+      <div class="nav-item" data-section="scanreports"><span class="nav-icon"><i data-lucide="scan-search" style="width:16px;height:16px;"></i></span><span class="nav-label"> Scan Reports</span></div>
+      <div class="nav-section-label">Life</div>
+      <div class="nav-item" data-section="personal"><span class="nav-icon"><i data-lucide="heart-pulse" style="width:16px;height:16px;"></i></span><span class="nav-label"> Personal</span></div>
+      <div class="nav-item" data-section="timetracker"><span class="nav-icon"><i data-lucide="timer" style="width:16px;height:16px;"></i></span><span class="nav-label"> Time Tracker</span></div>
+      <div class="nav-item" data-section="schedule"><span class="nav-icon"><i data-lucide="calendar-days" style="width:16px;height:16px;"></i></span><span class="nav-label"> Day Schedule</span></div>
+    </nav>
+    <div id="sidebar-footer">
+      <div class="nav-item" data-section="config"><span class="nav-icon"><i data-lucide="settings-2" style="width:16px;height:16px;"></i></span><span class="nav-label"> Settings</span></div>
+      <!-- Collapse / Expand toggle -->
+      <button id="sidebar-toggle-btn" onclick="toggleSidebarCollapse()"
+        title="Collapse/Expand sidebar"
+        style="width:100%;margin-top:4px;padding:7px 0;border-radius:8px;
+          border:1px solid var(--border);background:transparent;
+          color:var(--text-muted);font-size:0.8rem;cursor:pointer;
+          display:flex;align-items:center;justify-content:center;gap:6px;">
+        <span class="toggle-arrow" style="font-size:0.75rem;">◀</span>
+        <span class="nav-label" style="font-size:0.75rem;">Collapse</span>
+      </button>
+      <!-- Mobile close button -->
+      <button onclick="document.getElementById('sidebar').classList.remove('open')"
+        style="display:none;width:100%;margin-top:6px;padding:8px;border-radius:8px;
+          border:1px solid var(--border);background:var(--bg2);color:var(--text-muted);
+          font-size:0.8rem;cursor:pointer;" id="sidebar-close-btn">✕ Close Menu</button>
     </div>
-  </nav>
-  <div class="main-content">
-    <header class="header">
-      <button class="sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-      <span id="header-title" style="font-weight:700;font-size:1rem;">Hiring Portal</span>
-      <div style="display:flex;gap:8px;align-items:center;margin-left:auto;">
-        <button onclick="openModal('apikey-modal')" class="btn-secondary btn-sm" title="AI Key">🔓 API Key</button>
-        <button onclick="toggleTheme()" class="btn-secondary btn-sm" title="Toggle theme">☺</button>
+  </aside>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- HEADER -->
+    <header id="header">
+      <button id="hamburger" onclick="toggleSidebar()">&#9776;</button>
+      <div id="header-title">Dashboard</div>
+      <button class="header-btn primary hbtn" onclick="openQuickAdd()" title="Quick Add Task">+ Add</button>
+      <!-- Live timer chip -->
+      <div id="hdr-timer" onclick="navigate('timetracker')" title="Time Tracker"
+        style="display:none;align-items:center;gap:5px;padding:3px 8px;border-radius:20px;
+          border:1px solid var(--accent);background:var(--accent-glass);cursor:pointer;">
+        <span style="width:6px;height:6px;border-radius:50%;background:var(--critical);animation:pulse 1s infinite;flex-shrink:0;"></span>
+        <span id="hdr-timer-clock" style="font-size:0.75rem;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums;"></span>
+      </div>
+      <button class="header-btn primary hbtn" onclick="syncToGit()" title="Sync to GitHub" id="hdr-sync-btn">☁↑</button>
+      <button class="header-btn hbtn" onclick="loadCloudData()" title="Load from GitHub" id="hdr-load-btn" style="display:none;">☁↓</button>
+      <button class="header-btn primary hbtn" onclick="saveToCloud()" title="Save to GitHub" id="hdr-save-btn" style="display:none;">☁↑</button>
+      <button class="header-btn hbtn" onclick="exportData()" title="Export data">↓</button>
+      <label style="margin:0;cursor:pointer;" title="Import data">
+        <button class="header-btn hbtn" onclick="this.closest('label').querySelector('input').click()">↑</button>
+        <input type="file" accept=".json" style="display:none" onchange="importData(this)">
+      </label>
+      <button class="header-btn hbtn" id="notif-btn" onclick="requestNotifPermission()" title="Notifications">🔔</button>
+      <button class="header-btn hbtn" onclick="navigate('search')" title="Search">🔍</button>
+
+      <!-- Theme picker (color + mode) -->
+      <div style="position:relative;display:inline-block;">
+        <button class="header-btn" id="color-theme-btn" onclick="toggleColorPicker()"
+          style="display:flex;align-items:center;gap:7px;padding:5px 11px;">
+          <span id="color-theme-dot" style="width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,#4f8ef7,#7c6af7);flex-shrink:0;box-shadow:0 0 7px rgba(79,142,247,0.55);"></span>
+          <span style="font-size:0.65rem;color:var(--text-muted);">▾</span>
+        </button>
+
+        <div id="color-picker-popup" style="display:none;position:absolute;right:0;top:calc(100% + 10px);z-index:9999;
+            background:var(--card);border:1px solid var(--border-hi);border-radius:16px;
+            padding:16px;box-shadow:0 16px 48px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.04);
+            min-width:260px;animation:modalIn 0.15s ease;">
+
+          <!-- Mode toggle -->
+          <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);margin-bottom:8px;">Mode</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:16px;">
+            <button id="mode-dark-btn" onclick="setMode('dark')"
+              style="padding:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg2);
+              color:var(--text);font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s;">
+              🌙 Dark
+            </button>
+            <button id="mode-light-btn" onclick="setMode('light')"
+              style="padding:8px;border-radius:9px;border:1px solid var(--border);background:var(--bg2);
+              color:var(--text);font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s;">
+              ☀️ Light
+            </button>
+          </div>
+
+          <!-- Accent colours -->
+          <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-muted);margin-bottom:10px;">Accent</div>
+          <div id="color-swatches" style="display:flex;flex-direction:column;gap:5px;"></div>
+        </div>
       </div>
     </header>
-    <main class="content">
 
-<section id="sec-intdashboard" class="section">
+    <!-- CONTENT -->
+    <div id="content">
+
+      <!-- ======================================================
+           SECTION: DASHBOARD
+           ====================================================== -->
+      <section id="sec-dashboard" class="section active"></section>
+
+      <!-- ======================================================
+           SECTION: INBOX
+           ====================================================== -->
+      <section id="sec-inbox" class="section"></section>
+
+      <!-- ======================================================
+           SECTION: TASKS (tabs: Tasks | Follow-Ups)
+           ====================================================== -->
+      <section id="sec-tasks" class="section"></section>
+
+      <!-- ======================================================
+           SECTION: WORK (tabs: Projects | Team)
+           ====================================================== -->
+      <section id="sec-work" class="section"></section>
+
+      <!-- ======================================================
+           SECTION: HIRING DASHBOARD
+           ====================================================== -->
+      <section id="sec-intdashboard" class="section">
         <h2>📊 Hiring Dashboard</h2>
         <div id="intdash-inner"></div>
       </section>
@@ -946,153 +1067,15 @@ body[data-theme="light"] {
       <!-- ======================================================
            SECTION: PERSONAL (tabs: Goals | Health | Planner)
            ====================================================== -->
-      <section id="sec-personal" class="section">
-        <div class="inner-tabs">
-          <button class="inner-tab active" id="itab-goals" onclick="showInnerTab('personal','itab-goals','ipanel-goals')">&#127919; Goals</button>
-          <button class="inner-tab" id="itab-health" onclick="showInnerTab('personal','itab-health','ipanel-health')">&#10084; Health</button>
-          <button class="inner-tab" id="itab-planner" onclick="showInnerTab('personal','itab-planner','ipanel-planner')">&#128197; Planner</button>
-        </div>
-        <div id="ipanel-goals">
-          <div class="add-row">
-            <button class="btn-primary" onclick="openGoalModal()">&#43; Add Goal</button>
-          </div>
-          <div class="project-grid" id="goals-grid"></div>
-        </div>
-
-        <div id="ipanel-health" class="hidden">
-          <div class="card" style="margin-bottom:16px;">
-            <h3>Today <span class="text-sm text-muted" id="health-date-label"></span></h3>
-            <div class="health-form mt-8">
-              <div>
-                <label>&#128167; Water (glasses)</label>
-                <div class="range-wrap">
-                  <input type="range" id="h-water" min="0" max="12" value="0" oninput="document.getElementById('h-water-val').textContent=this.value">
-                  <span class="range-val" id="h-water-val">0</span>
-                </div>
-              </div>
-              <div>
-                <label>&#128564; Sleep (hours)</label>
-                <div class="range-wrap">
-                  <input type="range" id="h-sleep" min="0" max="12" step="0.5" value="7" oninput="document.getElementById('h-sleep-val').textContent=this.value">
-                  <span class="range-val" id="h-sleep-val">7</span>
-                </div>
-              </div>
-              <div>
-                <label>&#127939; Exercise</label>
-                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
-                  <input type="checkbox" id="h-exercise" style="width:auto;accent-color:var(--accent)">
-                  <input id="h-exercise-min" type="number" placeholder="minutes" min="0" style="width:90px">
-                </div>
-              </div>
-            </div>
-            <label>Notes</label>
-            <textarea id="h-notes" rows="2" placeholder="How are you feeling?"></textarea>
-            <div class="mt-8" style="display:flex;justify-content:flex-end;">
-              <button class="btn-primary" onclick="saveHealthEntry()">&#128190; Save</button>
-            </div>
-          </div>
-          <div class="card" style="padding:0;overflow:auto;">
-            <table>
-              <thead><tr>
-                <th>Date</th><th>&#128167; Water</th><th>&#128564; Sleep</th>
-                <th>&#127939; Exercise</th><th>Notes</th><th>Actions</th>
-              </tr></thead>
-              <tbody id="health-tbody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div id="ipanel-planner" class="hidden">
-          <div class="card">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-              <label style="margin:0;">Date:</label>
-              <input type="date" id="planner-date" style="width:auto" onchange="loadPlannerDate()">
-            </div>
-            <div class="planner-section">
-              <h3>&#127381; Top 3 Priorities</h3>
-              <div class="top3-inputs">
-                <input id="p-top1" placeholder="Priority #1">
-                <input id="p-top2" placeholder="Priority #2">
-                <input id="p-top3" placeholder="Priority #3">
-              </div>
-            </div>
-            <div class="planner-section" style="margin-top:16px;">
-              <h3>&#127769; Evening Review</h3>
-              <label>Completed Today</label>
-              <textarea id="p-completed" rows="2" placeholder="What did you accomplish?"></textarea>
-              <label>Still Pending</label>
-              <textarea id="p-pending" rows="2" placeholder="What's left?"></textarea>
-              <label>Carry Forward</label>
-              <textarea id="p-carry" rows="2" placeholder="What moves to tomorrow?"></textarea>
-            </div>
-            <div class="mt-8" style="display:flex;justify-content:flex-end;">
-              <button class="btn-primary" onclick="savePlanner()">&#128190; Save</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <section id="sec-personal" class="section"></section>
 
       <!-- Search (header icon → this section) -->
-      <section id="sec-search" class="section">
-        <h2>&#128269; Search</h2>
-        <input id="global-search" placeholder="Search tasks, follow-ups, projects, interviews..." oninput="runSearch()">
-        <div class="search-results" id="search-results"></div>
-      </section>
+      <section id="sec-search" class="section"></section>
 
       <!-- ======================================================
            SECTION: TIME TRACKER
            ====================================================== -->
-      <section id="sec-timetracker" class="section">
-        <h2>⏱ Time Tracker</h2>
-
-        <!-- Timer bar -->
-        <div class="card" style="margin-bottom:16px;padding:16px 18px;">
-          <div style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;margin-bottom:10px;">
-            <input id="tt-desc" placeholder="What are you working on?" style="font-size:0.95rem;">
-            <div style="display:flex;align-items:center;gap:8px;">
-              <div id="tt-live-clock" style="font-size:1.5rem;font-weight:800;color:var(--accent);
-                font-variant-numeric:tabular-nums;min-width:90px;display:none;text-align:right;">00:00:00</div>
-              <button id="tt-start-btn" onclick="toggleTimer()"
-                style="padding:10px 24px;border-radius:8px;border:none;font-weight:700;
-                  font-size:0.9rem;cursor:pointer;white-space:nowrap;
-                  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;
-                  box-shadow:0 2px 10px var(--accent-glow);">▶ Start</button>
-            </div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <select id="tt-project" onchange="ttProjectChanged()" style="flex:1;min-width:140px;">
-              <option value="">📁 No Project</option>
-            </select>
-            <select id="tt-task" style="flex:2;min-width:180px;">
-              <option value="">🔲 No Task</option>
-            </select>
-            <select id="tt-billable" style="width:auto;min-width:110px;">
-              <option value="0">⬜ Non-billable</option>
-              <option value="1">💰 Billable</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- View toggle -->
-        <div style="display:flex;gap:8px;margin-bottom:14px;">
-          <button id="tt-view-timeline" onclick="setTTView('timeline')"
-            style="padding:6px 16px;border-radius:20px;border:1px solid var(--accent);
-              background:var(--accent-glass);color:var(--accent);font-size:0.8rem;
-              font-weight:600;cursor:pointer;">📅 Timeline</button>
-          <button id="tt-view-projects" onclick="setTTView('projects')"
-            style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);
-              background:transparent;color:var(--text-muted);font-size:0.8rem;cursor:pointer;">📁 By Project</button>
-          <button id="tt-view-tasks" onclick="setTTView('tasks')"
-            style="padding:6px 16px;border-radius:20px;border:1px solid var(--border);
-              background:transparent;color:var(--text-muted);font-size:0.8rem;cursor:pointer;">✅ By Task</button>
-        </div>
-
-        <!-- Summary bar -->
-        <div id="tt-today-bar" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;"></div>
-
-        <!-- Entries -->
-        <div id="tt-entries"></div>
-      </section>
+      <section id="sec-timetracker" class="section"></section>
 
       <!-- ======================================================
            SECTION: PANEL SCHEDULER
@@ -1256,26 +1239,150 @@ body[data-theme="light"] {
       <!-- ======================================================
            SECTION: DAY SCHEDULE
            ====================================================== -->
+      <section id="sec-schedule" class="section"></section>
 
+      <!-- Block edit modal -->
+      <div class="modal-overlay" id="block-modal">
+        <div class="modal" style="max-width:420px;">
+          <h3 id="block-modal-title">Add Time Block</h3>
+          <input type="hidden" id="block-id">
+          <label>Title</label>
+          <input id="block-title" placeholder="e.g. SAST Review, Lunch, Break…">
+          <label>Type</label>
+          <select id="block-type">
+            <option value="task">📋 Task / Work</option>
+            <option value="meeting">👥 Meeting</option>
+            <option value="break">☕ Break / Rest</option>
+            <option value="personal">🌿 Personal</option>
+            <option value="water">💧 Water / Health</option>
+          </select>
+          <label>Link to Task (optional)</label>
+          <select id="block-task-id">
+            <option value="">— No task —</option>
+          </select>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><label>Start Time</label><input type="time" id="block-start"></div>
+            <div><label>End Time</label><input type="time" id="block-end"></div>
+          </div>
+          <label>Notes</label>
+          <textarea id="block-notes" rows="2" placeholder="Optional notes…"></textarea>
+          <div class="modal-footer">
+            <button class="btn-danger btn-sm" id="block-delete-btn" onclick="deleteBlock()" style="display:none;margin-right:auto;">🗑 Delete</button>
+            <button class="btn-secondary" onclick="closeModal('block-modal')">Cancel</button>
+            <button class="btn-primary" onclick="saveBlock()">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ======================================================
+           SECTION: CONFIG
+           ====================================================== -->
+      
 <section id="sec-config" class="section">
-  <h2>⚙️ Settings</h2>
-  <div class="card" style="max-width:480px;">
-    <h3>🤖 AI Provider</h3>
-    <label>Provider</label>
-    <select id="apikey-provider" onchange="onProviderChange()" style="margin-bottom:8px;">
-      <option value="groq">Groq (Free, Fast)</option>
-      <option value="anthropic">Anthropic (Claude)</option>
-    </select>
-    <label id="apikey-label">Groq API Key</label>
-    <input id="apikey-input" type="password" placeholder="Enter API key…">
-    <label>Model</label>
-    <input id="apikey-model" placeholder="e.g. llama-3.3-70b-versatile">
-    <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
-    <button class="btn-primary" onclick="saveApiKey()" style="margin-top:10px;">Save Key</button>
+  <div style="padding:24px;max-width:500px;">
+    <h2 style="margin-bottom:20px;">⚙️ Settings</h2>
+    <div class="card">
+      <h3>🤖 AI Provider</h3>
+      <label>Provider</label>
+      <select id="apikey-provider" onchange="onProviderChange()" style="margin-bottom:8px;">
+        <option value="groq">Groq (Free, Fast)</option>
+        <option value="anthropic">Anthropic (Claude)</option>
+      </select>
+      <label id="apikey-label">API Key</label>
+      <input id="apikey-input" type="password" placeholder="Enter API key…">
+      <label>Model</label>
+      <input id="apikey-model" placeholder="e.g. llama-3.3-70b-versatile">
+      <div id="apikey-status" style="font-size:0.8rem;margin-top:6px;"></div>
+      <button class="btn-primary" onclick="saveApiKey()" style="margin-top:10px;">Save Key</button>
+    </div>
   </div>
 </section>
 
-    </main>
+    </div><!-- #content -->
+  </div><!-- #main -->
+</div><!-- #app -->
+
+<!-- ============================================================
+     MODALS
+     ============================================================ -->
+
+<!-- Quick Add Modal -->
+<div class="modal-overlay" id="quickadd-modal">
+  <div class="modal" style="max-width:400px;">
+    <h3>&#9889; Quick Add Task</h3>
+    <label>Title *</label>
+    <input id="qa-title" placeholder="What needs to be done?" autofocus>
+    <div class="error-msg hidden" id="qa-title-err">Required</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label>Priority</label>
+        <select id="qa-priority">
+          <option>Medium</option><option>Critical</option><option>High</option><option>Low</option>
+        </select>
+      </div>
+      <div>
+        <label>Due Date</label>
+        <input type="date" id="qa-due">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('quickadd-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveQuickAdd()">&#43; Add Task</button>
+    </div>
+  </div>
+</div>
+
+<!-- Task Modal -->
+<div class="modal-overlay" id="task-modal">
+  <div class="modal">
+    <h3 id="task-modal-title">Add Task</h3>
+    <input type="hidden" id="task-id">
+    <label>Title *</label>
+    <input id="t-title" placeholder="Task title">
+    <div class="error-msg hidden" id="t-title-err">Required</div>
+    <label>Description</label>
+    <textarea id="t-desc" rows="2"></textarea>
+    <label>Category</label>
+    <select id="t-cat">
+      <option>Team Management</option><option>Projects</option>
+      <option>Partner Onboarding</option><option>Interviews</option>
+      <option>Learning</option><option>Personal</option><option>Health</option>
+    </select>
+    <label>Priority</label>
+    <select id="t-pri">
+      <option>Medium</option><option>Critical</option><option>High</option><option>Low</option>
+    </select>
+    <label>Status</label>
+    <select id="t-status">
+      <option>New</option><option>In Progress</option><option>Waiting</option><option>Completed</option>
+    </select>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label>Due Date</label>
+        <input type="date" id="t-due">
+      </div>
+      <div>
+        <label>Due Time</label>
+        <input type="time" id="t-due-time" placeholder="HH:MM">
+      </div>
+    </div>
+    <label>⏰ Reminder</label>
+    <select id="t-reminder">
+      <option value="">No reminder</option>
+      <option value="0">At due time</option>
+      <option value="5">5 min before</option>
+      <option value="10">10 min before</option>
+      <option value="15">15 min before</option>
+      <option value="30">30 min before</option>
+      <option value="60">1 hour before</option>
+      <option value="1440">1 day before</option>
+    </select>
+    <label>Notes</label>
+    <textarea id="t-notes" rows="2"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('task-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveTask()">Save</button>
+    </div>
   </div>
 </div>
 
@@ -1802,8 +1909,51 @@ body[data-theme="light"] {
   </div>
 </div>
 
-<script>
+<!-- Team Modal -->
+<div class="modal-overlay" id="team-modal">
+  <div class="modal">
+    <h3 id="team-modal-title">Add Team Member</h3>
+    <input type="hidden" id="tm-id">
+    <label>Name *</label>
+    <input id="tm-name" placeholder="Full name">
+    <div class="error-msg hidden" id="tm-name-err">Required</div>
+    <label>Assigned Tasks</label>
+    <input id="tm-tasks" type="number" min="0" value="0">
+    <label>Pending Actions</label>
+    <input id="tm-pending" type="number" min="0" value="0">
+    <label>Escalations</label>
+    <input id="tm-esc" type="number" min="0" value="0">
+    <label>Notes</label>
+    <textarea id="tm-notes" rows="2"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('team-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveTeamMember()">Save</button>
+    </div>
+  </div>
+</div>
 
+<!-- Goal Modal -->
+<div class="modal-overlay" id="goal-modal">
+  <div class="modal">
+    <h3 id="goal-modal-title">Add Goal</h3>
+    <input type="hidden" id="goal-id">
+    <label>Goal *</label>
+    <input id="goal-title" placeholder="Goal description">
+    <div class="error-msg hidden" id="goal-title-err">Required</div>
+    <label>Progress (%)</label>
+    <input type="number" id="goal-progress" min="0" max="100" value="0">
+    <label>Target Date</label>
+    <input type="date" id="goal-target">
+    <label>Notes</label>
+    <textarea id="goal-notes" rows="2"></textarea>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('goal-modal')">Cancel</button>
+      <button class="btn-primary" onclick="saveGoal()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
 window.onerror = function(msg, src, line, col, err) {
   var d = document.createElement('div');
   d.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#1e293b;color:#f87171;padding:20px;font-family:monospace;font-size:0.85rem;overflow:auto;';
@@ -9178,6 +9328,12 @@ navigate = function(s) {
   _origNav(s);
 };
 
+// Hide non-hiring nav items
+document.querySelectorAll('.nav-item[data-section]').forEach(function(el) {
+  if (!HIRING_NAV.has(el.dataset.section)) el.style.display = 'none';
+});
+
+// Minimal config renderer
 renderConfig = function() {
   var prov = document.getElementById('apikey-provider');
   var key  = document.getElementById('apikey-input');
@@ -9188,7 +9344,6 @@ renderConfig = function() {
 };
 
 navigate('intdashboard');
-if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
 </body>
 </html>
